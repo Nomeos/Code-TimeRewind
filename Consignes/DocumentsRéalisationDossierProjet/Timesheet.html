@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Journal</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <!-- external libs from cdnjs -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <!-- PivotTable.js libs from ../dist -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.js"></script>
+
+    <script src='_icescrum_api.js'></script>
+    <style>
+        #spinner {
+            width: 80px;
+            height: 80px;
+            left: 0px;
+            top: 0px;
+            opacity: 1;
+        }
+
+        .code {
+            font-family: "Courier New";
+            font-weight: bolder;
+            padding: 4px;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="pl-5 m-2 mt-4 text-center">
+    <h1 id="spnProjName"></h1>
+    <div id="divBadConfig" class="container d-none text-left m-5 p-3 bg-warning">
+        <h3>Oooops!!</h3>
+        <p>Si vous voyez ce texte, c'est que cette page a besoin d'informations compémentaires de votre part pour fonctionner.</p>
+        <p>Il faut que le dossier dans lequel est ce fichier contienne également un fichier nommé <span class="code">_icescrum_api.js</span> dans lequel vous devez mettre:
+            <ol>
+                <li>
+                    Votre token d'accès à l'API Icescrum.
+                    <span class="code">var iceScrumToken = '91030e0ea9a9ab58...'</span>
+        <p class="small text-secondary">Vous générez ou retrouvez votre token dans votre profil IceScrum ("My Account") sous l'onglet 'API token'</p>
+        </li>
+        <li>
+            Le code Icescrum de votre projet:
+            <span class="code">projectId = 'XXXXXXX'</span>
+            <p class="small text-secondary">Vous trouverez ce code dans l'url quand vous êtes sur votre projet dans Icescrum</p>
+        </li>
+        </ol>
+        <p>Veillez également à ce que le fichier <span class="code">_icescrum_api.js</span> soit exclu du système de versionning, si vous ne voulez pas que votre token se retrouve sur Github!</p>
+    </div>
+    <div id="spnLoading">
+        <img src="https://media2.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Loading GIF by Mashable" id="spinner"> Chargement de données depuis IceScrum...
+    </div>
+</div>
+<div id="output" style="margin: 30px;"></div>
+<div style="font-size: x-small">Powered by l'excellentissime <a href="https://github.com/nicolaskruchten/pivottable">pivottable.js</a> de Nicolas Kruchten</div>
+</body>
+</html>
+<script>
+
+    // ============ Initialization =================
+    // Configuration check
+    if (typeof (iceScrumToken) !== 'undefined' && typeof (projectId) !== 'undefined')
+    {
+        var API_base_url = 'https://icescrum.cpnv.ch/ws/project/' + projectId
+        loadData()
+    } else
+    {
+        divBadConfig.classList.remove('d-none')
+        spnLoading.classList.add('d-none')
+    }
+
+    // Project name
+    fetch(API_base_url + '/?icescrum-token=' + iceScrumToken).then(function (response) {
+        return response.json()
+    }).then(function (data) {
+        spnProjName.innerText = 'Projet ' + data.name
+    })
+
+    function loadData()
+    {
+        let tasks = [] // all tasks, including urgent and recurrent ones. Tasks will be duplicated if they have multiple tags (one instance per tag value)
+        let stories = [] // the stories of the project. We need them in order to get their type and value that are not in the task's parent story
+        // story-less tasks:
+        stories[10] = {name: '(Urgentes)', tasks: []}
+        stories[11] = {name: '(Récurrentes)', tasks: []}
+
+        // Get all stories
+        fetch(API_base_url + '/story?icescrum-token=' + iceScrumToken).then(function (response) {
+            return response.json()
+        }).then(function (data) {
+            data.forEach(function (story) {
+                // use id as index for easy find
+                stories[story.id] = {name: story.name, type: story.type == 0 ? 'user' : (story.type == 3 ? 'tech' : 'rec/urg'), value: story.value}
+            })
+        }).then(function () { // get all tasks
+            fetch(API_base_url + '/task?icescrum-token=' + iceScrumToken).then(function (response) {
+                return response.json()
+            }).then(function (data) {
+                data.forEach(function (task) {
+                    if (task.doneDate)
+                    {// we don't track the tasks in the future and in progress
+                        tasks.push(...prepareTask(task,stories)) // must spread before pushing, otherwise we build an array of array of objects (try it if you don't believe it)
+                    }
+                })
+            }).then(function () { // feed those tasks to the pivot table
+                $("#output").pivotUI(tasks,
+                    {
+                        rows: ["date", "story", "task"],
+                        cols: ["owner"]
+                    }
+                );
+                spnLoading.classList.add('d-none') // spinner off
+            })
+        }).catch(function (erreur) {
+            alert("Erreur de connexion au serveur IceScrum\n\nSi internet est ok (=vous pouvez atteindre icescrum.cpnv.ch avec votre navigateur), alors c'est probablement que le code du projet est faux ou que votre token est pourri")
+            window.close()
+        })
+    }
+
+    /**
+     * Returns an array of task objects. The array will have 1 task if the task has no tag or just one:  "tags": [],  or "tags": ["Ajax"]"
+     * It will have one item per tag value if threr are more: "tags": ["Ajax","forlater"]"
+     * @param task : the task received from the API
+     * @param stories : contains things that are not in task.parentStory
+     * @returns {[]}
+     */
+    function prepareTask(task,stories)
+    {
+        res = []
+
+        // determine story name
+        storyname = '?'
+        if (task.type == 10) storyname = 'Urgente'
+        if (task.type == 11) storyname = 'Récurrente'
+        if (task.parentStory) storyname = task.parentStory.name
+
+        base = {
+            tâche: task.name,
+            story: storyname,
+            release: task.sprint.parentRelease ? task.sprint.parentRelease.name : '?',
+            sprint: task.sprint.index,
+            owner: task.responsible ? task.responsible.firstName : '',
+            temps: task.spent,
+            type_story: task.parentStory ? stories[task.parentStory.id].type : 'rec/urg',
+            effort_estimé: task.parentStory ? task.parentStory.effort : 0,
+            value: task.parentStory ? stories[task.parentStory.id].value : 0,
+            date: task.doneDate.substring(0, 10),
+            semaine: getNumberOfWeek(task.doneDate.substring(0, 10))
+        }
+
+        // let's work on those tags now
+        if (task.tags.length == 0)
+        { // no tags -> one row without column tag for this task
+            res.push(base)
+        } else
+        {
+            task.tags.forEach(function (tag) { // one row for each tag for this task
+                taginstance = {...base} // build a clone
+                taginstance.tag = tag
+                res.push(taginstance)
+            })
+        }
+        return res
+    }
+
+    /**
+     * return the week number in format YYWW
+     * credit to https://stackoverflow.com/questions/8224459/how-to-create-a-date-object-from-string-in-javascript
+     * @param date
+     * @returns {number}
+     */
+    function getNumberOfWeek(date) {
+        date = new Date(Date.parse(date))
+        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+        const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+        return 100*(date.getFullYear()%100)+Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    }
+
+</script>
