@@ -1,0 +1,17 @@
+package main;
+
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.SlickException;
+
+public class Main {
+	
+	public static void main(String[] args) throws SlickException {
+		final String name = "Login";
+		// TODO Auto-generated method stub
+		AppGameContainer app;
+		app = new AppGameContainer(new Login(name));
+		app.setDisplayMode(640, 360, false);
+		app.start();
+	}
+
+}

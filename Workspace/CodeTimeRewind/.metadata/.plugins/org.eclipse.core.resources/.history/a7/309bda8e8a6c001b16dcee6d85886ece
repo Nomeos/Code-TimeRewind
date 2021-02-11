@@ -1,0 +1,13 @@
+package main;
+
+import org.newdawn.slick.AppGameContainer;
+
+public class main {
+	private static String name ="Login";
+	private static AppGameContainer app;
+	public static void main(String[] args) {
+		app = new AppGameContainer(new login(name));
+		
+		
+	}
+}

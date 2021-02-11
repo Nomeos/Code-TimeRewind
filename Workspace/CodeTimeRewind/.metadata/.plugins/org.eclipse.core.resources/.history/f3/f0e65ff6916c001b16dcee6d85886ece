@@ -1,0 +1,17 @@
+package main;
+
+import org.newdawn.slick.*;
+import org.newdawn.slick.SlickException;
+
+public class Main{
+	public static AppGameContainer app;
+	public static void main(String[] args) throws SlickException {
+		// TODO Auto-generated method stub
+		app = new AppGameContainer(new Login("Login"));
+		app.setDisplayMode(1920, 1080, false);
+		app.setTargetFrameRate(120);
+		app.setShowFPS(false);
+		app.start();
+	}
+
+}

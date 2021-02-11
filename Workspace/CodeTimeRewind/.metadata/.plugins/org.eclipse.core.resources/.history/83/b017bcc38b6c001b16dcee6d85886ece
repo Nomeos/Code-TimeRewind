@@ -1,0 +1,16 @@
+package main;
+
+import org.newdawn.slick.AppGameContainer;
+
+public class maina {
+	
+	public static void main(String[] args) {
+		private String name = "Login";
+		// TODO Auto-generated method stub
+		AppGameContainer app;
+		app = new AppGameContainer(new login(name));
+		app.setDisplayMode(640, 360, false);
+		app.start();
+	}
+
+}

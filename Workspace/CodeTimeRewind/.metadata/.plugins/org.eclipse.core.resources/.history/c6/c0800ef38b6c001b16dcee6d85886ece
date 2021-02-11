@@ -1,0 +1,28 @@
+package main;
+import controller.*;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
+
+public class Login extends StateBasedGame{
+	private static final int login = 0, signup = 1;
+	
+
+	public Login(String name) {
+		super(name);
+		// TODO Auto-generated constructor stub
+		this.addState(new GuiLogin(login));
+		this.addState(new GuiSignup(signup));
+	}
+
+	@Override
+	public void initStatesList(GameContainer gc) throws SlickException {
+		// TODO Auto-generated method stub
+		this.getState(login).init(gc, this);
+		this.getState(signup).init(gc, this);
+		this.enterState(login);
+	}
+	
+	
+	
+}
