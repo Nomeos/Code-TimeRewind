@@ -10,11 +10,11 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/slick.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/lwjgl.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/natives-linux.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/natives-mac.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/natives-windows.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/slick.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

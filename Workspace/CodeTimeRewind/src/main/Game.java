@@ -1,30 +1,33 @@
 package main;
-import org.newdawn.slick.BasicGame;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.StateBasedGame;
+
+import controller.*;
 
 
-public class Game extends BasicGame {
-    
-    public Game() {
+public class Game extends StateBasedGame {
+    public final int menu = 0;
+    public final int login = 1;
+    public final int signup = 2;
+    public Game(String gameName) {
         // Title windows name
-        super("Code::TimeRewind");
+        super(gameName);
+        this.addState(new GuiMenu(menu));
+        this.addState(new GuiLogin(login));
+        this.addState(new GuiSignup(signup));
+        
+
     }
 
     @Override
-    public void init(GameContainer gc) throws SlickException {
-    	//this.currentGui = new MenuGui(null);
-    }
-    @Override
-    public void render(GameContainer gc, Graphics g) throws SlickException {
-        
-    }
+    public void initStatesList(GameContainer gc) throws SlickException {
+    	this.getState(menu).init(gc, this);
+    	this.getState(login).init(gc, this);
+    	this.getState(signup).init(gc, this);
 
-    @Override
-    public void update(GameContainer gc, int delta) throws SlickException {
-        
+    	this.enterState(menu);
     }
     
     @Override
