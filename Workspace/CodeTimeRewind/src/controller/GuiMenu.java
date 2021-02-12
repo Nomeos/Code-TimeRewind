@@ -61,7 +61,6 @@ public class GuiMenu extends BasicGameState {
 		g.drawString(playString, playButton.getCenterX(), playButton.getCenterY());
 		g.drawString(exitString, exitButton.getCenterX(), exitButton.getCenterY());
 		g.drawString(this.position, 50, 50);
-		
 
 	}
 
