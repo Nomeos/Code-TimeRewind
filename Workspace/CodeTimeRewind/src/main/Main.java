@@ -1,10 +1,8 @@
 package main;
-import java.awt.Font;
 import java.io.IOException;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 
 public class Main {
 	public static AppGameContainer app;

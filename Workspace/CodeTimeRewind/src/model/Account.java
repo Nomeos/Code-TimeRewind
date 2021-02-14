@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class Account {
 	private String username, passwordHash;
 	private int account_Level;
-	private PasswordEncoder passwordEncoder;
+
 
 	public Account() {
 
@@ -37,9 +37,13 @@ public class Account {
 	}
 
 	public String hashPassword(String password) throws NoSuchAlgorithmException {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 		return passwordEncoder.encode(password);
+	}
+	public boolean areThePasswordEquals(String password) {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		return passwordEncoder.matches(password, this.passwordHash);
 	}
 
 	public String getPasswordHash() {
