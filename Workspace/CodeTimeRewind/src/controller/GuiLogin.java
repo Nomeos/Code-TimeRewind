@@ -203,7 +203,7 @@ public class GuiLogin extends BasicGameState {
 						this.account.setPasswordHash(this.account.hashPassword(this.currentPassword));
 						if (this.jm.LoginAccount(this.account)) {
 							this.loginSuccessful = true;
-							Game.getInstance().enterState(3);
+							//Game.getInstance().enterState(3);
 						} else {
 							this.errorLoginFail = true;
 							this.usernameTextField.setText("");

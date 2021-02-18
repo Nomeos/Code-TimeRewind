@@ -21,11 +21,12 @@ public class JsonManager {
 	private FileWriter fileWriter;
 	private boolean isRegister = false;
 
+	//Constructor of the JsonManager class
 	public JsonManager() {
 		file = new File(saveDirectoryPath);
 		this.listOfAccount = new ArrayList<Account>();
 	}
-
+	//Principal method for check if the user can register
 	public boolean RegisterAccount(Account userAccount) {
 		if (IsTheFileAlreadyExist(this.file)) {
 			this.isRegister = true;
@@ -43,7 +44,7 @@ public class JsonManager {
 			return true;
 		}
 	}
-
+	//Principal method for check if the user can login
 	public boolean LoginAccount(Account userAccount) {
 		if (IsTheFileAlreadyExist(this.file)) {
 			this.isRegister = false;
@@ -56,15 +57,11 @@ public class JsonManager {
 			return false;
 		}
 	}
-
-	public File GetFile() {
-		return this.file;
-	}
-
+	// Get feature for the list of account
 	public List<Account> ListOfAccount() {
 		return this.listOfAccount;
 	}
-
+	//Write the list of account object directly on the json
 	public void WriteOnJson() {
 		try {
 			json = new Gson();
@@ -76,7 +73,7 @@ public class JsonManager {
 			e.printStackTrace();
 		}
 	}
-
+	//Retrieve all data from the json and return a list of account
 	public List<Account> GetAllDataFromJson() {
 
 		try {
@@ -99,11 +96,11 @@ public class JsonManager {
 
 		return this.listOfAccount;
 	}
-
+	//Add the user account in the list of account.
 	public void AddTheAccountOnTheList(Account userAccount) {
 		this.listOfAccount.add(userAccount);
 	}
-
+	//Check if the user already exist in the json, it returns a boolean (works with login and register).
 	public boolean IsTheUserAlreadyExist(Account userAccount) {
 		boolean result = false;
 		if (isRegister) {
@@ -132,7 +129,7 @@ public class JsonManager {
 		return result;
 
 	}
-
+	//Check if the file already exist and return a boolean.
 	public boolean IsTheFileAlreadyExist(File file) {
 		if (file.exists()) {
 			return true;
@@ -140,7 +137,7 @@ public class JsonManager {
 			return false;
 		}
 	}
-
+	//Update the user account with the new information.
 	public String UpdateUserAccount(Account oldAccount) {
 
 		for (Account currentAccount : listOfAccount) {
@@ -149,6 +146,9 @@ public class JsonManager {
 			}
 		}
 		return null;
+	}
+	public File GetFile() {
+		return this.file;
 	}
 
 }

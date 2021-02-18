@@ -4,14 +4,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import controller.GuiLogin;
-import controller.GuiMenu;
-import controller.GuiSignup;
+import controller.*;
 
 public class Game extends StateBasedGame {
 	public final int menu = 0;
 	public final int login = 1;
 	public final int signup = 2;
+	public final int lobby = 3;
 	private static Game instance;
 	private boolean isTheRegisterSucessfull = false;
 
@@ -32,6 +31,7 @@ public class Game extends StateBasedGame {
 		this.addState(new GuiMenu(menu));
 		this.addState(new GuiLogin(login));
 		this.addState(new GuiSignup(signup));
+		this.addState(new GuiLobby(lobby));
 	}
 
 	@Override
