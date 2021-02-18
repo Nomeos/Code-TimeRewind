@@ -27,7 +27,7 @@ public class Game extends StateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
-
+		
 		this.addState(new GuiMenu(menu));
 		this.addState(new GuiLogin(login));
 		this.addState(new GuiSignup(signup));

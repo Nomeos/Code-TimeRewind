@@ -52,9 +52,9 @@ public class GuiLogin extends BasicGameState {
 		this.trueTypeFont = new TrueTypeFont(ft, true);
 		this.passwordTextField = new TextField(gc, trueTypeFont, x, y, width, height);
 		this.usernameTextField = new TextField(gc, trueTypeFont, x, y - 70, width, height);
-		this.submitButton = new Rectangle((gc.getWidth() - 170), (gc.getHeight() - 110), 120, 60);
 		this.requirementY = passwordTextField.getY() + passwordTextField.getHeight() + 10;
-		this.signUp = new Rectangle(x, requirementY + 20, width, 100);
+		this.submitButton = new Rectangle(x, requirementY + 20, width, 100);
+		this.signUp = new Rectangle((gc.getWidth() - 400), (gc.getHeight() - 110), 350, 60);
 
 	}
 
@@ -85,10 +85,10 @@ public class GuiLogin extends BasicGameState {
 		g.setColor(new Color(102, 204, 255));
 		this.stringX = signUp.getCenterX() - (signUp.getWidth() / 4);
 		this.stringY = (signUp.getCenterY() - (signUp.getHeight() / 4)) + 5;
-		g.drawString("No Account ? -> Sign up !", stringX + 20, stringY + 10);
+		g.drawString("No Account ? -> Sign up !", stringX - 25, stringY);
 
-		this.stringX = submitButton.getCenterX() - (submitButton.getWidth() / 4);
-		this.stringY = (submitButton.getCenterY() - (submitButton.getHeight() / 4)) + 5;
+		this.stringX = submitButton.getCenterX() - 40;
+		this.stringY = submitButton.getCenterY() - 10;
 		g.drawString("SUBMIT", stringX, stringY);
 
 		g.setColor(Color.red);
@@ -147,8 +147,7 @@ public class GuiLogin extends BasicGameState {
 			if (key == 200 || key == 203 || key == 205 || key == 208) {
 				this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
 			}
-			if ((key >= 2 && key <= 13) || (key >= 16 && key <= 27) || (key >= 30 && key <= 41)
-					|| (key >= 43 && key <= 53 || key == 57 || key >= 71 && key <= 82)) {
+			if (isAlphaNumericPassword(Character.toString(c))) {
 				this.currentPassword += c;
 				this.currentHiddenPassword += "*";
 				this.passwordTextField.setText(currentHiddenPassword);
@@ -158,6 +157,10 @@ public class GuiLogin extends BasicGameState {
 				this.currentHiddenPassword = this.passwordTextField.getText();
 				int currentHiddenPasswordLength = this.currentHiddenPassword.length();
 				this.currentPassword = currentPassword.substring(0, currentHiddenPasswordLength);
+			}
+			if (key == 15) {
+				this.passwordTextField.setFocus(false);
+				this.usernameTextField.setFocus(true);
 			}
 			this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
 		}
@@ -180,6 +183,10 @@ public class GuiLogin extends BasicGameState {
 				}
 
 			}
+			if (key == 15) {
+				this.passwordTextField.setFocus(true);
+				this.usernameTextField.setFocus(false);
+			}
 
 		}
 	}
@@ -189,7 +196,11 @@ public class GuiLogin extends BasicGameState {
 	}
 
 	public static boolean isAlphaNumeric(String s) {
-		return s != null && s.matches("^[a-zA-Z0-9]*$");
+		return s != null && s.matches("[a-zA-Z0-9]");
+	}
+
+	public static boolean isAlphaNumericPassword(String s) {
+		return s != null && s.matches("/[a-zA-Z0-9 \\/\\\\+@\"*#%&()=?'^~!{}.:,;°§_<>]*$/gm");
 	}
 
 	@Override
@@ -203,7 +214,7 @@ public class GuiLogin extends BasicGameState {
 						this.account.setPasswordHash(this.account.hashPassword(this.currentPassword));
 						if (this.jm.LoginAccount(this.account)) {
 							this.loginSuccessful = true;
-							//Game.getInstance().enterState(3);
+							Game.getInstance().enterState(3);
 						} else {
 							this.errorLoginFail = true;
 							this.usernameTextField.setText("");
@@ -230,6 +241,11 @@ public class GuiLogin extends BasicGameState {
 			this.errorUsernameLength = false;
 			this.missingFieldFill = false;
 			this.errorLoginFail = false;
+			this.usernameTextField.setText("");
+			this.passwordTextField.setText("");
+			this.currentHiddenPassword = "";
+			this.currentPassword = "";
+			this.currentUsername = "";
 			Game.getInstance().setTheRegisterSucessfull(false);
 			Game.getInstance().enterState(2);
 		}

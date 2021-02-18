@@ -3,11 +3,14 @@ package controller;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class GuiLobby extends BasicGameState {
 	private int stateID;
+	private Shape charactersButton = null, inventoryButton = null;
 
 	public GuiLobby() {}
 	
@@ -16,19 +19,24 @@ public class GuiLobby extends BasicGameState {
 	}
 
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException {
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		// TODO Auto-generated method stub
-		
+		this.charactersButton = new Rectangle(50, gc.getHeight()-100, 120, 60);
+		this.inventoryButton = new Rectangle(this.charactersButton.getX()+this.charactersButton.getWidth()+50, gc.getHeight()-100, 120, 60);
 	}
 
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException {
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// TODO Auto-generated method stub
+		g.draw(charactersButton);
+		g.fill(charactersButton);
 		
+		g.draw(inventoryButton);
+		g.fill(inventoryButton);
 	}
 
 	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2) throws SlickException {
+	public void update(GameContainer gc, StateBasedGame sbg, int g) throws SlickException {
 		// TODO Auto-generated method stub
 		
 	}

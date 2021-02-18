@@ -19,21 +19,22 @@ import model.Account;
 import model.JsonManager;
 
 public class GuiSignup extends BasicGameState {
-	public GuiSignup() {
-	}
-
 	private int x, y, requirementY, stateId, width, height;
 	private Font ft = null;
 	private Shape submitButton = null, loginButton = null;
 	private String currentPassword = "", currentPasswordConfirmation = "", currentUsername = "",
 			currentHiddenPassword = "", errorUsernameLengthString = "", missingFieldFillString = "",
-			currentHiddenPasswordConfirmation = "", errorPasswordNotEqualsString = "",errorAccountAlreadyExistString ="";
+			currentHiddenPasswordConfirmation = "", errorPasswordNotEqualsString = "",
+			errorAccountAlreadyExistString = "";
 	private float stringX, stringY;
 	private Account account;
 	private JsonManager jm;
 	private TrueTypeFont trueTypeFont;
 	private TextField usernameTextField, passwordTextField, passwordConfirmationTextField;
-	private boolean errorUsernameLength, missingFieldFill, errorPasswordNotEquals,errorAccountAlreadyExist;
+	private boolean errorUsernameLength, missingFieldFill, errorPasswordNotEquals, errorAccountAlreadyExist;
+
+	public GuiSignup() {
+	}
 
 	public GuiSignup(int state) {
 		this.stateId = state;
@@ -49,7 +50,7 @@ public class GuiSignup extends BasicGameState {
 
 		this.ft = new Font("Century Gothic", Font.BOLD, 20);
 		this.trueTypeFont = new TrueTypeFont(ft, true);
-		
+
 		this.account = new Account();
 		this.jm = new JsonManager();
 
@@ -59,9 +60,9 @@ public class GuiSignup extends BasicGameState {
 
 		this.requirementY = passwordConfirmationTextField.getY() + passwordConfirmationTextField.getHeight() + 10;
 
-		this.loginButton = new Rectangle(x, requirementY + 140, width, 100);
-		this.submitButton = new Rectangle((gc.getWidth() - 170), (gc.getHeight() - 110), 120, 60);
-		
+		this.loginButton = new Rectangle((gc.getWidth() - 400), (gc.getHeight() - 110), 350, 60);
+		this.submitButton = new Rectangle(x, requirementY + 140, width, 100);
+
 		this.usernameTextField.setText("");
 		this.passwordTextField.setText("");
 		this.passwordConfirmationTextField.setText("");
@@ -106,13 +107,13 @@ public class GuiSignup extends BasicGameState {
 		g.draw(loginButton);
 
 		g.setColor(new Color(102, 204, 255));
-		this.stringX = submitButton.getCenterX() - (submitButton.getWidth() / 4);
-		this.stringY = (submitButton.getCenterY() - (submitButton.getHeight() / 4)) + 5;
+		this.stringX = submitButton.getCenterX() - 40;
+		this.stringY = submitButton.getCenterY() - 10;
 		g.drawString("SUBMIT", stringX, stringY);
 
 		this.stringX = loginButton.getCenterX() - (loginButton.getWidth() / 4);
 		this.stringY = (loginButton.getCenterY() - (loginButton.getHeight() / 4)) + 5;
-		g.drawString("Already have an account ? Login !", stringX + 20, stringY + 10);
+		g.drawString("Already have an account ? Login !", stringX - 60, stringY);
 
 		g.setColor(Color.red);
 		g.drawString(errorUsernameLengthString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
@@ -154,6 +155,49 @@ public class GuiSignup extends BasicGameState {
 		this.errorPasswordNotEquals = false;
 		this.errorAccountAlreadyExist = false;
 
+		// Requirement check for the password confirmation textfield
+		if (this.passwordConfirmationTextField.hasFocus()) {
+			if (key == 200 || key == 203 || key == 205 || key == 208) {
+				this.passwordConfirmationTextField.setCursorPos(this.passwordConfirmationTextField.getText().length());
+			}
+			if (isAlphaNumericPassword(String.valueOf(c))) {
+				this.currentPasswordConfirmation += c;
+				this.currentHiddenPasswordConfirmation += "*";
+				this.passwordConfirmationTextField.setText(currentHiddenPasswordConfirmation);
+			}
+			if (key == 211 || key == 14) {
+
+				this.currentHiddenPasswordConfirmation = this.passwordConfirmationTextField.getText();
+				int currentHiddenPasswordLength = this.currentHiddenPasswordConfirmation.length();
+				this.currentPasswordConfirmation = currentPasswordConfirmation.substring(0,
+						currentHiddenPasswordLength);
+			}
+			this.passwordConfirmationTextField.setCursorPos(this.passwordConfirmationTextField.getText().length());
+		}
+		// Requirement check for the password textfield
+		if (this.passwordTextField.hasFocus()) {
+			if (key == 200 || key == 203 || key == 205 || key == 208) {
+				this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
+			}
+			if (isAlphaNumericPassword(String.valueOf(c))) {
+				this.currentPassword += c;
+				this.currentHiddenPassword += "*";
+				this.passwordTextField.setText(currentHiddenPassword);
+			}
+			if (key == 211 || key == 14) {
+
+				this.currentHiddenPassword = this.passwordTextField.getText();
+				int currentHiddenPasswordLength = this.currentHiddenPassword.length();
+				this.currentPassword = currentPassword.substring(0, currentHiddenPasswordLength);
+			}
+			if (key == 15) {
+
+				this.passwordTextField.setFocus(false);
+				this.passwordConfirmationTextField.setFocus(true);
+			}
+			this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
+
+		}
 		// Requirement check for the username textfield
 		if (this.usernameTextField.hasFocus()) {
 			if (usernameTextField.getText().length() <= 12) {
@@ -174,47 +218,15 @@ public class GuiSignup extends BasicGameState {
 				}
 
 			}
+			if (key == 15) {
+				this.usernameTextField.setFocus(false);
+				this.passwordConfirmationTextField.setFocus(false);
+				this.passwordTextField.setFocus(true);
+
+			}
 
 		}
-		// Requirement check for the password textfield
-		if (this.passwordTextField.hasFocus()) {
-			if (key == 200 || key == 203 || key == 205 || key == 208) {
-				this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
-			}
-			if ((key >= 2 && key <= 13) || (key >= 16 && key <= 27) || (key >= 30 && key <= 41)
-					|| (key >= 43 && key <= 53 || key == 57 || key >= 71 && key <= 82)) {
-				this.currentPassword += c;
-				this.currentHiddenPassword += "*";
-				this.passwordTextField.setText(currentHiddenPassword);
-			}
-			if (key == 211 || key == 14) {
 
-				this.currentHiddenPassword = this.passwordTextField.getText();
-				int currentHiddenPasswordLength = this.currentHiddenPassword.length();
-				this.currentPassword = currentPassword.substring(0, currentHiddenPasswordLength);
-			}
-			this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
-		}
-		// Requirement check for the password confirmation textfield
-		if (this.passwordConfirmationTextField.hasFocus()) {
-			if (key == 200 || key == 203 || key == 205 || key == 208) {
-				this.passwordConfirmationTextField.setCursorPos(this.passwordConfirmationTextField.getText().length());
-			}
-			if ((key >= 2 && key <= 13) || (key >= 16 && key <= 27) || (key >= 30 && key <= 41)
-					|| (key >= 43 && key <= 53 || key == 57 || key >= 71 && key <= 82)) {
-				this.currentPasswordConfirmation += c;
-				this.currentHiddenPasswordConfirmation += "*";
-				this.passwordConfirmationTextField.setText(currentHiddenPasswordConfirmation);
-			}
-			if (key == 211 || key == 14) {
-
-				this.currentHiddenPasswordConfirmation = this.passwordConfirmationTextField.getText();
-				int currentHiddenPasswordLength = this.currentHiddenPasswordConfirmation.length();
-				this.currentPasswordConfirmation = currentPasswordConfirmation.substring(0,
-						currentHiddenPasswordLength);
-			}
-			this.passwordConfirmationTextField.setCursorPos(this.passwordConfirmationTextField.getText().length());
-		}
 	}
 
 	@Override
@@ -231,8 +243,16 @@ public class GuiSignup extends BasicGameState {
 							if (this.jm.RegisterAccount(account)) {
 								Game.getInstance().setTheRegisterSucessfull(true);
 								Game.getInstance().enterState(1);
-							}else {
+							} else {
 								this.errorAccountAlreadyExist = true;
+								this.usernameTextField.setText("");
+								this.passwordTextField.setText("");
+								this.passwordConfirmationTextField.setText("");
+								this.currentUsername = "";
+								this.currentPassword = "";
+								this.currentHiddenPassword = "";
+								this.currentHiddenPasswordConfirmation = "";
+								this.currentPasswordConfirmation = "";
 							}
 
 						} catch (NoSuchAlgorithmException e) {
@@ -255,6 +275,14 @@ public class GuiSignup extends BasicGameState {
 			this.missingFieldFill = false;
 			this.errorPasswordNotEquals = false;
 			this.errorAccountAlreadyExist = false;
+			this.usernameTextField.setText("");
+			this.passwordTextField.setText("");
+			this.passwordConfirmationTextField.setText("");
+			this.currentUsername = "";
+			this.currentPassword = "";
+			this.currentHiddenPassword = "";
+			this.currentHiddenPasswordConfirmation = "";
+			this.currentPasswordConfirmation = "";
 			Game.getInstance().enterState(1);
 		}
 	}
@@ -292,6 +320,10 @@ public class GuiSignup extends BasicGameState {
 
 	public static boolean isAlphaNumeric(String s) {
 		return s != null && s.matches("^[a-zA-Z0-9]*$");
+	}
+
+	public static boolean isAlphaNumericPassword(String s) {
+		return s != null && s.matches("/[a-zA-Z0-9 \\/\\\\+@\"*#%&()=?'^~!{}.:,;°§_<>]*$/gm");
 	}
 
 	@Override

@@ -5,8 +5,6 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.google.gson.annotations.Expose;
-
 public class Account {
 	private int account_Level;
 	private String username, passwordHash;

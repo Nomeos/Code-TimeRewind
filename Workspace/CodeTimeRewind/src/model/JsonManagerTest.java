@@ -1,5 +1,6 @@
 package model;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -10,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class JsonManagerTest {
-	private String expected, actual;
 	private String saveDirectoryPath = System.getProperty("user.dir") + "\\save\\accounts.json";
 	private JsonManager jm;
 	private Account account, account2;
@@ -38,12 +38,8 @@ public class JsonManagerTest {
 		this.account2.setUsername("Albert");
 		this.account2.setPasswordHash(this.account2.hashPassword("test2"));
 
-		if(!this.jm.RegisterAccount(this.account)) {
-			fail();
-		}
-		if(!this.jm.RegisterAccount(this.account2)) {
-			fail();
-		}
+		assertTrue(this.jm.RegisterAccount(this.account));
+		assertTrue(this.jm.RegisterAccount(this.account2));
 		this.jm.GetAllDataFromJson();
 	}
 
@@ -53,9 +49,7 @@ public class JsonManagerTest {
 		this.account.setUsername("Jason");
 		this.account.setPasswordHash(this.account.hashPassword("test"));
 
-		if(!this.jm.RegisterAccount(this.account)) {
-			fail();
-		}
+		assertTrue(this.jm.RegisterAccount(this.account));
 	}
 
 	@Test
@@ -66,16 +60,11 @@ public class JsonManagerTest {
 		this.account2.setUsername("Albert");
 		this.account2.setPasswordHash(this.account2.hashPassword("test2"));
 
-		if(!this.jm.RegisterAccount(this.account)) {
-			fail();
-		}
-		if(!this.jm.RegisterAccount(this.account2)) {
-			fail();
-		}
-	
+		assertTrue(this.jm.RegisterAccount(this.account));
+		assertTrue(this.jm.RegisterAccount(this.account2));
+
 	}
 
-	
 	@Test
 	public void loginAccount() throws NoSuchAlgorithmException {
 		this.file.deleteOnExit();
@@ -83,18 +72,17 @@ public class JsonManagerTest {
 		this.account.setPassword("test");
 		this.account.setPasswordHash(this.account.hashPassword("test"));
 		this.jm.RegisterAccount(this.account);
-		if(!this.jm.LoginAccount(account)) {
+		if (!this.jm.LoginAccount(account)) {
 			fail();
 		}
-		
+
 	}
-	
 
 	@Test
 	public void areThePasswordEqualsTest() throws NoSuchAlgorithmException {
 		this.account.setUsername("Jason");
 		this.account.setPasswordHash(this.account.hashPassword("test"));
-		if(!this.account.areThePasswordEquals("test")) {
+		if (!this.account.areThePasswordEquals("test")) {
 			fail();
 		}
 
@@ -105,8 +93,6 @@ public class JsonManagerTest {
 		this.file.delete();
 		this.account = null;
 		this.account2 = null;
-		this.actual = null;
-		this.expected = null;
 		this.file = null;
 		this.jm = null;
 		this.saveDirectoryPath = null;
