@@ -61,18 +61,22 @@ public class JsonManagerTest {
 		this.jm.RegisterAccount(this.account);
 		this.jm.RegisterAccount(this.account2);
 	}
+
+	
 	@Test
 	public void loginAccount() throws NoSuchAlgorithmException {
 		this.account.setUsername("Jason");
 		this.account.setPasswordHash(this.account.hashPassword("test"));
 		this.jm.LoginAccount(account);
 	}
+	
+
 	@Test
 	public void areThePasswordEqualsTest() throws NoSuchAlgorithmException {
 		this.account.setUsername("Jason");
 		this.account.setPasswordHash(this.account.hashPassword("test"));
 		this.account.areThePasswordEquals("test");
-		
+
 	}
 
 	@After

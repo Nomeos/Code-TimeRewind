@@ -5,9 +5,14 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.google.gson.annotations.Expose;
+
 public class Account {
-	private String username, passwordHash;
 	private int account_Level;
+	private String username, passwordHash;
+	private transient String  password = "";
+	
+	
 
 
 	public Account() {
@@ -16,6 +21,7 @@ public class Account {
 
 	public Account(String username, String password) throws NoSuchAlgorithmException {
 		this.username = username;
+		
 		this.passwordHash = hashPassword(password);
 
 	}
@@ -52,5 +58,13 @@ public class Account {
 
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

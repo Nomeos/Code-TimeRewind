@@ -39,15 +39,15 @@ public class GuiMenu extends BasicGameState {
 		this.width = 600;
 
 		this.x = ((gc.getWidth() / 2) - (width / 2));
-		this.playButton = new Rectangle(x, 400, width, height);
-		this.exitButton = new Rectangle(x, 650, width, height);
+		this.playButton = new Rectangle(x, 350, width, height);
+		this.exitButton = new Rectangle(x, 600, width, height);
 		this.ft = new Font("Century Gothic", Font.BOLD, 20);
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		g.setBackground(Color.gray);
-		g.setColor(new Color(64, 207, 249));
+		g.setBackground(new Color(102, 204, 255));
+		g.setColor(Color.white);
 
 		g.draw(playButton);
 		g.draw(exitButton);
@@ -57,9 +57,11 @@ public class GuiMenu extends BasicGameState {
 
 		g.setFont(new TrueTypeFont(ft, true));
 
-		g.setColor(Color.white);
-		g.drawString(playString, playButton.getCenterX(), playButton.getCenterY());
-		g.drawString(exitString, exitButton.getCenterX(), exitButton.getCenterY());
+		g.setColor(new Color(102, 204, 255));
+		
+		g.drawString(playString, playButton.getCenterX()-20, playButton.getCenterY()-15);
+		
+		g.drawString(exitString, exitButton.getCenterX()-20, exitButton.getCenterY()-15);
 		g.drawString(this.position, 50, 50);
 
 	}

@@ -19,6 +19,7 @@ public class JsonManager {
 	private File file;
 	private FileReader fileReader;
 	private FileWriter fileWriter;
+	private boolean isRegister = false;
 
 	public JsonManager() {
 		file = new File(saveDirectoryPath);
@@ -27,9 +28,11 @@ public class JsonManager {
 
 	public boolean RegisterAccount(Account userAccount) {
 		if (IsTheFileAlreadyExist(this.file)) {
+			this.isRegister = true;
 			if (IsTheUserAlreadyExist(userAccount)) {
 				return false;
 			} else {
+				userAccount.setAccount_Level(1);
 				AddTheAccountOnTheList(userAccount);
 				WriteOnJson();
 				return true;
@@ -43,6 +46,7 @@ public class JsonManager {
 
 	public boolean LoginAccount(Account userAccount) {
 		if (IsTheFileAlreadyExist(this.file)) {
+			this.isRegister = false;
 			if (IsTheUserAlreadyExist(userAccount)) {
 				return true;
 			} else {
@@ -102,17 +106,28 @@ public class JsonManager {
 
 	public boolean IsTheUserAlreadyExist(Account userAccount) {
 		boolean result = false;
-		for (Account account : listOfAccount) {
-			if (account.getUsername() == userAccount.getUsername()) {
-				if (account.areThePasswordEquals(userAccount.getPasswordHash())) {
+		if (isRegister) {
+			for (Account account : GetAllDataFromJson()) {
+				if (!account.getUsername().equals(userAccount.getUsername())) {
+					result = false;
+				} else {
 					result = true;
 					break;
-				} else {
-					result = false;
-					break;
+				}
+
+			}
+
+		} else {
+			for (Account account : GetAllDataFromJson()) {
+				if (account.getUsername().equals(userAccount.getUsername())) {
+					if (account.areThePasswordEquals(userAccount.getPassword())) {
+						result = true;
+						break;
+					} else {
+						result = false;
+					}
 				}
 			}
-			result = false;
 		}
 		return result;
 

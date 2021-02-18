@@ -13,13 +13,11 @@ public class Game extends StateBasedGame {
 	public final int login = 1;
 	public final int signup = 2;
 	private static Game instance;
+	private boolean isTheRegisterSucessfull = false;
 
 	public Game(String gameName) {
 		// Title windows name
 		super(gameName);
-		this.addState(new GuiMenu(menu));
-		this.addState(new GuiLogin(login));
-		this.addState(new GuiSignup(signup));
 		instance = this;
 
 	}
@@ -31,16 +29,15 @@ public class Game extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
 
-		this.getState(menu).init(gc, this);
-		this.getState(login).init(gc, this);
-		this.getState(signup).init(gc, this);
-
-		this.enterState(menu);
+		this.addState(new GuiMenu(menu));
+		this.addState(new GuiLogin(login));
+		this.addState(new GuiSignup(signup));
 	}
 
 	@Override
 	public void keyReleased(int key, char c) {
 		this.getCurrentState().keyReleased(key, c);
+		
 	}
 
 	@Override
@@ -62,5 +59,13 @@ public class Game extends StateBasedGame {
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		this.getCurrentState().mouseMoved(oldx, oldy, newx, newy);
 
+	}
+
+	public boolean getTheRegisterSucessfull() {
+		return isTheRegisterSucessfull;
+	}
+
+	public void setTheRegisterSucessfull(boolean isTheRegisterSucessfull) {
+		this.isTheRegisterSucessfull = isTheRegisterSucessfull;
 	}
 }
