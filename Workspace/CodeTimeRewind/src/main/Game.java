@@ -5,6 +5,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import controller.*;
+import model.Account;
 
 public class Game extends StateBasedGame {
 	public final int menu = 0;
@@ -12,6 +13,7 @@ public class Game extends StateBasedGame {
 	public final int signup = 2;
 	public final int lobby = 3;
 	private static Game instance;
+	private Account playerAccount;
 	private boolean isTheRegisterSucessfull = false;
 
 	public Game(String gameName) {
@@ -67,5 +69,12 @@ public class Game extends StateBasedGame {
 
 	public void setTheRegisterSucessfull(boolean isTheRegisterSucessfull) {
 		this.isTheRegisterSucessfull = isTheRegisterSucessfull;
+	}
+
+	public Account getPlayerAccount() {
+		return playerAccount;
+	}
+	public void setPlayerAccount(Account user) {
+		this.playerAccount = user;
 	}
 }

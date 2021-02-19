@@ -1,6 +1,7 @@
 package controller;
 
-import model.*;
+import model.Account;
+import model.JsonManagerAccount;
 
 import java.awt.Font;
 import java.security.NoSuchAlgorithmException;
@@ -27,10 +28,11 @@ public class GuiLogin extends BasicGameState {
 			errorLoginFailString = "", loginSuccessfulString = "";
 	private float stringX, stringY;
 	private Account account;
-	private JsonManager jm;
+	private JsonManagerAccount jm;
 	private TrueTypeFont trueTypeFont;
 	private TextField usernameTextField, passwordTextField;
 	private boolean errorUsernameLength, missingFieldFill, errorLoginFail, loginSuccessful;
+	private boolean hoveringSignUp;
 
 	public GuiLogin() {
 	}
@@ -42,17 +44,28 @@ public class GuiLogin extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		this.account = new Account();
-		this.jm = new JsonManager();
+		this.jm = new JsonManagerAccount();
+		
 		this.height = 30;
 		this.width = 600;
 		this.x = ((gc.getWidth() / 2) - (width / 2));
 		this.y = 500;
+		
 		this.errorUsernameLength = false;
+		this.missingFieldFill = false;
+		this.errorLoginFail = false;
+		this.loginSuccessful = false;
+		
+		this.hoveringSignUp = false;
+		
 		this.ft = new Font("Century Gothic", Font.BOLD, 20);
 		this.trueTypeFont = new TrueTypeFont(ft, true);
+		
 		this.passwordTextField = new TextField(gc, trueTypeFont, x, y, width, height);
 		this.usernameTextField = new TextField(gc, trueTypeFont, x, y - 70, width, height);
+		
 		this.requirementY = passwordTextField.getY() + passwordTextField.getHeight() + 10;
+		
 		this.submitButton = new Rectangle(x, requirementY + 20, width, 100);
 		this.signUp = new Rectangle((gc.getWidth() - 400), (gc.getHeight() - 110), 350, 60);
 
@@ -103,6 +116,9 @@ public class GuiLogin extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		// TODO Auto-generated method stub
+		if(hoveringSignUp) {
+			
+		}
 		if (Game.getInstance().getTheRegisterSucessfull()) {
 			this.registrationSuccessfulString = "Registration Successful !";
 		} else {
@@ -128,6 +144,7 @@ public class GuiLogin extends BasicGameState {
 		} else {
 			this.loginSuccessfulString = "";
 		}
+		
 	}
 
 	@Override
@@ -200,7 +217,7 @@ public class GuiLogin extends BasicGameState {
 	}
 
 	public static boolean isAlphaNumericPassword(String s) {
-		return s != null && s.matches("/[a-zA-Z0-9 \\/\\\\+@\"*#%&()=?'^~!{}.:,;°§_<>]*$/gm");
+		return s != null && s.matches("^[a-zA-Z0-9 +@\\\"*$#%&()=?'^~!{}\\/\\\\.:,;°§_<>]*");
 	}
 
 	@Override
@@ -267,7 +284,9 @@ public class GuiLogin extends BasicGameState {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-
+		if(isHoveringButton(signUp, newx, newy)) {
+			
+		}
 	}
 
 }
