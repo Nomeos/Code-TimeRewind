@@ -16,7 +16,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import main.Game;
 import model.Account;
-import model.JsonManagerAccount;
+import model.DatabaseAccountManager;
 
 public class GuiSignup extends BasicGameState {
 	private int x, y, requirementY, stateId, width, height;
@@ -28,7 +28,7 @@ public class GuiSignup extends BasicGameState {
 			errorAccountAlreadyExistString = "";
 	private float stringX, stringY;
 	private Account account;
-	private JsonManagerAccount jm;
+	private DatabaseAccountManager jm;
 	private TrueTypeFont trueTypeFont;
 	private TextField usernameTextField, passwordTextField, passwordConfirmationTextField;
 	private boolean errorUsernameLength, missingFieldFill, errorPasswordNotEquals, errorAccountAlreadyExist;
@@ -52,7 +52,7 @@ public class GuiSignup extends BasicGameState {
 		this.trueTypeFont = new TrueTypeFont(ft, true);
 
 		this.account = new Account();
-		this.jm = new JsonManagerAccount();
+		this.jm = new DatabaseAccountManager();
 
 		this.passwordTextField = new TextField(gc, trueTypeFont, x, y, width, height);
 		this.usernameTextField = new TextField(gc, trueTypeFont, x, y - 70, width, height);

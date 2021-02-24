@@ -1,7 +1,7 @@
 package controller;
 
 import model.Account;
-import model.JsonManagerAccount;
+import model.DatabaseAccountManager;
 
 import java.awt.Font;
 import java.security.NoSuchAlgorithmException;
@@ -28,7 +28,7 @@ public class GuiLogin extends BasicGameState {
 			errorLoginFailString = "", loginSuccessfulString = "";
 	private float stringX, stringY;
 	private Account account;
-	private JsonManagerAccount jm;
+	private DatabaseAccountManager jm;
 	private TrueTypeFont trueTypeFont;
 	private TextField usernameTextField, passwordTextField;
 	private boolean errorUsernameLength, missingFieldFill, errorLoginFail, loginSuccessful;
@@ -44,7 +44,7 @@ public class GuiLogin extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		this.account = new Account();
-		this.jm = new JsonManagerAccount();
+		this.jm = new DatabaseAccountManager();
 		
 		this.height = 30;
 		this.width = 600;
@@ -228,9 +228,11 @@ public class GuiLogin extends BasicGameState {
 					this.account.setUsername(this.usernameTextField.getText());
 					try {
 						this.account.setPassword(this.currentPassword);
+						this.account.setPassword(currentPassword);
 						this.account.setPasswordHash(this.account.hashPassword(this.currentPassword));
 						if (this.jm.LoginAccount(this.account)) {
 							this.loginSuccessful = true;
+							
 							Game.getInstance().enterState(3);
 						} else {
 							this.errorLoginFail = true;

@@ -73,7 +73,7 @@ public class GuiLobby extends BasicGameState {
 		g.setColor(Color.white);
 		g.setFont(trueTypeFontUserName);
 		g.drawString(this.playerAccount.getUsername(), 300, 50);
-		g.drawString("Level : "+this.playerAccount.getAccount_Level(), 300, 70);
+		g.drawString("Level : " + this.playerAccount.getAccount_Level(), 300, 70);
 
 		g.setColor(new Color(102, 204, 255));
 		g.setFont(trueTypeFontTitre);

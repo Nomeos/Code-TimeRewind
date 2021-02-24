@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Projet TPI/Workspace/CodeTimeRewind/libs/native/windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/native/windows"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-15">
@@ -10,25 +10,22 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/gson-2.2.2.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/hamcrest-2.2.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/jar_files.zip"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/junit-4.13.1.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/lwjgl.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/natives-linux.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/natives-mac.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/natives-windows.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/slick.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/spring-boot-cli-2.4.2.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/spring-boot-loader-tools-2.4.2.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/spring-core-5.3.3.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/spring-jcl-5.3.3.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/spring-security-crypto-5.4.2.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/lombok-1.18.4.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/jar_persistence/derby.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/jar_persistence/jakarta.persistence-api.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/jar_persistence/eclipselink.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Workspace/CodeTimeRewind/libs/jar_persistence/javax.persistence-api-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/hamcrest-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/junit-4.13.1.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/lombok-1.18.4.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/lwjgl.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/natives-linux.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/natives-mac.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/natives-windows.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/slick.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/spring-boot-cli-2.4.2.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/spring-boot-loader-tools-2.4.2.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/spring-core-5.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/spring-jcl-5.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/spring-security-crypto-5.4.2.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/javax.persistence_2.2.1.v201807122140.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/derbyjar/derby.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/derbyjar/derbyclient.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
