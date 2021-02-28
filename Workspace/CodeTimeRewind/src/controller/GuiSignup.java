@@ -3,38 +3,48 @@ package controller;
 import java.awt.Font;
 import java.security.NoSuchAlgorithmException;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import lombok.NoArgsConstructor;
 import main.Game;
 import model.Account;
 import model.DatabaseAccountManager;
 
+@NoArgsConstructor
 public class GuiSignup extends BasicGameState {
-	private int x, y, requirementY, stateId, width, height;
+	private int middleButtonXPosition, middleButtonYPositionStarting, requirementY, stateId, middleComponentsWidth,
+			textFieldHeight, smallButtonWidth, smallButtonHeight, loginButtonXPosition, loginButtonYPosition,
+			submitButtonYPosition;
+
+	private int[] durationBetweenCharacterFrame = { 200, 200, 200, 200, 200, 200 };
+	private Image backgroundImage, submitButton, loginButton;
+	private Animation knightIdleAnimation;
+
 	private Font ft = null;
-	private Shape submitButton = null, loginButton = null;
+	private TrueTypeFont trueTypeFont;
+
 	private String currentPassword = "", currentPasswordConfirmation = "", currentUsername = "",
 			currentHiddenPassword = "", errorUsernameLengthString = "", missingFieldFillString = "",
 			currentHiddenPasswordConfirmation = "", errorPasswordNotEqualsString = "",
 			errorAccountAlreadyExistString = "";
-	private float stringX, stringY;
+
 	private Account account;
 	private DatabaseAccountManager jm;
-	private TrueTypeFont trueTypeFont;
-	private TextField usernameTextField, passwordTextField, passwordConfirmationTextField;
-	private boolean errorUsernameLength, missingFieldFill, errorPasswordNotEquals, errorAccountAlreadyExist;
 
-	public GuiSignup() {
-	}
+	private TextField usernameTextField, passwordTextField, passwordConfirmationTextField;
+	private boolean errorUsernameLength, missingFieldFill, errorPasswordNotEquals, errorAccountAlreadyExist,
+			initializeSubmit = true, isPressedSubmit = false, initializeLogin = true, isPressedLogin = false;
 
 	public GuiSignup(int state) {
 		this.stateId = state;
@@ -42,11 +52,14 @@ public class GuiSignup extends BasicGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.height = 30;
-		this.width = 600;
-
-		this.x = ((gc.getWidth() / 2) - (width / 2));
-		this.y = 450;
+		this.textFieldHeight = 30;
+		this.middleComponentsWidth = 600;
+		this.smallButtonHeight = 60;
+		this.smallButtonWidth = 350;
+		this.loginButtonXPosition = (gc.getWidth() - 400);
+		this.loginButtonYPosition = (gc.getHeight() - 110);
+		this.middleButtonXPosition = ((gc.getWidth() / 2) - (middleComponentsWidth / 2));
+		this.middleButtonYPositionStarting = 380;
 
 		this.ft = new Font("Century Gothic", Font.BOLD, 20);
 		this.trueTypeFont = new TrueTypeFont(ft, true);
@@ -54,26 +67,70 @@ public class GuiSignup extends BasicGameState {
 		this.account = new Account();
 		this.jm = new DatabaseAccountManager();
 
-		this.passwordTextField = new TextField(gc, trueTypeFont, x, y, width, height);
-		this.usernameTextField = new TextField(gc, trueTypeFont, x, y - 70, width, height);
-		this.passwordConfirmationTextField = new TextField(gc, trueTypeFont, x, y + 70, width, height);
+		this.passwordTextField = new TextField(gc, trueTypeFont, middleButtonXPosition,
+				middleButtonYPositionStarting + 70, middleComponentsWidth, textFieldHeight);
+		this.usernameTextField = new TextField(gc, trueTypeFont, middleButtonXPosition, middleButtonYPositionStarting,
+				middleComponentsWidth, textFieldHeight);
+		this.passwordConfirmationTextField = new TextField(gc, trueTypeFont, middleButtonXPosition,
+				middleButtonYPositionStarting + 140, middleComponentsWidth, textFieldHeight);
 
 		this.requirementY = passwordConfirmationTextField.getY() + passwordConfirmationTextField.getHeight() + 10;
 
-		this.loginButton = new Rectangle((gc.getWidth() - 400), (gc.getHeight() - 110), 350, 60);
-		this.submitButton = new Rectangle(x, requirementY + 140, width, 100);
+		this.submitButtonYPosition = requirementY + 140;
 
 		this.usernameTextField.setText("");
 		this.passwordTextField.setText("");
 		this.passwordConfirmationTextField.setText("");
+
+		this.backgroundImage = new Image("/res/Main_Screen_Background.png");
+
+		Image[] knightIdle = { new Image("/res/entity/Nom-eos/Idle/Knight_idle_01_uninterlace.png"),
+				new Image("/res/entity/Nom-eos/Idle/Knight_idle_02_uninterlace.png"),
+				new Image("/res/entity/Nom-eos/Idle/Knight_idle_03_uninterlace.png"),
+				new Image("/res/entity/Nom-eos/Idle/Knight_idle_04_uninterlace.png"),
+				new Image("/res/entity/Nom-eos/Idle/Knight_idle_05_uninterlace.png"),
+				new Image("/res/entity/Nom-eos/Idle/Knight_idle_06_uninterlace.png") };
+		this.knightIdleAnimation = new Animation(knightIdle, durationBetweenCharacterFrame);
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		g.drawImage(backgroundImage, 0, 0);
+
+		if (initializeSubmit) {
+			this.submitButton = new Image("/res/buttons/SubmitButton.png");
+			this.submitButton.draw(this.middleButtonXPosition, this.submitButtonYPosition);
+		} else {
+			if (!isPressedSubmit) {
+				this.submitButton.destroy();
+				this.submitButton = new Image("/res/buttons/SubmitButton.png");
+				this.submitButton.draw(this.middleButtonXPosition, this.submitButtonYPosition);
+			} else {
+				this.submitButton.destroy();
+				this.submitButton = new Image("/res/buttons/SubmitButtonHit.png");
+				this.submitButton.draw(this.middleButtonXPosition, this.submitButtonYPosition);
+			}
+		}
+		if (initializeLogin) {
+			this.loginButton = new Image("/res/buttons/LoginButton.png");
+			this.loginButton.draw(loginButtonXPosition, loginButtonYPosition);
+		} else {
+			if (!isPressedLogin) {
+				this.loginButton.destroy();
+				this.loginButton = new Image("/res/buttons/LoginButton.png");
+				this.loginButton.draw(loginButtonXPosition, loginButtonYPosition);
+			} else {
+				this.loginButton.destroy();
+				this.loginButton = new Image("/res/buttons/LoginButtonHit.png");
+				this.loginButton.draw(loginButtonXPosition, loginButtonYPosition);
+			}
+		}
+
 		g.setColor(Color.white);
-		g.drawString("* Enter your username : ", x, this.usernameTextField.getY() - 20);
-		g.drawString("* Enter your password : ", x, this.passwordTextField.getY() - 20);
-		g.drawString("* Confirm your password : ", x, this.passwordConfirmationTextField.getY() - 20);
+		g.drawString("* Enter your username : ", middleButtonXPosition, this.usernameTextField.getY() - 20);
+		g.drawString("* Enter your password : ", middleButtonXPosition, this.passwordTextField.getY() - 20);
+		g.drawString("* Confirm your password : ", middleButtonXPosition,
+				this.passwordConfirmationTextField.getY() - 20);
 
 		this.usernameTextField.setBorderColor(Color.black);
 		this.usernameTextField.setBackgroundColor(Color.white);
@@ -91,35 +148,26 @@ public class GuiSignup extends BasicGameState {
 		this.passwordTextField.render(gc, g);
 		this.passwordConfirmationTextField.render(gc, g);
 
-		g.drawString("Mandatory = *", x, requirementY);
-		g.drawString("Fill the two text field with your username and password.", x, requirementY + 20);
-		g.drawString("Username requirements :", x, requirementY + 40);
-		g.drawString("- Make sure it's at least between 4 and 12 characters.", x, requirementY + 60);
-		g.drawString("- Only alphanumeric characters can be usable.", x, requirementY + 80);
-		g.drawString("Password requirements :", x, requirementY + 100);
-		g.drawString("- Be sure to remember it.", x, requirementY + 120);
-
-		g.setColor(Color.white);
-		g.fill(submitButton);
-		g.draw(submitButton);
-
-		g.fill(loginButton);
-		g.draw(loginButton);
+		g.drawString("Mandatory = *", middleButtonXPosition, requirementY);
+		g.drawString("Fill the two text field with your username and password.", middleButtonXPosition,
+				requirementY + 20);
+		g.drawString("Username requirements :", middleButtonXPosition, requirementY + 40);
+		g.drawString("- Make sure it's at least between 4 and 12 characters.", middleButtonXPosition,
+				requirementY + 60);
+		g.drawString("- Only alphanumeric characters can be usable.", middleButtonXPosition, requirementY + 80);
+		g.drawString("Password requirements :", middleButtonXPosition, requirementY + 100);
+		g.drawString("- Be sure to remember it.", middleButtonXPosition, requirementY + 120);
 
 		g.setColor(new Color(102, 204, 255));
-		this.stringX = submitButton.getCenterX() - 40;
-		this.stringY = submitButton.getCenterY() - 10;
-		g.drawString("SUBMIT", stringX, stringY);
-
-		this.stringX = loginButton.getCenterX() - (loginButton.getWidth() / 4);
-		this.stringY = (loginButton.getCenterY() - (loginButton.getHeight() / 4)) + 5;
-		g.drawString("Already have an account ? Login !", stringX - 60, stringY);
 
 		g.setColor(Color.red);
 		g.drawString(errorUsernameLengthString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
 		g.drawString(missingFieldFillString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
 		g.drawString(errorPasswordNotEqualsString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
 		g.drawString(errorAccountAlreadyExistString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
+
+		g.drawAnimation(knightIdleAnimation, 100, 700);
+
 	}
 
 	@Override
@@ -231,18 +279,35 @@ public class GuiSignup extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (isHoveringButton(submitButton, x, y) && button == 0) {
+		if (middleButtonXPosition <= x && (middleButtonXPosition + middleComponentsWidth) >= x
+				&& (requirementY + 140) <= y && (requirementY + 140 + 150) >= y && button == 0) {
+			this.initializeSubmit = false;
+			this.isPressedSubmit = true;
+		}
+		if (this.loginButtonXPosition <= x && (this.loginButtonXPosition + this.smallButtonWidth) >= x
+				&& this.loginButtonYPosition <= y && (this.loginButtonYPosition + this.smallButtonHeight) >= y) {
+			this.initializeLogin = false;
+			this.isPressedLogin = true;
+		}
+
+	}
+
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+		this.isPressedSubmit = false;
+		this.isPressedLogin = false;
+		if (middleButtonXPosition <= x && (middleButtonXPosition + middleComponentsWidth) >= x
+				&& submitButtonYPosition <= y && (submitButtonYPosition + 150) >= y && button == 0) {
 			if (this.usernameTextField.getText() != "" && this.passwordTextField.getText() != ""
 					&& this.passwordConfirmationTextField.getText() != "") {
 				if (usernameTextField.getText().length() <= 12 && usernameTextField.getText().length() >= 4) {
-					System.out.println(this.currentPassword + " ? " + this.currentPasswordConfirmation);
 					if (this.currentPassword.equals(currentPasswordConfirmation)) {
 						this.account.setUsername(this.usernameTextField.getText());
 						try {
 							this.account.setPasswordHash(this.account.hashPassword(this.currentPassword));
 							if (this.jm.RegisterAccount(account)) {
 								Game.getInstance().setTheRegisterSucessfull(true);
-								Game.getInstance().enterState(1);
+								Game.getInstance().enterState(1, new FadeOutTransition(), new FadeInTransition());
 							} else {
 								this.errorAccountAlreadyExist = true;
 								this.usernameTextField.setText("");
@@ -268,9 +333,9 @@ public class GuiSignup extends BasicGameState {
 			} else {
 				this.missingFieldFill = true;
 			}
-
 		}
-		if (isHoveringButton(loginButton, x, y) && button == 0) {
+		if (this.loginButtonXPosition <= x && (this.loginButtonXPosition + this.smallButtonWidth) >= x
+				&& this.loginButtonYPosition <= y && (this.loginButtonYPosition + this.smallButtonHeight) >= y) {
 			this.errorUsernameLength = false;
 			this.missingFieldFill = false;
 			this.errorPasswordNotEquals = false;
@@ -283,12 +348,9 @@ public class GuiSignup extends BasicGameState {
 			this.currentHiddenPassword = "";
 			this.currentHiddenPasswordConfirmation = "";
 			this.currentPasswordConfirmation = "";
-			Game.getInstance().enterState(1);
+			Game.getInstance().enterState(1, new FadeOutTransition(), new FadeInTransition());
 		}
-	}
 
-	@Override
-	public void mouseReleased(int button, int x, int y) {
 		if (isHoveringTextField(this.usernameTextField, x, y) && button == 0) {
 
 			this.passwordTextField.setFocus(false);
@@ -313,10 +375,6 @@ public class GuiSignup extends BasicGameState {
 				&& textField.getY() + textField.getHeight() > y;
 	}
 
-	public boolean isHoveringButton(Shape shape, int x, int y) {
-		return shape.getX() < x && shape.getX() + shape.getWidth() > x && shape.getY() < y
-				&& shape.getY() + shape.getHeight() > y;
-	}
 
 	public static boolean isAlphaNumeric(String s) {
 		return s != null && s.matches("^[a-zA-Z0-9]*$");
@@ -340,7 +398,6 @@ public class GuiSignup extends BasicGameState {
 
 	@Override
 	public void keyPressed(int key, char c) {
-		System.out.println(key + " " + c);
 	}
 
 }

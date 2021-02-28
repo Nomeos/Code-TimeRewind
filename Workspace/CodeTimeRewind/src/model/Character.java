@@ -1,5 +1,9 @@
 package model;
 
+import java.util.List;
+
+import org.newdawn.slick.Animation;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,10 +18,16 @@ public class Character {
 		this.characterDefense = characterDefense;
 		this.characterAttack = characterAttack;
 		this.characterSpeed = characterSpeed;
+		this.dcm = new DatabaseCharacterManager();
+		this.animations = dcm.getAllAnimations(characterName);
+		
 	}
 
 	private String characterName;
 	private int characterLevel,characterHealth,characterDefense,characterAttack,characterSpeed;
+	private DatabaseCharacterManager dcm;
+	private List<Animation> animations;
 	
-
+	
+	
 }

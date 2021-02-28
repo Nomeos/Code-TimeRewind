@@ -10,7 +10,10 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/derbyjar/derbyclient.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/derbyjar/derby.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/hamcrest-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/javax.persistence_2.2.1.v201807122140.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/junit-4.13.1.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/lombok-1.18.4.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/lwjgl.jar"/>
@@ -24,8 +27,5 @@
 	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/spring-core-5.3.3.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/spring-jcl-5.3.3.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/spring-security-crypto-5.4.2.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/javax.persistence_2.2.1.v201807122140.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/derbyjar/derby.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/derbyjar/derbyclient.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

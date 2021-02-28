@@ -12,6 +12,7 @@ public class Game extends StateBasedGame {
 	public final int login = 1;
 	public final int signup = 2;
 	public final int lobby = 3;
+	public final int character = 4;
 	private static Game instance;
 	private Account playerAccount;
 	private boolean isTheRegisterSucessfull = false;
@@ -34,6 +35,7 @@ public class Game extends StateBasedGame {
 		this.addState(new GuiLogin(login));
 		this.addState(new GuiSignup(signup));
 		this.addState(new GuiLobby(lobby));
+		this.addState(new GuiCharacter(character));
 	}
 
 	@Override

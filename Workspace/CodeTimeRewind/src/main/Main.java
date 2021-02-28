@@ -1,7 +1,5 @@
 package main;
 
-import java.sql.Statement;
-
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 

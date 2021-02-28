@@ -36,7 +36,6 @@ public class Account {
 
 	public boolean areThePasswordEquals(String password) {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		System.out.println(this.password +" ? " +password);
 		return passwordEncoder.matches(this.password, password);
 	}
 }
