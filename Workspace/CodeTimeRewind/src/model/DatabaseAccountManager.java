@@ -249,13 +249,12 @@ public class DatabaseAccountManager {
 						userAccount.setAccount_Level(resultQuery.getInt("Account_Level"));
 
 						result = true;
-
 					}
 				}
 				if (result) {
 					this.sqlQuery = "select" + "  c.Name," + "  ac.level," + "  c.health," + "  c.defense,"
 							+ "  c.attack," + "  c.speed " + "from" + "  characters c"
-							+ "  INNER JOIN Account_own_characters ac ON c.character_id = ac.account_own_character_id"
+							+ "  INNER JOIN Account_own_characters ac ON c.character_id = ac.character_id"
 							+ "  INNER JOIN Accounts a ON ac.account_id = a.account_id" + "  where a.username = '"
 							+ userAccount.getUsername() + "'";
 					resultQueryOwnCharacters = statement.executeQuery(sqlQuery);
