@@ -21,21 +21,43 @@ import model.Account;
 import model.DatabaseAccountManager;
 
 public class GuiLogin extends BasicGameState {
-	private int middleButtonXPosition, middleButtonYPositionStarting, stateId, middleComponentsWidth, textFieldHeight,
-			smallButtonHeight, smallButtonWidth, signupButtonXPosition, signupButtonYPosition, submitButtonYPosition;
+	private int middleButtonXPosition;
+	private int middleButtonYPositionStarting;
+	private int stateId;
+	private int middleComponentsWidth;
+	private int textFieldHeight;
+	private int smallButtonHeight;
+	private int smallButtonWidth;
+	private int signupButtonXPosition;
+	private int signupButtonYPosition;
+	private int submitButtonYPosition;
 	private int[] duration = { 200, 200, 200, 200, 200, 200 };
 	private Font ft = null;
-	private String currentPassword = "", currentUsername = "", currentHiddenPassword = "",
-			errorUsernameLengthString = "", missingFieldFillString = "", registrationSuccessfulString = "",
-			errorLoginFailString = "", loginSuccessfulString = "";
+	private String currentPassword = "";
+	private String currentUsername = "";
+	private String currentHiddenPassword = "";
+	private String errorUsernameLengthString = "";
+	private String missingFieldFillString = "";
+	private String registrationSuccessfulString = "";
+	private String errorLoginFailString = "";
+	private String loginSuccessfulString = "";
 
 	private Account account;
 	private DatabaseAccountManager jm;
 	private TrueTypeFont trueTypeFont;
-	private TextField usernameTextField, passwordTextField;
-	private boolean errorUsernameLength, missingFieldFill, errorLoginFail, loginSuccessful;
-	private boolean initializeSubmit = true, isPressedSubmit = false, initializeSignup = true, isPressedSignup = false;
-	private Image backgroundImage, submitButton, signupButton;
+	private TextField usernameTextField;
+	private TextField passwordTextField;
+	private boolean errorUsernameLength;
+	private boolean missingFieldFill;
+	private boolean errorLoginFail;
+	private boolean loginSuccessful;
+	private boolean initializeSubmit = true;
+	private boolean isPressedSubmit = false;
+	private boolean initializeSignup = true;
+	private boolean isPressedSignup = false;
+	private Image backgroundImage;
+	private Image submitButton;
+	private Image signupButton;
 	private Animation knightIdleAnimation;
 
 	public GuiLogin() {
@@ -184,7 +206,12 @@ public class GuiLogin extends BasicGameState {
 		this.missingFieldFill = false;
 		this.errorLoginFail = false;
 		Game.getInstance().setTheRegisterSucessfull(false);
-
+		StepsIfPasswordHasFocus(key,c);
+		StepsIfUsernameHasFocus(key,c);
+		
+		
+	}
+	public void StepsIfPasswordHasFocus(int key, char c) {
 		if (this.passwordTextField.hasFocus()) {
 			if (key == 200 || key == 203 || key == 205 || key == 208) {
 				this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
@@ -206,6 +233,8 @@ public class GuiLogin extends BasicGameState {
 			}
 			this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
 		}
+	}
+	public void StepsIfUsernameHasFocus(int key, char c) {
 		if (this.usernameTextField.hasFocus()) {
 
 			if (usernameTextField.getText().length() <= 12) {
@@ -233,7 +262,6 @@ public class GuiLogin extends BasicGameState {
 
 		}
 	}
-
 	public void drawString(String text, float x, float y, Color color) {
 		this.trueTypeFont.drawString(x, y, text, color);
 	}
@@ -243,7 +271,7 @@ public class GuiLogin extends BasicGameState {
 	}
 
 	public static boolean isAlphaNumericPassword(String s) {
-		return s != null && s.matches("^[a-zA-Z0-9 +@\\\"*$#%&()=?'^~!{}\\/\\\\.:,;°§_<>]*");
+		return s != null && s.matches("^[a-zA-Z0-9 +@\\\"*$#%&()=?'^~!{}\\/\\\\.:,;§_<>]*");
 	}
 
 	@Override
@@ -263,7 +291,7 @@ public class GuiLogin extends BasicGameState {
 
 	@Override
 	public void keyPressed(int key, char c) {
-
+		//Do nothing because the user will not release or press any key.
 	}
 
 	@Override
@@ -320,6 +348,7 @@ public class GuiLogin extends BasicGameState {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		//Do nothing because no action while use the mouse mouvement feature.
 	}
 
 }
