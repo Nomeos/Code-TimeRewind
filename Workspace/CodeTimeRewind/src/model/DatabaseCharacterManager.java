@@ -35,7 +35,6 @@ public class DatabaseCharacterManager {
 					+ characterName + "'";
 			resultQueryAllAnimations = statement.executeQuery(sqlQuery);
 			while (resultQueryAllAnimations.next()) {
-				System.out.println(resultQueryAllAnimations.getString("name"));
 				if (currentCategory.equals(resultQueryAllAnimations.getString("name"))) {
 					this.images.add(new Image(resultQueryAllAnimations.getString("Sprite_Path")));
 

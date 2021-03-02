@@ -58,7 +58,8 @@ public class DatabaseAccountManager {
 		}
 		try {
 			this.sqlQuery = "Create Table Account_Own_Characters (Account_Own_Character_Id int not null generated always as identity,"
-					+ "Character_Id int, Account_Id int, Level int," + "PRIMARY KEY (Account_Own_Character_Id),"
+					+ "Character_Id int, Account_Id int, Level int, Experience_point int,"
+					+ "PRIMARY KEY (Account_Own_Character_Id),"
 					+ "FOREIGN KEY (Character_Id) REFERENCES Characters(Character_Id),"
 					+ "FOREIGN KEY (Account_Id) REFERENCES Accounts(Account_Id))";
 			this.statement.executeUpdate(this.sqlQuery);
@@ -211,8 +212,8 @@ public class DatabaseAccountManager {
 					+ userAccount.getUsername() + "','" + userAccount.getPasswordHash() + "',1)";
 			Statement statement = OpenDatabaseConnection();
 			statement.executeUpdate(sqlQuery);
-			this.sqlQuery = "INSERT INTO Account_Own_Characters (Character_Id, Account_Id, Level)values (1,(SELECT Account_Id from Accounts where Username ='"
-					+ userAccount.getUsername() + "'),1)";
+			this.sqlQuery = "INSERT INTO Account_Own_Characters (Character_Id, Account_Id, Level,Experience_point)values (1,(SELECT Account_Id from Accounts where Username ='"
+					+ userAccount.getUsername() + "'),1,30)";
 			statement.executeUpdate(sqlQuery);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -253,7 +254,7 @@ public class DatabaseAccountManager {
 				}
 				if (result) {
 					this.sqlQuery = "select" + "  c.Name," + "  ac.level," + "  c.health," + "  c.defense,"
-							+ "  c.attack," + "  c.speed " + "from" + "  characters c"
+							+ "  c.attack," + "  c.speed, " + "ac.experience_point" + " from" + "  characters c"
 							+ "  INNER JOIN Account_own_characters ac ON c.character_id = ac.character_id"
 							+ "  INNER JOIN Accounts a ON ac.account_id = a.account_id" + "  where a.username = '"
 							+ userAccount.getUsername() + "'";
@@ -262,7 +263,8 @@ public class DatabaseAccountManager {
 						userAccount.getListOfOwnedCharacter().add(new Character(
 								resultQueryOwnCharacters.getString("Name"), resultQueryOwnCharacters.getInt("Level"),
 								resultQueryOwnCharacters.getInt("health"), resultQueryOwnCharacters.getInt("defense"),
-								resultQueryOwnCharacters.getInt("attack"), resultQueryOwnCharacters.getInt("speed")));
+								resultQueryOwnCharacters.getInt("attack"), resultQueryOwnCharacters.getInt("speed"),
+								resultQueryOwnCharacters.getInt("experience_point")));
 					}
 				}
 

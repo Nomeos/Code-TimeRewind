@@ -21,15 +21,14 @@ import main.Game;
 import model.Account;
 
 public class GuiLobby extends BasicGameState {
-	private int stateID,level;
-	private Shape charactersButton = null, inventoryButton = null, adventureButton = null, leftTopTriangle = null;
+	private int stateID, level, smallButtonHeight, smallButtonWidth, smallButtonYPosition, characterButtonXPosition,
+			inventoryButtonXPosition, adventureButtonWidth, adventureButtonHeight, adventureButtonXPosition,
+			adventureButtonYPosition;
 	private Account playerAccount;
-	private Font ftTitre, ftUserName;
-	private TrueTypeFont trueTypeFontTitre, trueTypeFontUserName;
 	private String username;
-	private float[] trianglePoint;
-
-	private Image backgroundImage;
+	private boolean initializeCharacter = true, isPressedCharacter = false, initializeInventory = true,
+			isPressedInventory = false, initializeAdventure = true, isPressedAdventure = false;
+	private Image backgroundImage, charactersButton, inventoryButton, adventureButton;
 
 	public GuiLobby() {
 	}
@@ -40,18 +39,15 @@ public class GuiLobby extends BasicGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		// TODO Auto-generated method stub
-		this.charactersButton = new Rectangle(50, gc.getHeight() - 100, 120, 60);
-		this.inventoryButton = new Rectangle(this.charactersButton.getX() + this.charactersButton.getWidth() + 50,
-				gc.getHeight() - 100, 120, 60);
-		this.adventureButton = new Circle(gc.getWidth() / 2, gc.getHeight() / 2, 200);
-		this.ftUserName = new Font("Century Gothic", Font.BOLD, 20);
-		this.ftTitre = new Font("Century Gothic", Font.BOLD, 50);
-		this.trueTypeFontTitre = new TrueTypeFont(ftTitre, true);
-		this.trueTypeFontUserName = new TrueTypeFont(ftUserName, true);
-
-		this.trianglePoint = new float[] { 0, 0, 0, 250, 300, 0 };
-		this.leftTopTriangle = new Polygon(this.trianglePoint);
+		this.smallButtonHeight = 60;
+		this.smallButtonWidth = 350;
+		this.characterButtonXPosition = 50;
+		this.smallButtonYPosition = (gc.getHeight() - 110);
+		this.inventoryButtonXPosition = characterButtonXPosition + smallButtonWidth + 50;
+		this.adventureButtonWidth = 400;
+		this.adventureButtonHeight = 400;
+		this.adventureButtonXPosition = (gc.getWidth() / 2) - (adventureButtonWidth / 2);
+		this.adventureButtonYPosition = (gc.getHeight() / 2) - (adventureButtonHeight / 2);
 
 		this.backgroundImage = new Image("/res/Half_Night.png");
 
@@ -61,46 +57,68 @@ public class GuiLobby extends BasicGameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		// TODO Auto-generated method stub
 		g.drawImage(backgroundImage, 0, 0);
-
+		if (initializeCharacter) {
+			this.charactersButton = new Image("/res/buttons/CharacterButton.png");
+			this.charactersButton.draw(characterButtonXPosition, smallButtonYPosition);
+		} else {
+			if (!isPressedCharacter) {
+				this.charactersButton.destroy();
+				this.charactersButton = new Image("/res/buttons/CharacterButton.png");
+				this.charactersButton.draw(characterButtonXPosition, smallButtonYPosition);
+			} else {
+				this.charactersButton.destroy();
+				this.charactersButton = new Image("/res/buttons/CharacterButtonHit.png");
+				this.charactersButton.draw(characterButtonXPosition, smallButtonYPosition);
+			}
+		}
+		if (initializeInventory) {
+			this.inventoryButton = new Image("/res/buttons/InventoryButton.png");
+			this.inventoryButton.draw(inventoryButtonXPosition, smallButtonYPosition);
+		} else {
+			if (!isPressedInventory) {
+				this.inventoryButton.destroy();
+				this.inventoryButton = new Image("/res/buttons/InventoryButton.png");
+				this.inventoryButton.draw(inventoryButtonXPosition, smallButtonYPosition);
+			} else {
+				this.inventoryButton.destroy();
+				this.inventoryButton = new Image("/res/buttons/InventoryButtonHit.png");
+				this.inventoryButton.draw(inventoryButtonXPosition, smallButtonYPosition);
+			}
+		}
+		if (initializeAdventure) {
+			this.adventureButton = new Image("/res/buttons/AdventureButton.png");
+			this.adventureButton.draw(adventureButtonXPosition, adventureButtonYPosition);
+		} else {
+			if (!isPressedAdventure) {
+				this.adventureButton.destroy();
+				this.adventureButton = new Image("/res/buttons/AdventureButton.png");
+				this.adventureButton.draw(adventureButtonXPosition, adventureButtonYPosition);
+			} else {
+				this.adventureButton.destroy();
+				this.adventureButton = new Image("/res/buttons/AdventureButtonHit.png");
+				this.adventureButton.draw(adventureButtonXPosition, adventureButtonYPosition);
+			}
+		}
 		g.setColor(Color.white);
-		g.draw(charactersButton);
-		g.fill(charactersButton);
 
-		g.draw(inventoryButton);
-		g.fill(inventoryButton);
-
-		g.draw(adventureButton);
-		g.fill(adventureButton);
-
-		g.draw(leftTopTriangle);
-		g.fill(leftTopTriangle);
-
-		g.setColor(new Color(102, 204, 255));
-		g.drawString("Character", charactersButton.getX() + 20, charactersButton.getY() + 20);
-		g.drawString("Inventory", inventoryButton.getX() + 20, inventoryButton.getY() + 20);
-
-		g.setColor(Color.white);
-		g.setFont(trueTypeFontUserName);
-
-		if(this.playerAccount != null) {
+		if (this.playerAccount != null) {
 			g.drawString(username, 300, 50);
 			g.drawString("Level : " + level, 300, 70);
+			
 		}
-		
-
-		g.setColor(new Color(102, 204, 255));
-		g.setFont(trueTypeFontTitre);
-		g.drawString("Adventure", this.adventureButton.getCenterX() - 120, this.adventureButton.getCenterY() - 35);
 
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int g) throws SlickException {
-		this.playerAccount = Game.getInstance().getPlayerAccount();
-		this.username = this.playerAccount.getUsername();
-		this.level = this.playerAccount.getAccount_Level();
+		if (this.playerAccount == null) {
+			this.playerAccount = Game.getInstance().getPlayerAccount();
+			this.username = this.playerAccount.getUsername();
+			this.level = this.playerAccount.getAccount_Level();
+		}
+		
+	
 
 	}
 
@@ -116,19 +134,43 @@ public class GuiLobby extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (isHoveringButton(this.charactersButton, x, y) && button == 0) {
-			Game.getInstance().enterState(4, new FadeOutTransition(),new FadeInTransition());
+		if (characterButtonXPosition <= x && (characterButtonXPosition + smallButtonWidth) >= x
+				&& smallButtonYPosition <= y && (smallButtonYPosition + smallButtonHeight) >= y && button == 0) {
+			this.initializeCharacter = false;
+			this.isPressedCharacter = true;
 		}
-	}
-	
-	public boolean isHoveringButton(Shape shape, int x, int y) {
-		return shape.getX() < x && shape.getX() + shape.getWidth() > x && shape.getY() < y
-				&& shape.getY() + shape.getHeight() > y;
+		if (inventoryButtonXPosition <= x && (inventoryButtonXPosition + smallButtonWidth) >= x
+				&& smallButtonYPosition <= y && (smallButtonYPosition + smallButtonHeight) >= y && button == 0) {
+			this.initializeInventory = false;
+			this.isPressedInventory = true;
+		}
+		if (adventureButtonXPosition <= x && (adventureButtonXPosition + adventureButtonWidth) >= x
+				&& adventureButtonYPosition <= y && (adventureButtonYPosition + adventureButtonHeight) >= y
+				&& button == 0) {
+			this.initializeAdventure = false;
+			this.isPressedAdventure = true;
+		}
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
+		this.isPressedCharacter = false;
+		this.isPressedInventory = false;
+		this.isPressedAdventure = false;
+		if (characterButtonXPosition <= x && (characterButtonXPosition + smallButtonWidth) >= x
+				&& smallButtonYPosition <= y && (smallButtonYPosition + smallButtonHeight) >= y && button == 0) {
+			Game.getInstance().enterState(4, new FadeOutTransition(), new FadeInTransition());
+		}
+		if (inventoryButtonXPosition <= x && (inventoryButtonXPosition + smallButtonWidth) >= x
+				&& smallButtonYPosition <= y && (smallButtonYPosition + smallButtonHeight) >= y && button == 0) {
 
+			//TODO create view inventory
+		}
+		if (adventureButtonXPosition <= x && (adventureButtonXPosition + adventureButtonWidth) >= x
+				&& adventureButtonYPosition <= y && (adventureButtonYPosition + adventureButtonHeight) >= y
+				&& button == 0) {
+			//TODO create view Adventure
+		}
 	}
 
 	@Override
@@ -138,7 +180,6 @@ public class GuiLobby extends BasicGameState {
 
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
 		return this.stateID;
 	}
 
