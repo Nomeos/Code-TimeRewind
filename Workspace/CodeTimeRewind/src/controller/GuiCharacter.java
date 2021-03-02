@@ -17,25 +17,46 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import main.Game;
 import model.Account;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class GuiCharacter extends BasicGameState {
-	@Getter
-	@Setter
+
 	private Account player;
-	private int smallButtonHeight, smallButtonWidth, lobbyButtonXPosition, lobbyButtonYPosition,
-			zoneLibreStatsXPosition, zoneLibreStatsYPosition, zoneLibreStatsHeight, character_experience_point,
-			character_health, character_defense, character_attack, character_speed, character_max_experience_point,
-			character_level;
+	private int smallButtonHeight;
+	private int smallButtonWidth;
+	private int lobbyButtonXPosition;
+	private int lobbyButtonYPosition;
+	private int zoneLibreStatsXPosition;
+	private int zoneLibreStatsYPosition;
+	private int zoneLibreStatsHeight;
+	private int character_experience_point;
+	private int character_health;
+	private int character_defense;
+	private int character_attack;
+	private int character_speed;
+	private int character_max_experience_point;
+	private int character_level;
 	private float backgroundProgressBarWidth;
-	private Image backgroundImage, lobbyButton, zoneLibreStats, backgroundProgressBar,backgroundSort1,backgroundSort2,backgroundSort3;
+	private Image backgroundImage;
+	private Image lobbyButton;
+	private Image zoneLibreStats;
+	private Image backgroundProgressBar;
+	private Image backgroundSort1;
+	private Image backgroundSort2;
+	private Image backgroundSort3;
 	private Shape progressBar;
 	private Font characterNameFont;
 	private TrueTypeFont characterNameTTF;
-	private boolean initializeLobby = true, isPressedLobby = false;
-	
+	private boolean initializeLobby = true;
+	private boolean isPressedLobby = false;
+	private String backgroundSortPath = "/res/zones/ZoneSort.png";
+	private String centuryFont = "Century Gothic";
 
 	public GuiCharacter(int state) {
 
@@ -54,24 +75,23 @@ public class GuiCharacter extends BasicGameState {
 		this.backgroundImage = new Image("/res/Half_Sunset.png");
 		this.backgroundProgressBarWidth = 276;
 		this.zoneLibreStats = new Image("/res/zones/ZoneLibre.png");
-		this.characterNameFont = new Font("Century Gothic", Font.BOLD, 50);
+		this.characterNameFont = new Font(centuryFont, Font.BOLD, 50);
 		this.characterNameTTF = new TrueTypeFont(characterNameFont, true);
 		this.backgroundProgressBar = new Image("/res/zones/ProgressionBar.png");
-		this.backgroundSort1 = new Image("/res/zones/ZoneSort.png");
-		this.backgroundSort2 = new Image("/res/zones/ZoneSort.png");
-		this.backgroundSort3 = new Image("/res/zones/ZoneSort.png");
+		this.backgroundSort1 = new Image(backgroundSortPath);
+		this.backgroundSort2 = new Image(backgroundSortPath);
+		this.backgroundSort3 = new Image(backgroundSortPath);
 
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		// TODO Auto-generated method stub
 		g.drawImage(backgroundImage, 0, 0);
 		g.drawImage(zoneLibreStats, zoneLibreStatsXPosition, zoneLibreStatsYPosition);
 		g.drawImage(backgroundSort1, this.lobbyButtonXPosition, this.lobbyButtonYPosition - 260);
 		g.drawImage(backgroundSort2, this.lobbyButtonXPosition, this.lobbyButtonYPosition - 175);
 		g.drawImage(backgroundSort3, this.lobbyButtonXPosition, this.lobbyButtonYPosition - 90);
-		
+
 		if (initializeLobby) {
 			this.lobbyButton = new Image("/res/buttons/LobbyButton.png");
 			this.lobbyButton.draw(lobbyButtonXPosition, lobbyButtonYPosition);
@@ -89,10 +109,10 @@ public class GuiCharacter extends BasicGameState {
 		if (this.player != null) {
 			g.setFont(characterNameTTF);
 			g.drawString(this.player.getListOfOwnedCharacter().get(0).getCharacterName(), 75, 50);
-			g.setFont(new TrueTypeFont(new Font("Century Gothic", Font.BOLD, 40), true));
+			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.BOLD, 40), true));
 			g.drawString("Level : " + this.player.getListOfOwnedCharacter().get(0).getCharacterLevel() + "/40", 75,
 					120);
-			g.setFont(new TrueTypeFont(new Font("Century Gothic", Font.BOLD, 20), true));
+			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.BOLD, 20), true));
 			g.drawString("Attack : " + this.character_attack, zoneLibreStatsXPosition + 20,
 					zoneLibreStatsYPosition + 20);
 			g.drawString("Health : " + this.character_health, zoneLibreStatsXPosition + 20,
@@ -103,7 +123,7 @@ public class GuiCharacter extends BasicGameState {
 					zoneLibreStatsYPosition + 140);
 			g.drawString("Description :", zoneLibreStatsXPosition + 10,
 					this.zoneLibreStatsYPosition + this.zoneLibreStatsHeight + 10);
-			g.setFont(new TrueTypeFont(new Font("Century Gothic", Font.ITALIC, 16), true));
+			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.ITALIC, 16), true));
 			drawString(g,
 					"Ce personnage est très détendu , " + "\r\n" + "a trouvé son épée dans un champ de fleur" + "\r\n"
 							+ " et pense qu'il a une grande destinée.",
@@ -122,9 +142,8 @@ public class GuiCharacter extends BasicGameState {
 							.getMaxExperienceByLevel(this.player.getListOfOwnedCharacter().get(0).getCharacterLevel()),
 					195, 192);
 			Animation animationIdle = this.player.getListOfOwnedCharacter().get(0).getAnimations().get(1);
-			animationIdle.draw(600,500,750,400);
-				
-			
+			animationIdle.draw(600, 500, 750, 400);
+
 		}
 
 	}
@@ -133,13 +152,16 @@ public class GuiCharacter extends BasicGameState {
 		float result = 0;
 
 		result = (float) this.character_experience_point / (float) this.character_max_experience_point
-				* (float) this.backgroundProgressBarWidth;
+				* this.backgroundProgressBarWidth;
 		return result;
 	}
 
 	public void drawString(Graphics g, String text, int x, int y) {
-		for (String line : text.split("\n"))
-			g.drawString(line, x, y += g.getFont().getHeight(text));
+
+		for (String line : text.split("\n")) {
+			y += g.getFont().getHeight(text);
+			g.drawString(line, x, y);
+		}
 	}
 
 	@Override
@@ -160,12 +182,12 @@ public class GuiCharacter extends BasicGameState {
 
 	@Override
 	public void keyReleased(int key, char c) {
-
+		//Do nothing because the user will not release or press any key.
 	}
 
 	@Override
 	public void keyPressed(int key, char c) {
-
+		//Do nothing because the user will not release or press any key.
 	}
 
 	@Override
@@ -190,7 +212,7 @@ public class GuiCharacter extends BasicGameState {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-
+		//Do nothing because no action while use the mouse mouvement feature.
 	}
 
 	@Override

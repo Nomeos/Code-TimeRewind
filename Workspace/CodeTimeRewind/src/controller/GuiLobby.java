@@ -1,17 +1,10 @@
 package controller;
 
-import java.awt.Font;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -21,14 +14,29 @@ import main.Game;
 import model.Account;
 
 public class GuiLobby extends BasicGameState {
-	private int stateID, level, smallButtonHeight, smallButtonWidth, smallButtonYPosition, characterButtonXPosition,
-			inventoryButtonXPosition, adventureButtonWidth, adventureButtonHeight, adventureButtonXPosition,
-			adventureButtonYPosition;
+	private int stateID;
+	private int level;
+	private int smallButtonHeight;
+	private int smallButtonWidth;
+	private int smallButtonYPosition;
+	private int characterButtonXPosition;
+	private int inventoryButtonXPosition;
+	private int adventureButtonWidth;
+	private int adventureButtonHeight;
+	private int adventureButtonXPosition;
+	private int adventureButtonYPosition;
 	private Account playerAccount;
 	private String username;
-	private boolean initializeCharacter = true, isPressedCharacter = false, initializeInventory = true,
-			isPressedInventory = false, initializeAdventure = true, isPressedAdventure = false;
-	private Image backgroundImage, charactersButton, inventoryButton, adventureButton;
+	private boolean initializeCharacter = true;
+	private boolean isPressedCharacter = false;
+	private boolean initializeInventory = true;
+	private boolean isPressedInventory = false;
+	private boolean initializeAdventure = true;
+	private boolean isPressedAdventure = false;
+	private Image backgroundImage;
+	private Image charactersButton;
+	private Image inventoryButton;
+	private Image adventureButton;
 
 	public GuiLobby() {
 	}
@@ -58,56 +66,87 @@ public class GuiLobby extends BasicGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawImage(backgroundImage, 0, 0);
-		if (initializeCharacter) {
-			this.charactersButton = new Image("/res/buttons/CharacterButton.png");
-			this.charactersButton.draw(characterButtonXPosition, smallButtonYPosition);
-		} else {
-			if (!isPressedCharacter) {
-				this.charactersButton.destroy();
-				this.charactersButton = new Image("/res/buttons/CharacterButton.png");
-				this.charactersButton.draw(characterButtonXPosition, smallButtonYPosition);
-			} else {
-				this.charactersButton.destroy();
-				this.charactersButton = new Image("/res/buttons/CharacterButtonHit.png");
-				this.charactersButton.draw(characterButtonXPosition, smallButtonYPosition);
-			}
-		}
-		if (initializeInventory) {
-			this.inventoryButton = new Image("/res/buttons/InventoryButton.png");
-			this.inventoryButton.draw(inventoryButtonXPosition, smallButtonYPosition);
-		} else {
-			if (!isPressedInventory) {
-				this.inventoryButton.destroy();
-				this.inventoryButton = new Image("/res/buttons/InventoryButton.png");
-				this.inventoryButton.draw(inventoryButtonXPosition, smallButtonYPosition);
-			} else {
-				this.inventoryButton.destroy();
-				this.inventoryButton = new Image("/res/buttons/InventoryButtonHit.png");
-				this.inventoryButton.draw(inventoryButtonXPosition, smallButtonYPosition);
-			}
-		}
-		if (initializeAdventure) {
-			this.adventureButton = new Image("/res/buttons/AdventureButton.png");
-			this.adventureButton.draw(adventureButtonXPosition, adventureButtonYPosition);
-		} else {
-			if (!isPressedAdventure) {
-				this.adventureButton.destroy();
-				this.adventureButton = new Image("/res/buttons/AdventureButton.png");
-				this.adventureButton.draw(adventureButtonXPosition, adventureButtonYPosition);
-			} else {
-				this.adventureButton.destroy();
-				this.adventureButton = new Image("/res/buttons/AdventureButtonHit.png");
-				this.adventureButton.draw(adventureButtonXPosition, adventureButtonYPosition);
-			}
-		}
+
+		renderAdventureButton();
+		renderCharacterButton();
+		renderInventoryButton();
+
 		g.setColor(Color.white);
 
 		if (this.playerAccount != null) {
 			g.drawString(username, 300, 50);
 			g.drawString("Level : " + level, 300, 70);
-			
+
 		}
 
+	}
+
+	public void renderCharacterButton() {
+		try {
+			if (initializeCharacter) {
+				this.charactersButton = new Image("/res/buttons/CharacterButton.png");
+				this.charactersButton.draw(characterButtonXPosition, smallButtonYPosition);
+			} else {
+				if (!isPressedCharacter) {
+					this.charactersButton.destroy();
+					this.charactersButton = new Image("/res/buttons/CharacterButton.png");
+					this.charactersButton.draw(characterButtonXPosition, smallButtonYPosition);
+				} else {
+					this.charactersButton.destroy();
+					this.charactersButton = new Image("/res/buttons/CharacterButtonHit.png");
+					this.charactersButton.draw(characterButtonXPosition, smallButtonYPosition);
+				}
+			}
+		} catch (SlickException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	public void renderInventoryButton() {
+		try {
+			if (initializeInventory) {
+				this.inventoryButton = new Image("/res/buttons/InventoryButton.png");
+				this.inventoryButton.draw(inventoryButtonXPosition, smallButtonYPosition);
+			} else {
+				if (!isPressedInventory) {
+					this.inventoryButton.destroy();
+					this.inventoryButton = new Image("/res/buttons/InventoryButton.png");
+					this.inventoryButton.draw(inventoryButtonXPosition, smallButtonYPosition);
+				} else {
+					this.inventoryButton.destroy();
+					this.inventoryButton = new Image("/res/buttons/InventoryButtonHit.png");
+					this.inventoryButton.draw(inventoryButtonXPosition, smallButtonYPosition);
+				}
+			}
+		} catch (SlickException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	public void renderAdventureButton() {
+
+		try {
+			if (initializeAdventure) {
+				this.adventureButton = new Image("/res/buttons/AdventureButton.png");
+
+				this.adventureButton.draw(adventureButtonXPosition, adventureButtonYPosition);
+			} else {
+				if (!isPressedAdventure) {
+					this.adventureButton.destroy();
+					this.adventureButton = new Image("/res/buttons/AdventureButton.png");
+					this.adventureButton.draw(adventureButtonXPosition, adventureButtonYPosition);
+				} else {
+					this.adventureButton.destroy();
+					this.adventureButton = new Image("/res/buttons/AdventureButtonHit.png");
+					this.adventureButton.draw(adventureButtonXPosition, adventureButtonYPosition);
+				}
+			}
+		} catch (SlickException e) {
+
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -117,18 +156,18 @@ public class GuiLobby extends BasicGameState {
 			this.username = this.playerAccount.getUsername();
 			this.level = this.playerAccount.getAccount_Level();
 		}
-		
-	
 
 	}
 
 	@Override
 	public void keyReleased(int key, char c) {
+		// Do nothing because the user will not release or press any key.
 
 	}
 
 	@Override
 	public void keyPressed(int key, char c) {
+		// Do nothing because the user will not release or press any key.
 
 	}
 
@@ -164,17 +203,17 @@ public class GuiLobby extends BasicGameState {
 		if (inventoryButtonXPosition <= x && (inventoryButtonXPosition + smallButtonWidth) >= x
 				&& smallButtonYPosition <= y && (smallButtonYPosition + smallButtonHeight) >= y && button == 0) {
 
-			//TODO create view inventory
 		}
 		if (adventureButtonXPosition <= x && (adventureButtonXPosition + adventureButtonWidth) >= x
 				&& adventureButtonYPosition <= y && (adventureButtonYPosition + adventureButtonHeight) >= y
 				&& button == 0) {
-			//TODO create view Adventure
+
 		}
 	}
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		// Do nothing because no action while use the mouse mouvement feature.
 
 	}
 
