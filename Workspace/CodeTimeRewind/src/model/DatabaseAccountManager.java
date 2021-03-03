@@ -47,7 +47,7 @@ public class DatabaseAccountManager {
 		}
 		try {
 			this.sqlQuery = "Create Table Characters (Character_Id int not null generated always as identity,"
-					+ "Name varchar(12), Health int,Defense Int,Attack int,Speed int," + "PRIMARY KEY (Character_Id))";
+					+ "Name varchar(12), Health int,Defense Int,Attack int,Speed int, Description varchar(250)," + "PRIMARY KEY (Character_Id))";
 			this.statement.executeUpdate(this.sqlQuery);
 			InsertAllDifferentCharacters();
 		} catch (SQLException e) {
@@ -97,7 +97,7 @@ public class DatabaseAccountManager {
 	}
 
 	public void InsertAllDifferentCharacters() {
-		this.sqlQuery = "INSERT INTO Characters (Name,Health,Defense,Attack,Speed) values('Nom-eos',400,30,30,100)";
+		this.sqlQuery = "INSERT INTO Characters ( Name, Health, Defense, Attack, Speed, description )values('Nom-eos', 400, 30, 30, 100, 'Ce personnage est très détendu ,\\n a trouvé son épée dans un champ de fleur\\n et pense qu '' il a une grande destinée.')";
 		try {
 			this.statement.executeUpdate(this.sqlQuery);
 		} catch (SQLException e) {
@@ -254,7 +254,8 @@ public class DatabaseAccountManager {
 				}
 				if (result) {
 					this.sqlQuery = "select" + "  c.Name," + "  ac.level," + "  c.health," + "  c.defense,"
-							+ "  c.attack," + "  c.speed, " + "ac.experience_point" + " from" + "  characters c"
+							+ "  c.attack," + "  c.speed, " + "ac.experience_point," + " c.description" + " from"
+							+ "  characters c"
 							+ "  INNER JOIN Account_own_characters ac ON c.character_id = ac.character_id"
 							+ "  INNER JOIN Accounts a ON ac.account_id = a.account_id" + "  where a.username = '"
 							+ userAccount.getUsername() + "'";
@@ -264,7 +265,8 @@ public class DatabaseAccountManager {
 								resultQueryOwnCharacters.getString("Name"), resultQueryOwnCharacters.getInt("Level"),
 								resultQueryOwnCharacters.getInt("health"), resultQueryOwnCharacters.getInt("defense"),
 								resultQueryOwnCharacters.getInt("attack"), resultQueryOwnCharacters.getInt("speed"),
-								resultQueryOwnCharacters.getInt("experience_point")));
+								resultQueryOwnCharacters.getInt("experience_point"),
+								resultQueryOwnCharacters.getString("description")));
 					}
 				}
 

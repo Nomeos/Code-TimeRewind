@@ -9,4 +9,6 @@
     <fullyQualifiedTypeName name="org.newdawn.slick.Image"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.Color"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.state.BasicGameState"/>
+    <fullyQualifiedTypeName name="java.lang.Process"/>
+    <fullyQualifiedTypeName name="java.lang.Runtime"/>
 </qualifiedTypeNameHistroy>

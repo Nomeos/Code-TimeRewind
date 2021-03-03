@@ -57,6 +57,7 @@ public class GuiCharacter extends BasicGameState {
 	private boolean isPressedLobby = false;
 	private String backgroundSortPath = "/res/zones/ZoneSort.png";
 	private String centuryFont = "Century Gothic";
+	private String character_description;
 
 	public GuiCharacter(int state) {
 
@@ -124,9 +125,7 @@ public class GuiCharacter extends BasicGameState {
 			g.drawString("Description :", zoneLibreStatsXPosition + 10,
 					this.zoneLibreStatsYPosition + this.zoneLibreStatsHeight + 10);
 			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.ITALIC, 16), true));
-			drawString(g,
-					"Ce personnage est très détendu , " + "\r\n" + "a trouvé son épée dans un champ de fleur" + "\r\n"
-							+ " et pense qu'il a une grande destinée.",
+			drawString(g,this.character_description,
 					zoneLibreStatsXPosition + 10, this.zoneLibreStatsYPosition + this.zoneLibreStatsHeight + 20);
 
 			this.progressBar = new Rectangle(80, 180, calculateProgressBarSize(), 45);
@@ -176,18 +175,19 @@ public class GuiCharacter extends BasicGameState {
 			this.character_experience_point = this.player.getListOfOwnedCharacter().get(0).getCurrentExp();
 			this.character_max_experience_point = this.player.getListOfOwnedCharacter().get(0)
 					.getMaxExperienceByLevel(this.character_level);
+			this.character_description = this.player.getListOfOwnedCharacter().get(0).getCharacterDescription();
 		}
 
 	}
 
 	@Override
 	public void keyReleased(int key, char c) {
-		//Do nothing because the user will not release or press any key.
+		// Do nothing because the user will not release or press any key.
 	}
 
 	@Override
 	public void keyPressed(int key, char c) {
-		//Do nothing because the user will not release or press any key.
+		// Do nothing because the user will not release or press any key.
 	}
 
 	@Override
@@ -212,7 +212,7 @@ public class GuiCharacter extends BasicGameState {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		//Do nothing because no action while use the mouse mouvement feature.
+		// Do nothing because no action while use the mouse mouvement feature.
 	}
 
 	@Override

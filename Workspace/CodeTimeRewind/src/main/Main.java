@@ -12,12 +12,14 @@ public class Main {
 	public static String gameName = "Code::TimeRewind";
 	
 	public static void main(String[] args) throws SlickException{
+		
 		new DatabaseAccountManager().DatabaseCreation();
 		app = new AppGameContainer(new Game(gameName));
 		app.setTargetFrameRate(120);
 		app.setDisplayMode(BASE_WIDTH, BASE_HEIGHT, false);
 		app.setShowFPS(false);
 		app.start();
+		
 	}
 
 }
