@@ -1,4 +1,4 @@
-package model;
+package model.databaseManager;
 
 import java.io.File;
 import java.sql.Connection;
@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import main.Game;
+import model.account.Account;
+import model.entity.Character;
 
 public class DatabaseAccountManager {
 
@@ -47,7 +49,7 @@ public class DatabaseAccountManager {
 		}
 		try {
 			this.sqlQuery = "Create Table Characters (Character_Id int not null generated always as identity,"
-					+ "Name varchar(12), Health int,Defense Int,Attack int,Speed int, Description varchar(250)," + "PRIMARY KEY (Character_Id))";
+					+ "Name varchar(12), Health int,Defense Int,Attack int,Speed int, Description varchar(150)," + "PRIMARY KEY (Character_Id))";
 			this.statement.executeUpdate(this.sqlQuery);
 			InsertAllDifferentCharacters();
 		} catch (SQLException e) {
@@ -97,7 +99,7 @@ public class DatabaseAccountManager {
 	}
 
 	public void InsertAllDifferentCharacters() {
-		this.sqlQuery = "INSERT INTO Characters ( Name, Health, Defense, Attack, Speed, description )values('Nom-eos', 400, 30, 30, 100, 'Ce personnage est très détendu ,\\n a trouvé son épée dans un champ de fleur\\n et pense qu '' il a une grande destinée.')";
+		this.sqlQuery = "INSERT INTO Characters ( Name, Health, Defense, Attack, Speed, description )values('Nom-eos', 400, 30, 30, 100, 'Ce personnage est très détendu ,&n a trouvé son épée dans un champ de fleur&n et pense qu '' il a une grande destinée.')";
 		try {
 			this.statement.executeUpdate(this.sqlQuery);
 		} catch (SQLException e) {

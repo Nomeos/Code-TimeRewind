@@ -1,4 +1,4 @@
-package controller;
+package view.guis;
 
 import java.awt.Font;
 
@@ -20,7 +20,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import main.Game;
-import model.Account;
+import model.account.Account;
+import model.button.Button;
+import model.button.SmallButton;
 
 @Getter
 @Setter
@@ -40,11 +42,10 @@ public class GuiCharacter extends BasicGameState {
 	private int character_defense;
 	private int character_attack;
 	private int character_speed;
-	private int character_max_experience_point;
+	private float character_max_experience_point;
 	private int character_level;
 	private float backgroundProgressBarWidth;
 	private Image backgroundImage;
-	private Image lobbyButton;
 	private Image zoneLibreStats;
 	private Image backgroundProgressBar;
 	private Image backgroundSort1;
@@ -54,10 +55,11 @@ public class GuiCharacter extends BasicGameState {
 	private Font characterNameFont;
 	private TrueTypeFont characterNameTTF;
 	private boolean initializeLobby = true;
-	private boolean isPressedLobby = false;
+
 	private String backgroundSortPath = "/res/zones/ZoneSort.png";
 	private String centuryFont = "Century Gothic";
 	private String character_description;
+	private Button lobbyButton;
 
 	public GuiCharacter(int state) {
 
@@ -65,8 +67,7 @@ public class GuiCharacter extends BasicGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.smallButtonHeight = 60;
-		this.smallButtonWidth = 350;
+
 		this.lobbyButtonXPosition = 50;
 		this.lobbyButtonYPosition = (gc.getHeight() - 110);
 		this.zoneLibreStatsXPosition = 50;
@@ -83,6 +84,9 @@ public class GuiCharacter extends BasicGameState {
 		this.backgroundSort2 = new Image(backgroundSortPath);
 		this.backgroundSort3 = new Image(backgroundSortPath);
 
+		this.lobbyButton = new SmallButton(new Image("/res/buttons/LobbyButton.png"),
+				new Image("/res/buttons/LobbyButtonHit.png"), lobbyButtonXPosition, lobbyButtonYPosition);
+
 	}
 
 	@Override
@@ -94,25 +98,20 @@ public class GuiCharacter extends BasicGameState {
 		g.drawImage(backgroundSort3, this.lobbyButtonXPosition, this.lobbyButtonYPosition - 90);
 
 		if (initializeLobby) {
-			this.lobbyButton = new Image("/res/buttons/LobbyButton.png");
-			this.lobbyButton.draw(lobbyButtonXPosition, lobbyButtonYPosition);
+			this.lobbyButton.draw();
 		} else {
-			if (!isPressedLobby) {
-				this.lobbyButton.destroy();
-				this.lobbyButton = new Image("/res/buttons/LobbyButton.png");
-				this.lobbyButton.draw(lobbyButtonXPosition, lobbyButtonYPosition);
+			if (!this.lobbyButton.isPressed()) {
+				this.lobbyButton.draw();
 			} else {
-				this.lobbyButton.destroy();
-				this.lobbyButton = new Image("/res/buttons/LobbyButtonHit.png");
-				this.lobbyButton.draw(lobbyButtonXPosition, lobbyButtonYPosition);
+				this.lobbyButton.draw();
 			}
 		}
 		if (this.player != null) {
 			g.setFont(characterNameTTF);
-			g.drawString(this.player.getListOfOwnedCharacter().get(0).getCharacterName(), 75, 50);
+
+			g.drawString(this.player.getListOfOwnedCharacter().get(0).getName(), 75, 50);
 			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.BOLD, 40), true));
-			g.drawString("Level : " + this.player.getListOfOwnedCharacter().get(0).getCharacterLevel() + "/40", 75,
-					120);
+			g.drawString("Level : " + this.player.getListOfOwnedCharacter().get(0).getLevel() + "/40", 75, 120);
 			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.BOLD, 20), true));
 			g.drawString("Attack : " + this.character_attack, zoneLibreStatsXPosition + 20,
 					zoneLibreStatsYPosition + 20);
@@ -125,21 +124,23 @@ public class GuiCharacter extends BasicGameState {
 			g.drawString("Description :", zoneLibreStatsXPosition + 10,
 					this.zoneLibreStatsYPosition + this.zoneLibreStatsHeight + 10);
 			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.ITALIC, 16), true));
-			drawString(g,this.character_description,
-					zoneLibreStatsXPosition + 10, this.zoneLibreStatsYPosition + this.zoneLibreStatsHeight + 20);
+			drawString(g, this.character_description, zoneLibreStatsXPosition + 10,
+					this.zoneLibreStatsYPosition + this.zoneLibreStatsHeight + 20);
 
 			this.progressBar = new Rectangle(80, 180, calculateProgressBarSize(), 45);
 			g.setColor(Color.black);
+
 			g.draw(progressBar);
 			g.setColor(new Color(0x3bb062));
+
 			g.fill(progressBar);
 			g.setColor(Color.white);
+
 			this.backgroundProgressBar.draw(75, 175);
 			g.resetFont();
-			g.drawString(this.player.getListOfOwnedCharacter().get(0).getCurrentExp() + " / "
-					+ this.player.getListOfOwnedCharacter().get(0)
-							.getMaxExperienceByLevel(this.player.getListOfOwnedCharacter().get(0).getCharacterLevel()),
-					195, 192);
+
+			g.drawString(this.player.getListOfOwnedCharacter().get(0).getExperience() + " / "
+					+ this.player.getListOfOwnedCharacter().get(0).getMaxExperience(), 195, 192);
 			Animation animationIdle = this.player.getListOfOwnedCharacter().get(0).getAnimations().get(1);
 			animationIdle.draw(600, 500, 750, 400);
 
@@ -157,7 +158,7 @@ public class GuiCharacter extends BasicGameState {
 
 	public void drawString(Graphics g, String text, int x, int y) {
 
-		for (String line : text.split("\n")) {
+		for (String line : text.split("&n")) {
 			y += g.getFont().getHeight(text);
 			g.drawString(line, x, y);
 		}
@@ -167,15 +168,14 @@ public class GuiCharacter extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (this.player == null) {
 			this.player = Game.getInstance().getPlayerAccount();
-			this.character_health = this.player.getListOfOwnedCharacter().get(0).getCharacterHealth();
-			this.character_attack = this.player.getListOfOwnedCharacter().get(0).getCharacterAttack();
-			this.character_defense = this.player.getListOfOwnedCharacter().get(0).getCharacterDefense();
-			this.character_level = this.player.getListOfOwnedCharacter().get(0).getCharacterLevel();
-			this.character_speed = this.player.getListOfOwnedCharacter().get(0).getCharacterSpeed();
-			this.character_experience_point = this.player.getListOfOwnedCharacter().get(0).getCurrentExp();
-			this.character_max_experience_point = this.player.getListOfOwnedCharacter().get(0)
-					.getMaxExperienceByLevel(this.character_level);
-			this.character_description = this.player.getListOfOwnedCharacter().get(0).getCharacterDescription();
+			this.character_health = this.player.getListOfOwnedCharacter().get(0).getHealth();
+			this.character_attack = this.player.getListOfOwnedCharacter().get(0).getAttack();
+			this.character_defense = this.player.getListOfOwnedCharacter().get(0).getDefense();
+			this.character_level = this.player.getListOfOwnedCharacter().get(0).getLevel();
+			this.character_speed = this.player.getListOfOwnedCharacter().get(0).getSpeed();
+			this.character_experience_point = this.player.getListOfOwnedCharacter().get(0).getExperience();
+			this.character_max_experience_point = this.player.getListOfOwnedCharacter().get(0).getMaxExperience();
+			this.character_description = this.player.getListOfOwnedCharacter().get(0).getDescription();
 		}
 
 	}
@@ -192,20 +192,16 @@ public class GuiCharacter extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (this.lobbyButtonXPosition <= x && (this.lobbyButtonXPosition + this.smallButtonWidth) >= x
-				&& this.lobbyButtonYPosition <= y && (this.lobbyButtonYPosition + this.smallButtonHeight) >= y
-				&& button == 0) {
+		if (this.lobbyButton.isHovering(x, y) && button == 0) {
 			this.initializeLobby = false;
-			this.isPressedLobby = true;
+			this.lobbyButton.setPressed(true);
 		}
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		this.isPressedLobby = false;
-		if (this.lobbyButtonXPosition <= x && (this.lobbyButtonXPosition + this.smallButtonWidth) >= x
-				&& this.lobbyButtonYPosition <= y && (this.lobbyButtonYPosition + this.smallButtonHeight) >= y
-				&& button == 0) {
+		this.lobbyButton.setPressed(false);
+		if (this.lobbyButton.isHovering(x, y) && button == 0) {
 			Game.getInstance().enterState(3, new FadeOutTransition(), new FadeInTransition());
 		}
 	}

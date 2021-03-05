@@ -1,4 +1,4 @@
-package controller;
+package view.guis;
 
 import java.awt.Font;
 import java.security.NoSuchAlgorithmException;
@@ -16,21 +16,21 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import lombok.NoArgsConstructor;
 import main.Game;
-import model.Account;
-import model.DatabaseAccountManager;
+import model.account.Account;
+import model.button.Button;
+import model.button.MediumButton;
+import model.button.SmallButton;
+import model.databaseManager.DatabaseAccountManager;
 
+@NoArgsConstructor
 public class GuiLogin extends BasicGameState {
 	private int middleButtonXPosition;
 	private int middleButtonYPositionStarting;
 	private int stateId;
 	private int middleComponentsWidth;
 	private int textFieldHeight;
-	private int smallButtonHeight;
-	private int smallButtonWidth;
-	private int signupButtonXPosition;
-	private int signupButtonYPosition;
-	private int submitButtonYPosition;
 	private int[] duration = { 200, 200, 200, 200, 200, 200 };
 	private Font ft = null;
 	private String currentPassword = "";
@@ -52,16 +52,14 @@ public class GuiLogin extends BasicGameState {
 	private boolean errorLoginFail;
 	private boolean loginSuccessful;
 	private boolean initializeSubmit = true;
-	private boolean isPressedSubmit = false;
-	private boolean initializeSignup = true;
-	private boolean isPressedSignup = false;
-	private Image backgroundImage;
-	private Image submitButton;
-	private Image signupButton;
-	private Animation knightIdleAnimation;
 
-	public GuiLogin() {
-	}
+	private boolean initializeSignup = true;
+
+	private Image backgroundImage;
+
+	private Animation knightIdleAnimation;
+	private Button submitButton;
+	private Button signupButton;
 
 	public GuiLogin(int state) {
 		this.stateId = state;
@@ -72,15 +70,24 @@ public class GuiLogin extends BasicGameState {
 
 		this.textFieldHeight = 30;
 		this.middleComponentsWidth = 600;
-		this.smallButtonHeight = 60;
-		this.smallButtonWidth = 350;
-		this.signupButtonXPosition = (gc.getWidth() - 400);
-		this.signupButtonYPosition = (gc.getHeight() - 110);
 		this.middleButtonXPosition = ((gc.getWidth() / 2) - (middleComponentsWidth / 2));
 		this.middleButtonYPositionStarting = 500;
 
 		this.ft = new Font("Century Gothic", Font.BOLD, 20);
 		this.trueTypeFont = new TrueTypeFont(ft, true);
+
+		this.passwordTextField = new TextField(gc, trueTypeFont, middleButtonXPosition, middleButtonYPositionStarting,
+				middleComponentsWidth, textFieldHeight);
+
+		this.usernameTextField = new TextField(gc, trueTypeFont, middleButtonXPosition,
+				middleButtonYPositionStarting - 70, middleComponentsWidth, textFieldHeight);
+
+		this.signupButton = new SmallButton(new Image("/res/buttons/SignupButton.png"),
+				new Image("/res/buttons/SignupButtonHit.png"), (gc.getWidth() - 400), (gc.getHeight() - 110));
+
+		this.submitButton = new MediumButton(new Image("/res/buttons/SubmitButton.png"),
+				new Image("/res/buttons/SubmitButtonHit.png"), middleButtonXPosition,
+				this.passwordTextField.getY() + 50);
 
 		this.account = new Account();
 		this.jm = new DatabaseAccountManager();
@@ -89,13 +96,6 @@ public class GuiLogin extends BasicGameState {
 		this.missingFieldFill = false;
 		this.errorLoginFail = false;
 		this.loginSuccessful = false;
-
-		this.passwordTextField = new TextField(gc, trueTypeFont, middleButtonXPosition, middleButtonYPositionStarting,
-				middleComponentsWidth, textFieldHeight);
-		this.usernameTextField = new TextField(gc, trueTypeFont, middleButtonXPosition,
-				middleButtonYPositionStarting - 70, middleComponentsWidth, textFieldHeight);
-
-		this.submitButtonYPosition = this.passwordTextField.getY() + 50;
 
 		this.backgroundImage = new Image("/res/Main_Screen_Background.png");
 
@@ -113,36 +113,27 @@ public class GuiLogin extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawImage(backgroundImage, 0, 0);
 		if (initializeSubmit) {
-			this.submitButton = new Image("/res/buttons/SubmitButton.png");
-			this.submitButton.draw(middleButtonXPosition, submitButtonYPosition);
+			this.submitButton.draw();
 		} else {
-			if (!isPressedSubmit) {
-				this.submitButton.destroy();
-				this.submitButton = new Image("/res/buttons/SubmitButton.png");
-				this.submitButton.draw(middleButtonXPosition, submitButtonYPosition);
+			if (!this.submitButton.isPressed()) {
+				this.submitButton.draw();
 			} else {
-				this.submitButton.destroy();
-				this.submitButton = new Image("/res/buttons/SubmitButtonHit.png");
-				this.submitButton.draw(middleButtonXPosition, submitButtonYPosition);
+				this.submitButton.draw();
 			}
 		}
 		if (initializeSignup) {
-			this.signupButton = new Image("/res/buttons/SignupButton.png");
-			this.signupButton.draw(signupButtonXPosition, signupButtonYPosition);
+			this.signupButton.draw();
 		} else {
-			if (!isPressedSignup) {
-				this.signupButton.destroy();
-				this.signupButton = new Image("/res/buttons/SignupButton.png");
-				this.signupButton.draw(signupButtonXPosition, signupButtonYPosition);
+			if (!this.signupButton.isPressed()) {
+				this.signupButton.draw();
 			} else {
-				this.signupButton.destroy();
-				this.signupButton = new Image("/res/buttons/SignupButtonHit.png");
-				this.signupButton.draw(signupButtonXPosition, signupButtonYPosition);
+				this.signupButton.draw();
 			}
 		}
 		g.setColor(Color.white);
-		g.drawString("* Enter your username : ", middleButtonXPosition, this.usernameTextField.getY() - 20);
-		g.drawString("* Enter your password : ", middleButtonXPosition, this.passwordTextField.getY() - 20);
+
+		g.drawString("* Enter your username : ", middleButtonXPosition, this.usernameTextField.getY() - 25);
+		g.drawString("* Enter your password : ", middleButtonXPosition, this.passwordTextField.getY() - 25);
 
 		this.usernameTextField.setBorderColor(Color.black);
 		this.usernameTextField.setBackgroundColor(Color.white);
@@ -206,11 +197,11 @@ public class GuiLogin extends BasicGameState {
 		this.missingFieldFill = false;
 		this.errorLoginFail = false;
 		Game.getInstance().setTheRegisterSucessfull(false);
-		StepsIfPasswordHasFocus(key,c);
-		StepsIfUsernameHasFocus(key,c);
-		
-		
+		StepsIfPasswordHasFocus(key, c);
+		StepsIfUsernameHasFocus(key, c);
+
 	}
+
 	public void StepsIfPasswordHasFocus(int key, char c) {
 		if (this.passwordTextField.hasFocus()) {
 			if (key == 200 || key == 203 || key == 205 || key == 208) {
@@ -234,6 +225,7 @@ public class GuiLogin extends BasicGameState {
 			this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
 		}
 	}
+
 	public void StepsIfUsernameHasFocus(int key, char c) {
 		if (this.usernameTextField.hasFocus()) {
 
@@ -262,6 +254,7 @@ public class GuiLogin extends BasicGameState {
 
 		}
 	}
+
 	public void drawString(String text, float x, float y, Color color) {
 		this.trueTypeFont.drawString(x, y, text, color);
 	}
@@ -276,31 +269,28 @@ public class GuiLogin extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (middleButtonXPosition <= x && (middleButtonXPosition + 600) >= x && (submitButtonYPosition) <= y
-				&& (submitButtonYPosition + 150) >= y && button == 0) {
+		if (this.submitButton.isHovering(x, y) && button == 0) {
 			this.initializeSubmit = false;
-			this.isPressedSubmit = true;
+			this.submitButton.setPressed(true);
 		}
-		if (signupButtonXPosition <= x && (signupButtonXPosition + smallButtonWidth) >= x && signupButtonYPosition <= y
-				&& (signupButtonYPosition + smallButtonHeight) >= y && button == 0) {
+		if (this.signupButton.isHovering(x, y) && button == 0) {
 			this.initializeSignup = false;
-			this.isPressedSignup = true;
+			this.signupButton.setPressed(true);
 		}
 
 	}
 
 	@Override
 	public void keyPressed(int key, char c) {
-		//Do nothing because the user will not release or press any key.
+		// Do nothing because the user will not release or press any key.
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		this.isPressedSubmit = false;
-		this.isPressedSignup = false;
+		this.signupButton.setPressed(false);
+		this.submitButton.setPressed(false);
 
-		if (middleButtonXPosition <= x && (middleButtonXPosition + 600) >= x && (submitButtonYPosition) <= y
-				&& (submitButtonYPosition + 150) >= y && button == 0) {
+		if (this.submitButton.isHovering(x, y) && button == 0) {
 			if (this.usernameTextField.getText() != "" && this.passwordTextField.getText() != "") {
 				if (usernameTextField.getText().length() <= 12 && usernameTextField.getText().length() >= 4) {
 					this.account.setUsername(this.usernameTextField.getText());
@@ -331,8 +321,7 @@ public class GuiLogin extends BasicGameState {
 			}
 
 		}
-		if (signupButtonXPosition <= x && (signupButtonXPosition + smallButtonWidth) >= x && signupButtonYPosition <= y
-				&& (signupButtonYPosition + smallButtonHeight) >= y && button == 0) {
+		if (this.signupButton.isHovering(x, y) && button == 0) {
 			this.errorUsernameLength = false;
 			this.missingFieldFill = false;
 			this.errorLoginFail = false;
@@ -348,7 +337,7 @@ public class GuiLogin extends BasicGameState {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		//Do nothing because no action while use the mouse mouvement feature.
+		// Do nothing because no action while use the mouse mouvement feature.
 	}
 
 }

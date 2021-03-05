@@ -4,8 +4,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import controller.*;
-import model.Account;
+import model.account.Account;
+import view.guis.GuiAdventure;
+import view.guis.GuiCharacter;
+import view.guis.GuiLobby;
+import view.guis.GuiLogin;
+import view.guis.GuiMenu;
+import view.guis.GuiSignup;
 
 public class Game extends StateBasedGame {
 	public final int menu = 0;
@@ -13,9 +18,11 @@ public class Game extends StateBasedGame {
 	public final int signup = 2;
 	public final int lobby = 3;
 	public final int character = 4;
+	public final int adventure = 5;
 	private static Game instance;
 	private Account playerAccount;
 	private boolean isTheRegisterSucessfull = false;
+	
 
 	public Game(String gameName) {
 		// Title windows name
@@ -36,6 +43,7 @@ public class Game extends StateBasedGame {
 		this.addState(new GuiSignup(signup));
 		this.addState(new GuiLobby(lobby));
 		this.addState(new GuiCharacter(character));
+		this.addState(new GuiAdventure(adventure));
 	}
 
 	@Override

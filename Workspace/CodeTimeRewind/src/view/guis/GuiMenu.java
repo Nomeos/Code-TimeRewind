@@ -1,4 +1,4 @@
-package controller;
+package view.guis;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -12,33 +12,33 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lombok.NoArgsConstructor;
 import main.Game;
+import model.button.*;
 
 @NoArgsConstructor
 public class GuiMenu extends BasicGameState {
 
-	// Set the two buttons size and location
-	private int buttonXPosition, buttonWidth, buttonHeight;
-
-	// In Miliseconds
 	private int[] durationBetweenCharacterFrame = { 150, 150, 150, 150, 150, 150 };
 	private Animation knightWalkingAnimation;
-
-	private Image backgroundImage, secondBackgroundImage, playButton, exitButton;
-
-	// Use for do the sliding mainscreen
+	private Image backgroundImage;
+	private Image secondBackgroundImage;
+	private Button playButton;
+	private Button exitButton;
+	// Used for do the sliding mainscreen
 	private float backX = 0, backY = 0, backDX = 1920, backDY = 0, speed = 0.10f;
-
-	// Check if the buttons are pressed and initialize
-	private boolean isPressedPlay = false, initializePlay = true, isPressedExit = false, initializeExit = true;
+	private boolean initializePlay = true;
+	private boolean initializeExit = true;
 
 	public GuiMenu(int state) {
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.buttonHeight = 150;
-		this.buttonWidth = 600;
-		this.buttonXPosition = ((gc.getWidth() / 2) - (buttonWidth / 2));
+
+		this.playButton = new MediumButton(new Image("/res/buttons/PlayButton.png"),
+				new Image("/res/buttons/PlayButtonHit.png"), ((gc.getWidth() / 2) - (600 / 2)), 350);
+
+		this.exitButton = new MediumButton(new Image("/res/buttons/ExitButton.png"),
+				new Image("/res/buttons/ExitButtonHit.png"), ((gc.getWidth() / 2) - (600 / 2)), 600);
 
 		this.backgroundImage = new Image("/res/Main_Screen_Background.png");
 		this.secondBackgroundImage = new Image("/res/Main_Screen_Background.png");
@@ -57,31 +57,21 @@ public class GuiMenu extends BasicGameState {
 		g.drawImage(backgroundImage, backX, backY);
 		g.drawImage(secondBackgroundImage, backDX, backDY);
 		if (initializePlay) {
-			this.playButton = new Image("/res/buttons/PlayButton.png");
-			this.playButton.draw(buttonXPosition, 350);
+			this.playButton.draw();
 		} else {
-			if (!isPressedPlay) {
-				this.playButton.destroy();
-				this.playButton = new Image("/res/buttons/PlayButton.png");
-				this.playButton.draw(buttonXPosition, 350);
+			if (this.playButton.isPressed()) {
+				this.playButton.draw();
 			} else {
-				this.playButton.destroy();
-				this.playButton = new Image("/res/buttons/PlayButtonHit.png");
-				this.playButton.draw(buttonXPosition, 350);
+				this.playButton.draw();
 			}
 		}
 		if (initializeExit) {
-			this.exitButton = new Image("/res/buttons/ExitButton.png");
-			this.exitButton.draw(buttonXPosition, 600);
+			this.exitButton.draw();
 		} else {
-			if (!isPressedExit) {
-				this.exitButton.destroy();
-				this.exitButton = new Image("/res/buttons/ExitButton.png");
-				this.exitButton.draw(buttonXPosition, 600);
+			if (this.exitButton.isPressed()) {
+				this.exitButton.draw();
 			} else {
-				this.exitButton.destroy();
-				this.exitButton = new Image("/res/buttons/ExitButtonHit.png");
-				this.exitButton.draw(buttonXPosition, 600);
+				this.exitButton.draw();
 			}
 		}
 		knightWalkingAnimation.draw(100, 700);
@@ -102,27 +92,19 @@ public class GuiMenu extends BasicGameState {
 	}
 
 	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		this.isPressedPlay = false;
-		this.isPressedExit = false;
-		if (buttonXPosition <= x && (buttonXPosition + buttonWidth) >= x && 350 <= y && (350 + buttonHeight) >= y
-				&& button == 0) {
+		this.playButton.setPressed(false);
+		this.exitButton.setPressed(false);
+		if (this.playButton.isHovering(x, y) && button == 0) {
 			Game.getInstance().enterState(1, new FadeOutTransition(), new FadeInTransition());
 		}
 
-		if (buttonXPosition <= x && (buttonXPosition + buttonWidth) >= x && 600 <= y && (600 + buttonHeight) >= y
-				&& button == 0) {
+		if (this.exitButton.isHovering(x, y) && button == 0) {
 			Game.getInstance().getContainer().exit();
 		}
 
@@ -130,16 +112,19 @@ public class GuiMenu extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (buttonXPosition <= x && (buttonXPosition + buttonWidth) >= x && 350 <= y && (350 + buttonHeight) >= y
-				&& button == 0) {
+		if (this.playButton.isHovering(x, y) && button == 0) {
 			this.initializePlay = false;
-			this.isPressedPlay = true;
+			this.playButton.setPressed(true);
 		}
-		if (buttonXPosition <= x && (buttonXPosition + buttonWidth) >= x && 600 <= y && (600 + buttonHeight) >= y
-				&& button == 0) {
+		if (this.exitButton.isHovering(x, y) && button == 0) {
 			this.initializeExit = false;
-			this.isPressedExit = true;
+			this.exitButton.setPressed(true);
 		}
+	}
 
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

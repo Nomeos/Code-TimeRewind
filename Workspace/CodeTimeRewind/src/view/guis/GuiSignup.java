@@ -1,4 +1,4 @@
-package controller;
+package view.guis;
 
 import java.awt.Font;
 import java.security.NoSuchAlgorithmException;
@@ -18,33 +18,56 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lombok.NoArgsConstructor;
 import main.Game;
-import model.Account;
-import model.DatabaseAccountManager;
+import model.account.Account;
+import model.button.Button;
+import model.button.MediumButton;
+import model.button.SmallButton;
+import model.databaseManager.DatabaseAccountManager;
 
 @NoArgsConstructor
 public class GuiSignup extends BasicGameState {
-	private int middleButtonXPosition, middleButtonYPositionStarting, requirementY, stateId, middleComponentsWidth,
-			textFieldHeight, smallButtonWidth, smallButtonHeight, loginButtonXPosition, loginButtonYPosition,
-			submitButtonYPosition;
+	private int middleButtonXPosition;
+	private int middleButtonYPositionStarting;
+	private int requirementY;
+	private int stateId;
+	private int middleComponentsWidth;
+	private int textFieldHeight;
+	private int loginButtonXPosition;
+	private int loginButtonYPosition;
+	private int submitButtonYPosition;
 
 	private int[] durationBetweenCharacterFrame = { 200, 200, 200, 200, 200, 200 };
-	private Image backgroundImage, submitButton, loginButton;
+	private Image backgroundImage;
 	private Animation knightIdleAnimation;
 
 	private Font ft = null;
 	private TrueTypeFont trueTypeFont;
 
-	private String currentPassword = "", currentPasswordConfirmation = "", currentUsername = "",
-			currentHiddenPassword = "", errorUsernameLengthString = "", missingFieldFillString = "",
-			currentHiddenPasswordConfirmation = "", errorPasswordNotEqualsString = "",
-			errorAccountAlreadyExistString = "";
+	private String currentPassword = "";
+	private String currentPasswordConfirmation = "";
+	private String currentUsername = "";
+	private String currentHiddenPassword = "";
+	private String errorUsernameLengthString = "";
+	private String missingFieldFillString = "";
+	private String currentHiddenPasswordConfirmation = "";
+	private String errorPasswordNotEqualsString = "";
+	private String errorAccountAlreadyExistString = "";
 
 	private Account account;
 	private DatabaseAccountManager jm;
 
-	private TextField usernameTextField, passwordTextField, passwordConfirmationTextField;
-	private boolean errorUsernameLength, missingFieldFill, errorPasswordNotEquals, errorAccountAlreadyExist,
-			initializeSubmit = true, isPressedSubmit = false, initializeLogin = true, isPressedLogin = false;
+	private TextField usernameTextField;
+	private TextField passwordTextField;
+	private TextField passwordConfirmationTextField;
+	private boolean errorUsernameLength;
+	private boolean missingFieldFill;
+	private boolean errorPasswordNotEquals;
+	private boolean errorAccountAlreadyExist;
+	private boolean initializeSubmit = true;
+	private boolean initializeLogin = true;
+
+	private Button submitButton;
+	private Button loginButton;
 
 	public GuiSignup(int state) {
 		this.stateId = state;
@@ -54,8 +77,6 @@ public class GuiSignup extends BasicGameState {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		this.textFieldHeight = 30;
 		this.middleComponentsWidth = 600;
-		this.smallButtonHeight = 60;
-		this.smallButtonWidth = 350;
 		this.loginButtonXPosition = (gc.getWidth() - 400);
 		this.loginButtonYPosition = (gc.getHeight() - 110);
 		this.middleButtonXPosition = ((gc.getWidth() / 2) - (middleComponentsWidth / 2));
@@ -63,9 +84,6 @@ public class GuiSignup extends BasicGameState {
 
 		this.ft = new Font("Century Gothic", Font.BOLD, 20);
 		this.trueTypeFont = new TrueTypeFont(ft, true);
-
-		this.account = new Account();
-		this.jm = new DatabaseAccountManager();
 
 		this.passwordTextField = new TextField(gc, trueTypeFont, middleButtonXPosition,
 				middleButtonYPositionStarting + 70, middleComponentsWidth, textFieldHeight);
@@ -75,8 +93,15 @@ public class GuiSignup extends BasicGameState {
 				middleButtonYPositionStarting + 140, middleComponentsWidth, textFieldHeight);
 
 		this.requirementY = passwordConfirmationTextField.getY() + passwordConfirmationTextField.getHeight() + 10;
-
 		this.submitButtonYPosition = requirementY + 140;
+
+		this.loginButton = new SmallButton(new Image("/res/buttons/LoginButton.png"),
+				new Image("/res/buttons/LoginButtonHit.png"), loginButtonXPosition, loginButtonYPosition);
+		this.submitButton = new MediumButton(new Image("/res/buttons/SubmitButton.png"),
+				new Image("/res/buttons/SubmitButtonHit.png"), middleButtonXPosition, submitButtonYPosition);
+
+		this.account = new Account();
+		this.jm = new DatabaseAccountManager();
 
 		this.usernameTextField.setText("");
 		this.passwordTextField.setText("");
@@ -98,31 +123,21 @@ public class GuiSignup extends BasicGameState {
 		g.drawImage(backgroundImage, 0, 0);
 
 		if (initializeSubmit) {
-			this.submitButton = new Image("/res/buttons/SubmitButton.png");
-			this.submitButton.draw(this.middleButtonXPosition, this.submitButtonYPosition);
+			this.submitButton.draw();
 		} else {
-			if (!isPressedSubmit) {
-				this.submitButton.destroy();
-				this.submitButton = new Image("/res/buttons/SubmitButton.png");
-				this.submitButton.draw(this.middleButtonXPosition, this.submitButtonYPosition);
+			if (!this.submitButton.isPressed()) {
+				this.submitButton.draw();
 			} else {
-				this.submitButton.destroy();
-				this.submitButton = new Image("/res/buttons/SubmitButtonHit.png");
-				this.submitButton.draw(this.middleButtonXPosition, this.submitButtonYPosition);
+				this.submitButton.draw();
 			}
 		}
 		if (initializeLogin) {
-			this.loginButton = new Image("/res/buttons/LoginButton.png");
-			this.loginButton.draw(loginButtonXPosition, loginButtonYPosition);
+			this.loginButton.draw();
 		} else {
-			if (!isPressedLogin) {
-				this.loginButton.destroy();
-				this.loginButton = new Image("/res/buttons/LoginButton.png");
-				this.loginButton.draw(loginButtonXPosition, loginButtonYPosition);
+			if (!this.loginButton.isPressed()) {
+				this.loginButton.draw();
 			} else {
-				this.loginButton.destroy();
-				this.loginButton = new Image("/res/buttons/LoginButtonHit.png");
-				this.loginButton.draw(loginButtonXPosition, loginButtonYPosition);
+				this.submitButton.draw();
 			}
 		}
 
@@ -204,49 +219,15 @@ public class GuiSignup extends BasicGameState {
 		this.errorAccountAlreadyExist = false;
 
 		// Requirement check for the password confirmation textfield
-		if (this.passwordConfirmationTextField.hasFocus()) {
-			if (key == 200 || key == 203 || key == 205 || key == 208) {
-				this.passwordConfirmationTextField.setCursorPos(this.passwordConfirmationTextField.getText().length());
-			}
-			if (isAlphaNumericPassword(String.valueOf(c))) {
-				this.currentPasswordConfirmation += c;
-				this.currentHiddenPasswordConfirmation += "*";
-				this.passwordConfirmationTextField.setText(currentHiddenPasswordConfirmation);
-			}
-			if (key == 211 || key == 14) {
-
-				this.currentHiddenPasswordConfirmation = this.passwordConfirmationTextField.getText();
-				int currentHiddenPasswordLength = this.currentHiddenPasswordConfirmation.length();
-				this.currentPasswordConfirmation = currentPasswordConfirmation.substring(0,
-						currentHiddenPasswordLength);
-			}
-			this.passwordConfirmationTextField.setCursorPos(this.passwordConfirmationTextField.getText().length());
-		}
+		StepsIfPasswordConfirmationHasFocus(key, c);
 		// Requirement check for the password textfield
-		if (this.passwordTextField.hasFocus()) {
-			if (key == 200 || key == 203 || key == 205 || key == 208) {
-				this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
-			}
-			if (isAlphaNumericPassword(String.valueOf(c))) {
-				this.currentPassword += c;
-				this.currentHiddenPassword += "*";
-				this.passwordTextField.setText(currentHiddenPassword);
-			}
-			if (key == 211 || key == 14) {
-
-				this.currentHiddenPassword = this.passwordTextField.getText();
-				int currentHiddenPasswordLength = this.currentHiddenPassword.length();
-				this.currentPassword = currentPassword.substring(0, currentHiddenPasswordLength);
-			}
-			if (key == 15) {
-
-				this.passwordTextField.setFocus(false);
-				this.passwordConfirmationTextField.setFocus(true);
-			}
-			this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
-
-		}
+		StepsIfPasswordHasFocus(key, c);
 		// Requirement check for the username textfield
+		StepsIfUsernameHasFocus(key, c);
+
+	}
+
+	public void StepsIfUsernameHasFocus(int key, char c) {
 		if (this.usernameTextField.hasFocus()) {
 			if (usernameTextField.getText().length() <= 12) {
 				if (isAlphaNumeric(String.valueOf(c))) {
@@ -274,30 +255,73 @@ public class GuiSignup extends BasicGameState {
 			}
 
 		}
+	}
 
+	public void StepsIfPasswordHasFocus(int key, char c) {
+		if (this.passwordTextField.hasFocus()) {
+			if (key == 200 || key == 203 || key == 205 || key == 208) {
+				this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
+			}
+			if (isAlphaNumericPassword(String.valueOf(c))) {
+				this.currentPassword += c;
+				this.currentHiddenPassword += "*";
+				this.passwordTextField.setText(currentHiddenPassword);
+			}
+			if (key == 211 || key == 14) {
+
+				this.currentHiddenPassword = this.passwordTextField.getText();
+				int currentHiddenPasswordLength = this.currentHiddenPassword.length();
+				this.currentPassword = currentPassword.substring(0, currentHiddenPasswordLength);
+			}
+			if (key == 15) {
+
+				this.passwordTextField.setFocus(false);
+				this.passwordConfirmationTextField.setFocus(true);
+			}
+			this.passwordTextField.setCursorPos(this.passwordTextField.getText().length());
+
+		}
+	}
+
+	public void StepsIfPasswordConfirmationHasFocus(int key, char c) {
+		if (this.passwordConfirmationTextField.hasFocus()) {
+			if (key == 200 || key == 203 || key == 205 || key == 208) {
+				this.passwordConfirmationTextField.setCursorPos(this.passwordConfirmationTextField.getText().length());
+			}
+			if (isAlphaNumericPassword(String.valueOf(c))) {
+				this.currentPasswordConfirmation += c;
+				this.currentHiddenPasswordConfirmation += "*";
+				this.passwordConfirmationTextField.setText(currentHiddenPasswordConfirmation);
+			}
+			if (key == 211 || key == 14) {
+
+				this.currentHiddenPasswordConfirmation = this.passwordConfirmationTextField.getText();
+				int currentHiddenPasswordLength = this.currentHiddenPasswordConfirmation.length();
+				this.currentPasswordConfirmation = currentPasswordConfirmation.substring(0,
+						currentHiddenPasswordLength);
+			}
+			this.passwordConfirmationTextField.setCursorPos(this.passwordConfirmationTextField.getText().length());
+		}
 	}
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (middleButtonXPosition <= x && (middleButtonXPosition + middleComponentsWidth) >= x
-				&& (requirementY + 140) <= y && (requirementY + 140 + 150) >= y && button == 0) {
+		if (this.submitButton.isHovering(x, y) && button == 0) {
 			this.initializeSubmit = false;
-			this.isPressedSubmit = true;
+			this.submitButton.setPressed(true);
 		}
-		if (this.loginButtonXPosition <= x && (this.loginButtonXPosition + this.smallButtonWidth) >= x
-				&& this.loginButtonYPosition <= y && (this.loginButtonYPosition + this.smallButtonHeight) >= y) {
+		if (this.loginButton.isHovering(x, y) && button == 0) {
 			this.initializeLogin = false;
-			this.isPressedLogin = true;
+			this.loginButton.setPressed(true);
 		}
 
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		this.isPressedSubmit = false;
-		this.isPressedLogin = false;
-		if (middleButtonXPosition <= x && (middleButtonXPosition + middleComponentsWidth) >= x
-				&& submitButtonYPosition <= y && (submitButtonYPosition + 150) >= y && button == 0) {
+		this.submitButton.setPressed(false);
+		this.loginButton.setPressed(false);
+		if (this.submitButton.isHovering(x, y) && button == 0) {
 			if (this.usernameTextField.getText() != "" && this.passwordTextField.getText() != ""
 					&& this.passwordConfirmationTextField.getText() != "") {
 				if (usernameTextField.getText().length() <= 12 && usernameTextField.getText().length() >= 4) {
@@ -334,8 +358,7 @@ public class GuiSignup extends BasicGameState {
 				this.missingFieldFill = true;
 			}
 		}
-		if (this.loginButtonXPosition <= x && (this.loginButtonXPosition + this.smallButtonWidth) >= x
-				&& this.loginButtonYPosition <= y && (this.loginButtonYPosition + this.smallButtonHeight) >= y) {
+		if (this.loginButton.isHovering(x, y) && button == 0) {
 			this.errorUsernameLength = false;
 			this.missingFieldFill = false;
 			this.errorPasswordNotEquals = false;
@@ -374,7 +397,6 @@ public class GuiSignup extends BasicGameState {
 		return textField.getX() < x && textField.getX() + textField.getWidth() > x && textField.getY() < y
 				&& textField.getY() + textField.getHeight() > y;
 	}
-
 
 	public static boolean isAlphaNumeric(String s) {
 		return s != null && s.matches("^[a-zA-Z0-9]*$");

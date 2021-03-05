@@ -1,4 +1,4 @@
-package model;
+package model.databaseManager;
 
 import static org.junit.Assert.assertTrue;
 
@@ -10,6 +10,8 @@ import java.sql.Statement;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import model.account.Account;
 
 public class DatabaseAccountManagerTest {
 
@@ -80,7 +82,6 @@ public class DatabaseAccountManagerTest {
 		this.jm.RegisterAccount(this.account);
 		assertTrue(this.jm.LoginAccount(this.account));
 	}
-
 
 	@After
 	public void Clean() {

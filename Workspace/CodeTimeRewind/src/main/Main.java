@@ -3,7 +3,7 @@ package main;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
-import model.DatabaseAccountManager;
+import model.databaseManager.DatabaseAccountManager;
 
 public class Main {
 	public static AppGameContainer app;
