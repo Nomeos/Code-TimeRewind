@@ -27,10 +27,7 @@ import model.databaseManager.DatabaseAccountManager;
 @NoArgsConstructor
 public class GuiLogin extends BasicGameState {
 	private int middleButtonXPosition;
-	private int middleButtonYPositionStarting;
 	private int stateId;
-	private int middleComponentsWidth;
-	private int textFieldHeight;
 	private int[] duration = { 200, 200, 200, 200, 200, 200 };
 	private Font ft = null;
 	private String currentPassword = "";
@@ -41,7 +38,6 @@ public class GuiLogin extends BasicGameState {
 	private String registrationSuccessfulString = "";
 	private String errorLoginFailString = "";
 	private String loginSuccessfulString = "";
-
 	private Account account;
 	private DatabaseAccountManager jm;
 	private TrueTypeFont trueTypeFont;
@@ -50,13 +46,7 @@ public class GuiLogin extends BasicGameState {
 	private boolean errorUsernameLength;
 	private boolean missingFieldFill;
 	private boolean errorLoginFail;
-	private boolean loginSuccessful;
-	private boolean initializeSubmit = true;
-
-	private boolean initializeSignup = true;
-
 	private Image backgroundImage;
-
 	private Animation knightIdleAnimation;
 	private Button submitButton;
 	private Button signupButton;
@@ -68,10 +58,10 @@ public class GuiLogin extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 
-		this.textFieldHeight = 30;
-		this.middleComponentsWidth = 600;
+		int textFieldHeight = 30;
+		int middleComponentsWidth = 600;
 		this.middleButtonXPosition = ((gc.getWidth() / 2) - (middleComponentsWidth / 2));
-		this.middleButtonYPositionStarting = 500;
+		int middleButtonYPositionStarting = 500;
 
 		this.ft = new Font("Century Gothic", Font.BOLD, 20);
 		this.trueTypeFont = new TrueTypeFont(ft, true);
@@ -95,16 +85,13 @@ public class GuiLogin extends BasicGameState {
 		this.errorUsernameLength = false;
 		this.missingFieldFill = false;
 		this.errorLoginFail = false;
-		this.loginSuccessful = false;
+
 
 		this.backgroundImage = new Image("/res/Main_Screen_Background.png");
 
-		Image[] knightIdle = { new Image("/res/entity/Nom-eos/Idle/Knight_idle_01_uninterlace.png"),
-				new Image("/res/entity/Nom-eos/Idle/Knight_idle_02_uninterlace.png"),
-				new Image("/res/entity/Nom-eos/Idle/Knight_idle_03_uninterlace.png"),
-				new Image("/res/entity/Nom-eos/Idle/Knight_idle_04_uninterlace.png"),
-				new Image("/res/entity/Nom-eos/Idle/Knight_idle_05_uninterlace.png"),
-				new Image("/res/entity/Nom-eos/Idle/Knight_idle_06_uninterlace.png") };
+		Image[] knightIdle = new Image[6];
+		for (int i = 1; i < 7; i++)
+			knightIdle[i - 1] = new Image("/res/entity/Nom-eos/Idle/Knight_idle_0" + i + "_uninterlace.png");
 		this.knightIdleAnimation = new Animation(knightIdle, duration);
 
 	}
@@ -112,24 +99,8 @@ public class GuiLogin extends BasicGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawImage(backgroundImage, 0, 0);
-		if (initializeSubmit) {
-			this.submitButton.draw();
-		} else {
-			if (!this.submitButton.isPressed()) {
-				this.submitButton.draw();
-			} else {
-				this.submitButton.draw();
-			}
-		}
-		if (initializeSignup) {
-			this.signupButton.draw();
-		} else {
-			if (!this.signupButton.isPressed()) {
-				this.signupButton.draw();
-			} else {
-				this.signupButton.draw();
-			}
-		}
+		this.submitButton.draw();
+		this.signupButton.draw();
 		g.setColor(Color.white);
 
 		g.drawString("* Enter your username : ", middleButtonXPosition, this.usernameTextField.getY() - 25);
@@ -152,6 +123,7 @@ public class GuiLogin extends BasicGameState {
 		g.drawString(registrationSuccessfulString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
 		g.drawString(errorLoginFailString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
 		g.drawString(loginSuccessfulString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
+
 		g.drawAnimation(knightIdleAnimation, 100, 700);
 
 	}
@@ -178,12 +150,6 @@ public class GuiLogin extends BasicGameState {
 		} else {
 			this.errorLoginFailString = "";
 		}
-		if (loginSuccessful) {
-			this.loginSuccessfulString = "Login Successful !";
-		} else {
-			this.loginSuccessfulString = "";
-		}
-
 	}
 
 	@Override
@@ -270,11 +236,9 @@ public class GuiLogin extends BasicGameState {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		if (this.submitButton.isHovering(x, y) && button == 0) {
-			this.initializeSubmit = false;
 			this.submitButton.setPressed(true);
 		}
 		if (this.signupButton.isHovering(x, y) && button == 0) {
-			this.initializeSignup = false;
 			this.signupButton.setPressed(true);
 		}
 
@@ -289,17 +253,16 @@ public class GuiLogin extends BasicGameState {
 	public void mouseReleased(int button, int x, int y) {
 		this.signupButton.setPressed(false);
 		this.submitButton.setPressed(false);
+		String username = this.usernameTextField.getText();
 
 		if (this.submitButton.isHovering(x, y) && button == 0) {
-			if (this.usernameTextField.getText() != "" && this.passwordTextField.getText() != "") {
-				if (usernameTextField.getText().length() <= 12 && usernameTextField.getText().length() >= 4) {
-					this.account.setUsername(this.usernameTextField.getText());
+			if (!username.isEmpty() && !this.currentPassword.isEmpty()) {
+				if (username.length() <= 12 && username.length() >= 4) {
+					this.account.setUsername(username);
 					try {
-						this.account.setPassword(this.currentPassword);
 						this.account.setPassword(currentPassword);
 						this.account.setPasswordHash(this.account.hashPassword(this.currentPassword));
 						if (this.jm.LoginAccount(this.account)) {
-							this.loginSuccessful = true;
 							Game.getInstance().enterState(3, new FadeOutTransition(), new FadeInTransition());
 						} else {
 							this.errorLoginFail = true;

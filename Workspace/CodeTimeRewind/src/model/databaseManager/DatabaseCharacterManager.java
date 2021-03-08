@@ -12,9 +12,6 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
 public class DatabaseCharacterManager {
 	private String connectionStatement;
 	private String sqlQuery, currentCategory = "";
@@ -24,7 +21,11 @@ public class DatabaseCharacterManager {
 	private List<Animation> animations = new ArrayList<>();
 	private List<Image> images = new ArrayList<>();
 	private Image[] imageArray;
-	private int[] durations;
+	private static DatabaseCharacterManager instance;
+
+	public static DatabaseCharacterManager getInstance() {
+		return instance == null ? instance = new DatabaseCharacterManager() : instance;
+	}
 
 	public List<Animation> getAllAnimations(String characterName) {
 		try {
@@ -40,7 +41,7 @@ public class DatabaseCharacterManager {
 
 					if (resultQueryAllAnimations.isLast()) {
 						this.imageArray = images.toArray(new Image[0]);
-						this.animations.add(new Animation(imageArray, this.CalculDuration()));
+						this.animations.add(new Animation(imageArray, 100));
 					}
 				} else {
 					if (images.size() == 0) {
@@ -49,7 +50,7 @@ public class DatabaseCharacterManager {
 					} else {
 						this.imageArray = images.toArray(new Image[0]);
 						
-						this.animations.add(new Animation(imageArray, this.CalculDuration()));
+						this.animations.add(new Animation(imageArray, 100));
 						this.imageArray = null;
 						this.images.clear();
 						this.images.add(new Image(resultQueryAllAnimations.getString("Sprite_Path")));
@@ -57,7 +58,6 @@ public class DatabaseCharacterManager {
 
 					}
 				}
-
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -84,21 +84,4 @@ public class DatabaseCharacterManager {
 		return null;
 
 	}
-	
-	public int[] CalculDuration() {
-		if (this.images.size() == 1)
-			durations = new int[] { 100 };
-		if (this.images.size() == 2)
-			durations = new int[] { 100, 100 };
-		if (this.images.size() == 3)
-			durations = new int[] { 100, 100, 100 };
-		if (this.images.size() == 4)
-			durations = new int[] { 100, 100, 100, 100 };
-		if (this.images.size() == 5)
-			durations = new int[] { 100, 100, 100, 100, 100 };
-		if (this.images.size() == 6)
-			durations = new int[] { 100, 100, 100, 100, 100, 100 };
-		return durations;
-	}
-	
 }

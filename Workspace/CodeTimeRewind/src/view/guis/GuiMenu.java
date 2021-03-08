@@ -24,9 +24,11 @@ public class GuiMenu extends BasicGameState {
 	private Button playButton;
 	private Button exitButton;
 	// Used for do the sliding mainscreen
-	private float backX = 0, backY = 0, backDX = 1920, backDY = 0, speed = 0.10f;
-	private boolean initializePlay = true;
-	private boolean initializeExit = true;
+	private float backX = 0;
+	private float backY = 0;
+	private float backDX = 1920;
+	private float backDY = 0;
+	private float speed = 0.10f;
 
 	public GuiMenu(int state) {
 	}
@@ -39,7 +41,7 @@ public class GuiMenu extends BasicGameState {
 
 		this.exitButton = new MediumButton(new Image("/res/buttons/ExitButton.png"),
 				new Image("/res/buttons/ExitButtonHit.png"), ((gc.getWidth() / 2) - (600 / 2)), 600);
-
+		
 		this.backgroundImage = new Image("/res/Main_Screen_Background.png");
 		this.secondBackgroundImage = new Image("/res/Main_Screen_Background.png");
 
@@ -56,24 +58,8 @@ public class GuiMenu extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawImage(backgroundImage, backX, backY);
 		g.drawImage(secondBackgroundImage, backDX, backDY);
-		if (initializePlay) {
-			this.playButton.draw();
-		} else {
-			if (this.playButton.isPressed()) {
-				this.playButton.draw();
-			} else {
-				this.playButton.draw();
-			}
-		}
-		if (initializeExit) {
-			this.exitButton.draw();
-		} else {
-			if (this.exitButton.isPressed()) {
-				this.exitButton.draw();
-			} else {
-				this.exitButton.draw();
-			}
-		}
+		this.playButton.draw();
+		this.exitButton.draw();
 		knightWalkingAnimation.draw(100, 700);
 	}
 
@@ -113,11 +99,9 @@ public class GuiMenu extends BasicGameState {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		if (this.playButton.isHovering(x, y) && button == 0) {
-			this.initializePlay = false;
 			this.playButton.setPressed(true);
 		}
 		if (this.exitButton.isHovering(x, y) && button == 0) {
-			this.initializeExit = false;
 			this.exitButton.setPressed(true);
 		}
 	}

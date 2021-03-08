@@ -18,7 +18,7 @@ public class Character extends Entity {
 	private int experience;
 	private int maxExperience;
 	private int firstLevelMaxExperience;
-	private DatabaseCharacterManager dcm;
+	
 	private List<Animation> animations;
 
 	public Character(String name, int level, int health, int defense, int attack, int speed, int experience,
@@ -29,8 +29,7 @@ public class Character extends Entity {
 		this.description = Description;
 		this.firstLevelMaxExperience = 150;
 		calculateMaxExperience();
-		this.dcm = new DatabaseCharacterManager();
-		this.animations = dcm.getAllAnimations(name);
+		this.animations = DatabaseCharacterManager.getInstance().getAllAnimations(name);
 	}
 
 	public void calculateMaxExperience() {

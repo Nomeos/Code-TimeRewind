@@ -75,11 +75,16 @@ public class GuiCharacter extends BasicGameState {
 		this.zoneLibreStatsHeight = 350;
 
 		this.backgroundImage = new Image("/res/Half_Sunset.png");
+		
 		this.backgroundProgressBarWidth = 276;
+		
 		this.zoneLibreStats = new Image("/res/zones/ZoneLibre.png");
+		
 		this.characterNameFont = new Font(centuryFont, Font.BOLD, 50);
 		this.characterNameTTF = new TrueTypeFont(characterNameFont, true);
+		
 		this.backgroundProgressBar = new Image("/res/zones/ProgressionBar.png");
+
 		this.backgroundSort1 = new Image(backgroundSortPath);
 		this.backgroundSort2 = new Image(backgroundSortPath);
 		this.backgroundSort3 = new Image(backgroundSortPath);

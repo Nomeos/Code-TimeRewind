@@ -10,8 +10,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Button {
-	private int WIDTH;
-	private int HEIGHT;
+	private int width;
+	private int height;
 	private int x;
 	private int y;
 	private Image image;
@@ -23,8 +23,8 @@ public class Button {
 		this.imageHit = imageHit;
 		this.x = x;
 		this.y = y;
-		this.HEIGHT = HEIGHT;
-		this.WIDTH = WIDTH;
+		this.height = HEIGHT;
+		this.width = WIDTH;
 	}
 	public Button(Image image, Image imageHit, int x, int y) {
 		this.image = image;
@@ -44,7 +44,7 @@ public class Button {
 	}
 	
 	public boolean isHovering(int x, int y) {
-		return this.x < x && (this.x + this.WIDTH) > x && this.y < y
-				&& (this.y + this.HEIGHT) > y;
+		return this.x < x && (this.x + this.width) > x && this.y < y
+				&& (this.y + this.height) > y;
 	}
 }

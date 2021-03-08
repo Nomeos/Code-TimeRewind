@@ -55,7 +55,7 @@ public class GuiLobby extends BasicGameState {
 				new Image("/res/buttons/CharacterButtonHit.png"), characterButtonXPosition, smallButtonYPosition);
 		this.inventoryButton = new SmallButton(new Image("/res/buttons/InventoryButton.png"),
 				new Image("/res/buttons/InventoryButtonHit.png"),
-				inventoryButtonXPosition + this.characterButton.getWIDTH(), smallButtonYPosition);
+				inventoryButtonXPosition + this.characterButton.getWidth(), smallButtonYPosition);
 		this.adventureButton = new BigButton(new Image("/res/buttons/AdventureButton.png"),
 				new Image("/res/buttons/AdventureButtonHit.png"), adventureButtonXPosition, adventureButtonYPosition);
 		this.backgroundImage = new Image("/res/Half_Night.png");

@@ -22,7 +22,7 @@ public class Account {
 	private int account_Level;
 	private String username, passwordHash;
 	private List<Character> listOfOwnedCharacter = new ArrayList<Character>();
-	private transient String password = "";
+	private String password = "";
 
 	public Account(String username, String password) throws NoSuchAlgorithmException {
 		this.username = username;
