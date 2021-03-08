@@ -1,5 +1,8 @@
 package view.guis;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -18,22 +21,14 @@ import model.button.SmallButton;
 
 public class GuiLobby extends BasicGameState {
 	private int stateID;
-	private int level;
-	private int smallButtonYPosition;
-	private int characterButtonXPosition;
-	private int inventoryButtonXPosition;
-
-	private int adventureButtonXPosition;
-	private int adventureButtonYPosition;
-	private Account playerAccount;
 	private String username;
-	private boolean initializeCharacter = true;
-	private boolean initializeInventory = true;
-	private boolean initializeAdventure = true;
+	private int level;
+	private Account playerAccount;
 	private Image backgroundImage;
 	private Button characterButton;
 	private Button inventoryButton;
 	private Button adventureButton;
+	private List<Button> listOfButton;
 
 	public GuiLobby() {
 	}
@@ -45,11 +40,11 @@ public class GuiLobby extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 
-		this.characterButtonXPosition = 50;
-		this.smallButtonYPosition = (gc.getHeight() - 110);
-		this.inventoryButtonXPosition = characterButtonXPosition + 50;
-		this.adventureButtonXPosition = (gc.getWidth() / 2) - (350 / 2);
-		this.adventureButtonYPosition = (gc.getHeight() / 2) - (350 / 2);
+		int characterButtonXPosition = 50;
+		int smallButtonYPosition = (gc.getHeight() - 110);
+		int inventoryButtonXPosition = characterButtonXPosition + 50;
+		int adventureButtonXPosition = (gc.getWidth() / 2) - (350 / 2);
+		int adventureButtonYPosition = (gc.getHeight() / 2) - (350 / 2);
 
 		this.characterButton = new SmallButton(new Image("/res/buttons/CharacterButton.png"),
 				new Image("/res/buttons/CharacterButtonHit.png"), characterButtonXPosition, smallButtonYPosition);
@@ -60,6 +55,11 @@ public class GuiLobby extends BasicGameState {
 				new Image("/res/buttons/AdventureButtonHit.png"), adventureButtonXPosition, adventureButtonYPosition);
 		this.backgroundImage = new Image("/res/Half_Night.png");
 
+		this.listOfButton = new ArrayList<Button>();
+		this.listOfButton.add(adventureButton);
+		this.listOfButton.add(characterButton);
+		this.listOfButton.add(inventoryButton);
+
 		this.username = "";
 		this.level = 0;
 	}
@@ -67,34 +67,8 @@ public class GuiLobby extends BasicGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawImage(backgroundImage, 0, 0);
-
-		if (initializeCharacter) {
-			this.characterButton.draw();
-		} else {
-			if (!this.characterButton.isPressed()) {
-				this.characterButton.draw();
-			} else {
-				this.characterButton.draw();
-			}
-		}
-		if (initializeInventory) {
-			this.inventoryButton.draw();
-		} else {
-			if (!this.inventoryButton.isPressed()) {
-				this.inventoryButton.draw();
-			} else {
-				this.inventoryButton.draw();
-			}
-		}
-		if (initializeAdventure) {
-			this.adventureButton.draw();
-		} else {
-			if (!this.adventureButton.isPressed()) {
-				this.adventureButton.draw();
-			} else {
-				this.adventureButton.draw();
-			}
-		}
+		for (Button button : this.listOfButton)
+			button.draw();
 
 		g.setColor(Color.white);
 
@@ -131,15 +105,12 @@ public class GuiLobby extends BasicGameState {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		if (this.characterButton.isHovering(x, y) && button == 0) {
-			this.initializeCharacter = false;
 			this.characterButton.setPressed(true);
 		}
 		if (this.inventoryButton.isHovering(x, y) && button == 0) {
-			this.initializeInventory = false;
 			this.inventoryButton.setPressed(true);
 		}
 		if (this.adventureButton.isHovering(x, y) && button == 0) {
-			this.initializeAdventure = false;
 			this.adventureButton.setPressed(true);
 		}
 	}

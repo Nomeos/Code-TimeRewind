@@ -1,6 +1,8 @@
 package view.guis;
 
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -42,6 +44,7 @@ public class GuiCharacter extends BasicGameState {
 	private int character_defense;
 	private int character_attack;
 	private int character_speed;
+	private int stateId;
 	private float character_max_experience_point;
 	private int character_level;
 	private float backgroundProgressBarWidth;
@@ -54,15 +57,15 @@ public class GuiCharacter extends BasicGameState {
 	private Shape progressBar;
 	private Font characterNameFont;
 	private TrueTypeFont characterNameTTF;
-	private boolean initializeLobby = true;
 
 	private String backgroundSortPath = "/res/zones/ZoneSort.png";
 	private String centuryFont = "Century Gothic";
 	private String character_description;
 	private Button lobbyButton;
+	private List<Button> listOfButton;
 
 	public GuiCharacter(int state) {
-
+		this.stateId = state;
 	}
 
 	@Override
@@ -91,6 +94,9 @@ public class GuiCharacter extends BasicGameState {
 
 		this.lobbyButton = new SmallButton(new Image("/res/buttons/LobbyButton.png"),
 				new Image("/res/buttons/LobbyButtonHit.png"), lobbyButtonXPosition, lobbyButtonYPosition);
+		this.listOfButton = new ArrayList();
+		this.listOfButton.add(lobbyButton);
+		
 
 	}
 
@@ -102,15 +108,8 @@ public class GuiCharacter extends BasicGameState {
 		g.drawImage(backgroundSort2, this.lobbyButtonXPosition, this.lobbyButtonYPosition - 175);
 		g.drawImage(backgroundSort3, this.lobbyButtonXPosition, this.lobbyButtonYPosition - 90);
 
-		if (initializeLobby) {
-			this.lobbyButton.draw();
-		} else {
-			if (!this.lobbyButton.isPressed()) {
-				this.lobbyButton.draw();
-			} else {
-				this.lobbyButton.draw();
-			}
-		}
+		for(Button button : this.listOfButton) button.draw();
+		
 		if (this.player != null) {
 			g.setFont(characterNameTTF);
 
@@ -198,7 +197,6 @@ public class GuiCharacter extends BasicGameState {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		if (this.lobbyButton.isHovering(x, y) && button == 0) {
-			this.initializeLobby = false;
 			this.lobbyButton.setPressed(true);
 		}
 	}

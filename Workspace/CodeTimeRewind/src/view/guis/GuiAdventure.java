@@ -1,5 +1,8 @@
 package view.guis;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -22,10 +25,7 @@ public class GuiAdventure extends BasicGameState {
 	private Button chapterTwo;
 	private Button chapterThree;
 	private Button lobbyButton;
-	private boolean initializeChapterOne = true;
-	private boolean initializeChapterTwo = true;
-	private boolean initializeChapterThree = true;
-	private boolean initializeLobby = true;
+	private List<Button> listOfButton;
 	private int middleOfTheScreenWidth;
 	private int middleOfTheScreenHeight;
 	private int lobbyButtonXPosition;
@@ -58,52 +58,19 @@ public class GuiAdventure extends BasicGameState {
 
 		this.lobbyButton = new SmallButton(new Image("/res/buttons/LobbyButton.png"),
 				new Image("/res/buttons/LobbyButtonHit.png"), lobbyButtonXPosition, lobbyButtonYPosition);
+		this.listOfButton = new ArrayList<Button>();
+		this.listOfButton.add(chapterOne);
+		this.listOfButton.add(chapterThree);
+		this.listOfButton.add(chapterTwo);
+		this.listOfButton.add(lobbyButton);
+		
+		
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		this.background.draw(0, 0);
-		this.chapterOne.draw();
-		this.chapterTwo.draw();
-		this.chapterThree.draw();
-
-		if (initializeChapterOne) {
-			this.chapterOne.draw();
-		} else {
-			if (!this.chapterOne.isPressed()) {
-				this.chapterOne.draw();
-			} else {
-				this.chapterOne.draw();
-			}
-		}
-		if (initializeChapterTwo) {
-			this.chapterTwo.draw();
-		} else {
-			if (!this.chapterTwo.isPressed()) {
-				this.chapterTwo.draw();
-			} else {
-				this.chapterTwo.draw();
-			}
-		}
-		if (initializeChapterThree) {
-			this.chapterThree.draw();
-		} else {
-			if (!this.chapterThree.isPressed()) {
-				this.chapterThree.draw();
-			} else {
-				this.chapterThree.draw();
-			}
-		}
-		if (initializeLobby) {
-			this.lobbyButton.draw();
-		} else {
-			if (!this.lobbyButton.isPressed()) {
-				this.lobbyButton.draw();
-			} else {
-				this.lobbyButton.draw();
-			}
-		}
-
+		for(Button button : this.listOfButton) button.draw();
 	}
 
 	@Override
@@ -114,19 +81,15 @@ public class GuiAdventure extends BasicGameState {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		if (this.chapterOne.isHovering(x, y) && button == 0) {
-			this.initializeChapterOne = false;
 			this.chapterOne.setPressed(true);
 		}
 		if (this.chapterTwo.isHovering(x, y) && button == 0) {
-			this.initializeChapterTwo = false;
 			this.chapterTwo.setPressed(true);
 		}
 		if (this.chapterThree.isHovering(x, y) && button == 0) {
-			this.initializeChapterThree = false;
 			this.chapterThree.setPressed(true);
 		}
 		if (this.lobbyButton.isHovering(x, y) && button == 0) {
-			this.initializeLobby = false;
 			this.lobbyButton.setPressed(true);
 		}
 	}
@@ -136,6 +99,7 @@ public class GuiAdventure extends BasicGameState {
 		this.chapterOne.setPressed(false);
 		this.chapterTwo.setPressed(false);
 		this.chapterThree.setPressed(false);
+		this.lobbyButton.setPressed(false);
 		if (this.chapterOne.isHovering(x, y) && button == 0) {
 
 		}
@@ -145,7 +109,6 @@ public class GuiAdventure extends BasicGameState {
 		if (this.chapterThree.isHovering(x, y) && button == 0) {
 
 		}
-		this.lobbyButton.setPressed(false);
 		if (this.lobbyButton.isHovering(x, y) && button == 0) {
 			Game.getInstance().enterState(3, new FadeOutTransition(), new FadeInTransition());
 		}

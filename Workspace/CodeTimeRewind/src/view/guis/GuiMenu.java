@@ -1,5 +1,8 @@
 package view.guis;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -29,6 +32,7 @@ public class GuiMenu extends BasicGameState {
 	private float backDX = 1920;
 	private float backDY = 0;
 	private float speed = 0.10f;
+	private List<Button> listOfButton;
 
 	public GuiMenu(int state) {
 	}
@@ -41,6 +45,9 @@ public class GuiMenu extends BasicGameState {
 
 		this.exitButton = new MediumButton(new Image("/res/buttons/ExitButton.png"),
 				new Image("/res/buttons/ExitButtonHit.png"), ((gc.getWidth() / 2) - (600 / 2)), 600);
+		this.listOfButton = new ArrayList<Button>();
+		this.listOfButton.add(exitButton);
+		this.listOfButton.add(playButton);
 		
 		this.backgroundImage = new Image("/res/Main_Screen_Background.png");
 		this.secondBackgroundImage = new Image("/res/Main_Screen_Background.png");
@@ -58,8 +65,7 @@ public class GuiMenu extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawImage(backgroundImage, backX, backY);
 		g.drawImage(secondBackgroundImage, backDX, backDY);
-		this.playButton.draw();
-		this.exitButton.draw();
+		for (Button button : this.listOfButton) button.draw();
 		knightWalkingAnimation.draw(100, 700);
 	}
 

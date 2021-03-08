@@ -2,6 +2,8 @@ package view.guis;
 
 import java.awt.Font;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -10,7 +12,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -23,6 +24,7 @@ import model.button.Button;
 import model.button.MediumButton;
 import model.button.SmallButton;
 import model.databaseManager.DatabaseAccountManager;
+import model.textfield.TextField;
 
 @NoArgsConstructor
 public class GuiLogin extends BasicGameState {
@@ -33,23 +35,17 @@ public class GuiLogin extends BasicGameState {
 	private String currentPassword = "";
 	private String currentUsername = "";
 	private String currentHiddenPassword = "";
-	private String errorUsernameLengthString = "";
-	private String missingFieldFillString = "";
-	private String registrationSuccessfulString = "";
-	private String errorLoginFailString = "";
-	private String loginSuccessfulString = "";
+	private String errorText = "";
 	private Account account;
 	private DatabaseAccountManager jm;
 	private TrueTypeFont trueTypeFont;
 	private TextField usernameTextField;
 	private TextField passwordTextField;
-	private boolean errorUsernameLength;
-	private boolean missingFieldFill;
-	private boolean errorLoginFail;
 	private Image backgroundImage;
 	private Animation knightIdleAnimation;
 	private Button submitButton;
 	private Button signupButton;
+	private List<Button> listOfButton;
 
 	public GuiLogin(int state) {
 		this.stateId = state;
@@ -78,14 +74,12 @@ public class GuiLogin extends BasicGameState {
 		this.submitButton = new MediumButton(new Image("/res/buttons/SubmitButton.png"),
 				new Image("/res/buttons/SubmitButtonHit.png"), middleButtonXPosition,
 				this.passwordTextField.getY() + 50);
-
+		this.listOfButton = new ArrayList<Button>();
+		this.listOfButton.add(signupButton);
+		this.listOfButton.add(submitButton);
+		
 		this.account = new Account();
 		this.jm = new DatabaseAccountManager();
-
-		this.errorUsernameLength = false;
-		this.missingFieldFill = false;
-		this.errorLoginFail = false;
-
 
 		this.backgroundImage = new Image("/res/Main_Screen_Background.png");
 
@@ -99,8 +93,7 @@ public class GuiLogin extends BasicGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawImage(backgroundImage, 0, 0);
-		this.submitButton.draw();
-		this.signupButton.draw();
+		for (Button button : this.listOfButton) button.draw();
 		g.setColor(Color.white);
 
 		g.drawString("* Enter your username : ", middleButtonXPosition, this.usernameTextField.getY() - 25);
@@ -118,12 +111,7 @@ public class GuiLogin extends BasicGameState {
 		this.passwordTextField.render(gc, g);
 
 		g.setColor(Color.red);
-		g.drawString(errorUsernameLengthString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
-		g.drawString(missingFieldFillString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
-		g.drawString(registrationSuccessfulString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
-		g.drawString(errorLoginFailString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
-		g.drawString(loginSuccessfulString, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
-
+		g.drawString(errorText, middleButtonXPosition, middleButtonXPosition);
 		g.drawAnimation(knightIdleAnimation, 100, 700);
 
 	}
@@ -131,24 +119,7 @@ public class GuiLogin extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (Game.getInstance().getTheRegisterSucessfull()) {
-			this.registrationSuccessfulString = "Registration Successful !";
-		} else {
-			this.registrationSuccessfulString = "";
-		}
-		if (errorUsernameLength) {
-			this.errorUsernameLengthString = "The length of the username is invalid (between 4 and 12 charactercs long).";
-		} else {
-			this.errorUsernameLengthString = "";
-		}
-		if (missingFieldFill) {
-			this.missingFieldFillString = "Please fill the text fields with your informations.";
-		} else {
-			this.missingFieldFillString = "";
-		}
-		if (errorLoginFail) {
-			this.errorLoginFailString = "The Login failed. Try to reconnect or create a new account.";
-		} else {
-			this.errorLoginFailString = "";
+			this.errorText = this.usernameTextField.errorManagement(5);
 		}
 	}
 
@@ -159,9 +130,7 @@ public class GuiLogin extends BasicGameState {
 
 	@Override
 	public void keyReleased(int key, char c) {
-		this.errorUsernameLength = false;
-		this.missingFieldFill = false;
-		this.errorLoginFail = false;
+		this.errorText = this.usernameTextField.errorManagement(0);
 		Game.getInstance().setTheRegisterSucessfull(false);
 		StepsIfPasswordHasFocus(key, c);
 		StepsIfUsernameHasFocus(key, c);
@@ -265,39 +234,39 @@ public class GuiLogin extends BasicGameState {
 						if (this.jm.LoginAccount(this.account)) {
 							Game.getInstance().enterState(3, new FadeOutTransition(), new FadeInTransition());
 						} else {
-							this.errorLoginFail = true;
-							this.usernameTextField.setText("");
-							this.passwordTextField.setText("");
-							this.currentHiddenPassword = "";
-							this.currentPassword = "";
-							this.currentUsername = "";
+							this.errorText = this.usernameTextField.errorManagement(6);
+							resetTextFieldContent();
 						}
 					} catch (NoSuchAlgorithmException e) {
 
 						e.printStackTrace();
 					}
 				} else {
-					this.errorUsernameLength = true;
+					this.errorText = this.usernameTextField.errorManagement(1);
+
 				}
 			} else {
-				this.missingFieldFill = true;
+				this.errorText = this.usernameTextField.errorManagement(2);
+
 			}
 
 		}
 		if (this.signupButton.isHovering(x, y) && button == 0) {
-			this.errorUsernameLength = false;
-			this.missingFieldFill = false;
-			this.errorLoginFail = false;
-			this.usernameTextField.setText("");
-			this.passwordTextField.setText("");
-			this.currentHiddenPassword = "";
-			this.currentPassword = "";
-			this.currentUsername = "";
+			this.errorText = this.usernameTextField.errorManagement(0);
+			resetTextFieldContent();
 			Game.getInstance().setTheRegisterSucessfull(false);
 			Game.getInstance().enterState(2, new FadeOutTransition(), new FadeInTransition());
 		}
 	}
 
+	public void resetTextFieldContent() {
+		this.usernameTextField.setText("");
+		this.passwordTextField.setText("");
+		this.currentHiddenPassword = "";
+		this.currentPassword = "";
+		this.currentUsername = "";
+	}
+	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		// Do nothing because no action while use the mouse mouvement feature.
