@@ -13,8 +13,12 @@ import model.entity.Entity;
 @Setter
 public class Level {
 	List<Entity> listOfEntity = new ArrayList<Entity>();
-	private int level_Id;
 	private String name;
 	private boolean isLevelClear;
+	
+	public Level(String name, boolean isLevelClear) {
+		this.name = name;
+		this.isLevelClear = isLevelClear;
+	}
 
 }

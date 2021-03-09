@@ -1,11 +1,15 @@
 package main;
 
+import java.util.List;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import model.account.Account;
+import model.level.Level;
 import view.guis.GuiAdventure;
+import view.guis.GuiChapters;
 import view.guis.GuiCharacter;
 import view.guis.GuiLobby;
 import view.guis.GuiLogin;
@@ -18,9 +22,12 @@ public class Game extends StateBasedGame {
 	public final int signup = 2;
 	public final int lobby = 3;
 	public final int character = 4;
-	public final int adventure = 5;
+	public final int chapters = 5;
+	public final int adventure = 6;
+	private int currentChapter;
 	private static Game instance;
 	private Account playerAccount;
+	private List<List<Level>> ListOfChapters;
 	private boolean isTheRegisterSucessfull = false;
 	
 
@@ -43,6 +50,7 @@ public class Game extends StateBasedGame {
 		this.addState(new GuiSignup(signup));
 		this.addState(new GuiLobby(lobby));
 		this.addState(new GuiCharacter(character));
+		this.addState(new GuiChapters(chapters));
 		this.addState(new GuiAdventure(adventure));
 	}
 
@@ -86,5 +94,20 @@ public class Game extends StateBasedGame {
 	}
 	public void setPlayerAccount(Account user) {
 		this.playerAccount = user;
+	}
+	public List<List<Level>> getListOfChapters() {
+		return ListOfChapters;
+	}
+
+	public void setListOfChapters(List<List<Level>> listOfChapters) {
+		ListOfChapters = listOfChapters;
+	}
+
+	public int getCurrentChapter() {
+		return currentChapter;
+	}
+
+	public void setCurrentChapter(int currentChapter) {
+		this.currentChapter = currentChapter;
 	}
 }

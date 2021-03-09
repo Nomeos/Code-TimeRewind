@@ -94,7 +94,7 @@ public class GuiCharacter extends BasicGameState {
 
 		this.lobbyButton = new SmallButton(new Image("/res/buttons/LobbyButton.png"),
 				new Image("/res/buttons/LobbyButtonHit.png"), lobbyButtonXPosition, lobbyButtonYPosition);
-		this.listOfButton = new ArrayList();
+		this.listOfButton = new ArrayList<>();
 		this.listOfButton.add(lobbyButton);
 		
 

@@ -1,4 +1,4 @@
-!SESSION 2021-03-08 08:13:21.298 -----------------------------------------------
+!SESSION 2021-03-09 09:54:54.231 -----------------------------------------------
 eclipse.buildId=4.18.0.I20201202-1800
 java.version=15.0.1
 java.vendor=Oracle Corporation
@@ -6,22 +6,58 @@ BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_CH
 Framework arguments:  -product org.eclipse.epp.package.java.product
 Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
 
-This is a continuation of log file C:\Projet TPI\Code-TimeRewind\Workspace\.metadata\.bak_2.log
-Created Time: 2021-03-08 16:09:41.822
+This is a continuation of log file C:\Projet TPI\Code-TimeRewind\Workspace\.metadata\.bak_1.log
+Created Time: 2021-03-09 16:51:49.301
 
-!ENTRY org.eclipse.debug.ui 4 120 2021-03-08 16:09:41.827
-!MESSAGE Error logged from Debug UI: 
+!ENTRY com.genuitec.eclipse.theming.core 4 0 2021-03-09 16:51:49.305
+!MESSAGE Cannot find a common class for org/eclipse/jface/text/BadPartitioningException and org/eclipse/jface/text/BadLocationException
+
+!ENTRY com.genuitec.eclipse.patches 4 0 2021-03-09 16:51:49.310
+!MESSAGE Patches instrumentation extension fix-javadoc.view.styles (Fixing Hyperlink colors in JavaDoc View) has failed to weave class org.eclipse.jdt.internal.ui.infoviews.JavadocView. Extension will be disabled. Error: java.lang.ClassNotFoundException: org.eclipse.jface.text.BadPartitioningException
 !STACK 0
-java.lang.InterruptedException
-	at java.base/java.util.concurrent.FutureTask.awaitDone(FutureTask.java:418)
-	at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:203)
-	at org.eclipse.debug.internal.ui.stringsubstitution.SelectedResourceManager.runInUIThreadWithTimeout(SelectedResourceManager.java:262)
-	at org.eclipse.debug.internal.ui.stringsubstitution.SelectedResourceManager.getFromUI(SelectedResourceManager.java:240)
-	at org.eclipse.debug.internal.ui.stringsubstitution.SelectedResourceManager.getActiveWindow(SelectedResourceManager.java:231)
-	at org.eclipse.debug.ui.DebugUITools.getDebugContext(DebugUITools.java:247)
-	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.getFrame(JavaDebugHover.java:97)
-	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.getHoverInfo2(JavaDebugHover.java:251)
-	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
-	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
-	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
-	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+java.lang.RuntimeException: java.lang.ClassNotFoundException: org.eclipse.jface.text.BadPartitioningException
+	at com.genuitec.eclipse.theming.core.AbstractWeaverExtension$1.getCommonSuperClass(AbstractWeaverExtension.java:72)
+	at org.objectweb.asm.SymbolTable.addMergedType(SymbolTable.java:1202)
+	at org.objectweb.asm.Frame.merge(Frame.java:1299)
+	at org.objectweb.asm.Frame.merge(Frame.java:1213)
+	at org.objectweb.asm.MethodWriter.computeAllFrames(MethodWriter.java:1610)
+	at org.objectweb.asm.MethodWriter.visitMaxs(MethodWriter.java:1546)
+	at org.objectweb.asm.tree.MethodNode.accept(MethodNode.java:769)
+	at org.objectweb.asm.tree.MethodNode.accept(MethodNode.java:649)
+	at org.objectweb.asm.tree.ClassNode.accept(ClassNode.java:465)
+	at com.genuitec.eclipse.theming.core.AbstractWeaverExtension.weave(AbstractWeaverExtension.java:91)
+	at com.genuitec.eclipse.patches.internal.InstrumentationManager$WeavingExtension.weave(InstrumentationManager.java:429)
+	at com.genuitec.eclipse.patches.internal.InstrumentationManager.weave(InstrumentationManager.java:332)
+	at com.genuitec.eclipse.patches.internal.InstrumentationWeaver.weave(InstrumentationWeaver.java:15)
+	at org.eclipse.osgi.internal.weaving.WovenClassImpl.call(WovenClassImpl.java:187)
+	at org.eclipse.osgi.internal.weaving.WovenClassImpl.call(WovenClassImpl.java:1)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.notifyHookPrivileged(ServiceRegistry.java:1338)
+	at org.eclipse.osgi.internal.serviceregistry.ServiceRegistry.notifyHooksPrivileged(ServiceRegistry.java:1311)
+	at org.eclipse.osgi.internal.weaving.WovenClassImpl.callHooks(WovenClassImpl.java:252)
+	at org.eclipse.osgi.internal.weaving.WeavingHookConfigurator.processClass(WeavingHookConfigurator.java:80)
+	at org.eclipse.osgi.internal.loader.classpath.ClasspathManager.processClass(ClasspathManager.java:737)
+	at org.eclipse.osgi.internal.loader.classpath.ClasspathManager.defineClass(ClasspathManager.java:708)
+	at org.eclipse.osgi.internal.loader.classpath.ClasspathManager.findClassImpl(ClasspathManager.java:641)
+	at org.eclipse.osgi.internal.loader.classpath.ClasspathManager.findLocalClassImpl(ClasspathManager.java:609)
+	at org.eclipse.osgi.internal.loader.classpath.ClasspathManager.findLocalClassImpl(ClasspathManager.java:589)
+	at org.eclipse.osgi.internal.loader.classpath.ClasspathManager.findLocalClass(ClasspathManager.java:568)
+	at org.eclipse.osgi.internal.loader.ModuleClassLoader.findLocalClass(ModuleClassLoader.java:346)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:398)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:477)
+	at org.eclipse.osgi.internal.loader.ModuleClassLoader.loadClass(ModuleClassLoader.java:171)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover.getConstantValue(JavadocHover.java:987)
+	at org.eclipse.jdt.internal.ui.text.java.AbstractJavaCompletionProposal.addConstantOrDefaultValue(AbstractJavaCompletionProposal.java:634)
+	at org.eclipse.jdt.internal.ui.text.java.AbstractJavaCompletionProposal.getAdditionalProposalInfo(AbstractJavaCompletionProposal.java:592)
+	at org.eclipse.jface.text.contentassist.AdditionalInfoController$Timer$2$1.run(AdditionalInfoController.java:116)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: java.lang.ClassNotFoundException: org.eclipse.jface.text.BadPartitioningException
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:606)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:168)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
+	at org.eclipse.osgi.internal.framework.ContextFinder.loadClass(ContextFinder.java:147)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:468)
+	at com.genuitec.eclipse.theming.core.AbstractWeaverExtension$1.getCommonSuperClass(AbstractWeaverExtension.java:68)
+	... 34 more

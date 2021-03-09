@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 import main.Game;
 import model.account.Account;
 import model.entity.Character;
+import model.entity.Enemy;
+import model.level.Level;
 
 @NoArgsConstructor
 public class DatabaseAccountManager {
@@ -99,8 +101,20 @@ public class DatabaseAccountManager {
 			}
 		}
 		try {
+			this.sqlQuery = "Create Table Chapters (Chapter_Id int not null generated always as identity,"
+					+ "Name varchar(20),PRIMARY KEY(Chapter_Id))";
+			this.statement.executeUpdate(this.sqlQuery);
+
+		} catch (SQLException e) {
+			if (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") || e.getSQLState().equals("X0Y32")) {
+			} else {
+				e.printStackTrace();
+			}
+		}
+		try {
 			this.sqlQuery = "Create Table Levels (Level_Id int not null generated always as identity,"
-					+ "  Name varchar(20),PRIMARY KEY(Level_Id))";
+					+ " Chapter_Id Int,Name varchar(20),PRIMARY KEY(Level_Id),"
+					+ " FOREIGN KEY (Chapter_Id) REFERENCES Chapters(Chapter_Id))";
 			this.statement.executeUpdate(this.sqlQuery);
 
 		} catch (SQLException e) {
@@ -157,11 +171,19 @@ public class DatabaseAccountManager {
 			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Enemies(Name, Health, Defense, Attack, Speed )values('Robot',300,50,10,20)";
 			this.statement.executeUpdate(this.sqlQuery);
-			this.sqlQuery = "INSERT INTO Levels(Name)values('Facile')";
+			this.sqlQuery = "INSERT INTO Chapters(Name)values('Chapter One')";
 			this.statement.executeUpdate(this.sqlQuery);
-			this.sqlQuery = "INSERT INTO Levels(Name)values('Moyen')";
+			this.sqlQuery = "INSERT INTO Chapters(Name)values('Chapter Two')";
 			this.statement.executeUpdate(this.sqlQuery);
-			this.sqlQuery = "INSERT INTO Levels(Name)values('Difficile')";
+			this.sqlQuery = "INSERT INTO Chapters(Name)values('Chapter Three')";
+			this.statement.executeUpdate(this.sqlQuery);
+			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name)values(1,'Facile')";
+			this.statement.executeUpdate(this.sqlQuery);
+			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name)values(1,'Moyen')";
+			this.statement.executeUpdate(this.sqlQuery);
+			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name)values(1,'Difficile')";
+			this.statement.executeUpdate(this.sqlQuery);
+			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name)values(2,'Ultra Difficile')";
 			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(1,1,1)";
 			this.statement.executeUpdate(this.sqlQuery);
@@ -169,7 +191,10 @@ public class DatabaseAccountManager {
 			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(2,2,1)";
 			this.statement.executeUpdate(this.sqlQuery);
-			
+			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(3,3,2)";
+			this.statement.executeUpdate(this.sqlQuery);
+			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(4,3,3)";
+			this.statement.executeUpdate(this.sqlQuery);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -280,7 +305,7 @@ public class DatabaseAccountManager {
 	public boolean LoginAccount(Account userAccount) {
 		this.isRegister = false;
 		if (IsTheUserAlreadyExist(userAccount)) {
-			TakePlayerProgression();
+			TakePlayerProgression(userAccount);
 			CloseDatabaseConnection();
 			return true;
 		} else {
@@ -289,9 +314,8 @@ public class DatabaseAccountManager {
 		}
 	}
 
-	public void InsertLevelsInAccount(Account userAccount){
-		
-		
+	public void InsertLevelsInAccount(Account userAccount) {
+
 		this.sqlQuery = "SELECT Level_Id FROM Levels";
 		try {
 			ResultSet resultQuery;
@@ -301,7 +325,7 @@ public class DatabaseAccountManager {
 			while (resultQuery.next()) {
 				i.add(resultQuery.getInt("Level_Id"));
 			}
-			for(int j : i) {
+			for (int j : i) {
 				this.sqlQuery = "INSERT INTO Level_By_Accounts(Account_Id, Level_Id, Is_Level_Clear)values((SELECT ACCOUNT_ID from ACCOUNTS WHERE Username = '"
 						+ userAccount.getUsername() + "')," + j + ",0)";
 				this.statement.executeUpdate(sqlQuery);
@@ -310,7 +334,7 @@ public class DatabaseAccountManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void InsertAccountInDatabase(Account userAccount) {
@@ -321,7 +345,7 @@ public class DatabaseAccountManager {
 			Statement statement = OpenDatabaseConnection();
 			statement.executeUpdate(sqlQuery);
 			this.sqlQuery = "INSERT INTO Account_Own_Characters (Character_Id, Account_Id, Level,Experience_point)values (1,(SELECT Account_Id from Accounts where Username ='"
-					+ userAccount.getUsername() + "'),1,30)";
+					+ userAccount.getUsername() + "'),1,0)";
 			statement.executeUpdate(sqlQuery);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -329,26 +353,69 @@ public class DatabaseAccountManager {
 
 	}
 
-	public void TakePlayerProgression() {
+	public void TakePlayerProgression(Account userAccount) {
 		Statement statement = OpenDatabaseConnection();
 		ResultSet resultQuery;
+		int levelId = 0;
+		int chapterId = 1;
+		List<Level> listOfLevel = new ArrayList<>();
+		List<List<Level>> listOfChapter = new ArrayList<>();
+
 		try {
-			this.sqlQuery = "select" + "  c.Name," + "  ac.level," + "  c.health," + "  c.defense,"
-					+ "  c.attack," + "  c.speed, " + "ac.experience_point," + " c.description" + " from"
-					+ "  characters c"
-					+ "  INNER JOIN Account_own_characters ac ON c.character_id = ac.character_id"
-					+ "  INNER JOIN Accounts a ON ac.account_id = a.account_id" + "  where a.username = '";
+			this.sqlQuery = "SELECT C.CHAPTER_ID,L.LEVEL_ID,L.NAME,LBA.IS_LEVEL_CLEAR,E.NAME,EPL.LEVEL,E.ATTACK,E.DEFENSE,E.HEALTH,E.SPEED FROM ACCOUNTS A\r\n"
+					+ "INNER JOIN LEVEL_BY_ACCOUNTS LBA on A.ACCOUNT_ID = LBA.ACCOUNT_ID\r\n"
+					+ "INNER JOIN LEVELS L on L.LEVEL_ID = LBA.LEVEL_ID\r\n"
+					+ "INNER JOIN ENEMY_PER_LEVELS EPL on L.LEVEL_ID = EPL.LEVEL_ID\r\n"
+					+ "INNER JOIN CHAPTERS C on C.CHAPTER_ID = L.CHAPTER_ID\r\n"
+					+ "INNER JOIN ENEMIES E on EPL.ENEMY_ID = E.ENEMY_ID WHERE A.USERNAME = '"
+					+ userAccount.getUsername() + "'";
 			resultQuery = statement.executeQuery(sqlQuery);
 			while (resultQuery.next()) {
-				
+				if (resultQuery.getInt(1) == chapterId) {
+					if (resultQuery.getInt(2) == levelId) {
+						listOfLevel.get(levelId - 1).getListOfEntity()
+								.add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
+										resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
+										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
+					} else {
+						levelId = resultQuery.getInt("LEVEL_ID");
+						listOfLevel.add(new Level(resultQuery.getString(3), resultQuery.getBoolean(4)));
+						listOfLevel.get(levelId - 1).getListOfEntity()
+								.add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
+										resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
+										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
+
+					}
+				} else {
+					listOfChapter.add(listOfLevel);
+					listOfLevel.clear();
+					if (resultQuery.getInt(2) == levelId) {
+						listOfLevel.get(levelId - 1).getListOfEntity()
+								.add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
+										resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
+										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
+					} else {
+						levelId = resultQuery.getInt("LEVEL_ID");
+						listOfLevel.add(new Level(resultQuery.getString(3), resultQuery.getBoolean(4)));
+						listOfLevel.get(0).getListOfEntity()
+								.add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
+										resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
+										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
+					}
+					
+
+				}
+
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		if (Game.getInstance() != null) {
+			Game.getInstance().setListOfChapters(listOfChapter);
+		}
+
 	}
-	
+
 	// Check if the user already exist in the json, it returns a boolean (works with
 	// login and register).
 	public boolean IsTheUserAlreadyExist(Account userAccount) {
