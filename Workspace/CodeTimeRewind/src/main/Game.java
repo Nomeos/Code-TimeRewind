@@ -8,13 +8,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import model.account.Account;
 import model.level.Level;
-import view.guis.GuiAdventure;
-import view.guis.GuiChapters;
-import view.guis.GuiCharacter;
-import view.guis.GuiLobby;
-import view.guis.GuiLogin;
-import view.guis.GuiMenu;
-import view.guis.GuiSignup;
+import view.guis.*;
+
 
 public class Game extends StateBasedGame {
 	public final int menu = 0;
@@ -24,7 +19,9 @@ public class Game extends StateBasedGame {
 	public final int character = 4;
 	public final int chapters = 5;
 	public final int adventure = 6;
+	public final int fight = 7;
 	private int currentChapter;
+	private int currentLevel;
 	private static Game instance;
 	private Account playerAccount;
 	private List<List<Level>> ListOfChapters;
@@ -52,6 +49,7 @@ public class Game extends StateBasedGame {
 		this.addState(new GuiCharacter(character));
 		this.addState(new GuiChapters(chapters));
 		this.addState(new GuiAdventure(adventure));
+		this.addState(new GuiFight(fight));
 	}
 
 	@Override
@@ -109,5 +107,13 @@ public class Game extends StateBasedGame {
 
 	public void setCurrentChapter(int currentChapter) {
 		this.currentChapter = currentChapter;
+	}
+
+	public int getCurrentLevel() {
+		return currentLevel;
+	}
+
+	public void setCurrentLevel(int currentLevel) {
+		this.currentLevel = currentLevel;
 	}
 }

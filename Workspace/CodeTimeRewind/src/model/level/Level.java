@@ -15,10 +15,14 @@ public class Level {
 	List<Entity> listOfEntity = new ArrayList<Entity>();
 	private String name;
 	private boolean isLevelClear;
-	
-	public Level(String name, boolean isLevelClear) {
+	private int xPosition;
+	private int yPosition;
+
+	public Level(String name, boolean isLevelClear, int xPosition, int yPosition) {
 		this.name = name;
 		this.isLevelClear = isLevelClear;
+		this.xPosition = xPosition;
+		this.yPosition = yPosition;
 	}
 
 }

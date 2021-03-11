@@ -113,7 +113,7 @@ public class DatabaseAccountManager {
 		}
 		try {
 			this.sqlQuery = "Create Table Levels (Level_Id int not null generated always as identity,"
-					+ " Chapter_Id Int,Name varchar(20),PRIMARY KEY(Level_Id),"
+					+ " Chapter_Id Int,Name varchar(20), XPosition int, YPosition int, PRIMARY KEY(Level_Id),"
 					+ " FOREIGN KEY (Chapter_Id) REFERENCES Chapters(Chapter_Id))";
 			this.statement.executeUpdate(this.sqlQuery);
 
@@ -177,13 +177,13 @@ public class DatabaseAccountManager {
 			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Chapters(Name)values('Chapter Three')";
 			this.statement.executeUpdate(this.sqlQuery);
-			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name)values(1,'Facile')";
+			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name,XPosition,YPosition)values(1,'Facile',125,125)";
 			this.statement.executeUpdate(this.sqlQuery);
-			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name)values(1,'Moyen')";
+			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name,XPosition,YPosition)values(1,'Moyen',400,400)";
 			this.statement.executeUpdate(this.sqlQuery);
-			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name)values(1,'Difficile')";
+			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name,XPosition,YPosition)values(1,'Difficile',70,800)";
 			this.statement.executeUpdate(this.sqlQuery);
-			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name)values(2,'Ultra Difficile')";
+			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name,XPosition,YPosition)values(2,'Ultra Difficile',150,70)";
 			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(1,1,1)";
 			this.statement.executeUpdate(this.sqlQuery);
@@ -206,7 +206,6 @@ public class DatabaseAccountManager {
 		try {
 			this.statement.executeUpdate(this.sqlQuery);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -226,7 +225,6 @@ public class DatabaseAccountManager {
 			this.statement.executeUpdate(this.sqlQuery);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -258,7 +256,6 @@ public class DatabaseAccountManager {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -331,7 +328,6 @@ public class DatabaseAccountManager {
 				this.statement.executeUpdate(sqlQuery);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -362,7 +358,7 @@ public class DatabaseAccountManager {
 		List<List<Level>> listOfChapter = new ArrayList<>();
 
 		try {
-			this.sqlQuery = "SELECT C.CHAPTER_ID,L.LEVEL_ID,L.NAME,LBA.IS_LEVEL_CLEAR,E.NAME,EPL.LEVEL,E.ATTACK,E.DEFENSE,E.HEALTH,E.SPEED FROM ACCOUNTS A\r\n"
+			this.sqlQuery = "SELECT C.CHAPTER_ID,L.LEVEL_ID,L.NAME,LBA.IS_LEVEL_CLEAR,E.NAME,EPL.LEVEL,E.ATTACK,E.DEFENSE,E.HEALTH,E.SPEED, L.XPOSITION,L.YPOSITION FROM ACCOUNTS A\r\n"
 					+ "INNER JOIN LEVEL_BY_ACCOUNTS LBA on A.ACCOUNT_ID = LBA.ACCOUNT_ID\r\n"
 					+ "INNER JOIN LEVELS L on L.LEVEL_ID = LBA.LEVEL_ID\r\n"
 					+ "INNER JOIN ENEMY_PER_LEVELS EPL on L.LEVEL_ID = EPL.LEVEL_ID\r\n"
@@ -371,6 +367,7 @@ public class DatabaseAccountManager {
 					+ userAccount.getUsername() + "'";
 			resultQuery = statement.executeQuery(sqlQuery);
 			while (resultQuery.next()) {
+				System.out.println(resultQuery.getInt(11) + " + " + resultQuery.getInt(12));
 				if (resultQuery.getInt(1) == chapterId) {
 					if (resultQuery.getInt(2) == levelId) {
 						listOfLevel.get(levelId - 1).getListOfEntity()
@@ -379,7 +376,8 @@ public class DatabaseAccountManager {
 										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
 					} else {
 						levelId = resultQuery.getInt("LEVEL_ID");
-						listOfLevel.add(new Level(resultQuery.getString(3), resultQuery.getBoolean(4)));
+						listOfLevel.add(new Level(resultQuery.getString(3), resultQuery.getBoolean(4),
+								resultQuery.getInt(11), resultQuery.getInt(12)));
 						listOfLevel.get(levelId - 1).getListOfEntity()
 								.add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
 										resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
@@ -387,7 +385,7 @@ public class DatabaseAccountManager {
 
 					}
 				} else {
-					listOfChapter.add(listOfLevel);
+					listOfChapter.add(new ArrayList<>(listOfLevel));
 					listOfLevel.clear();
 					if (resultQuery.getInt(2) == levelId) {
 						listOfLevel.get(levelId - 1).getListOfEntity()
@@ -396,13 +394,13 @@ public class DatabaseAccountManager {
 										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
 					} else {
 						levelId = resultQuery.getInt("LEVEL_ID");
-						listOfLevel.add(new Level(resultQuery.getString(3), resultQuery.getBoolean(4)));
+						listOfLevel.add(new Level(resultQuery.getString(3), resultQuery.getBoolean(4),
+								resultQuery.getInt(11), resultQuery.getInt(12)));
 						listOfLevel.get(0).getListOfEntity()
 								.add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
 										resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
 										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
 					}
-					
 
 				}
 

@@ -12,13 +12,13 @@ import lombok.Setter;
 public class Button {
 	private int width;
 	private int height;
-	private int x;
-	private int y;
+	private float x;
+	private float y;
 	private Image image;
 	private Image imageHit;
 	private boolean isPressed = false;
 
-	public Button(Image image, Image imageHit, int x, int y,int WIDTH,int HEIGHT) {
+	public Button(Image image, Image imageHit, float x, float y,int WIDTH,int HEIGHT) {
 		this.image = image;
 		this.imageHit = imageHit;
 		this.x = x;
@@ -26,7 +26,7 @@ public class Button {
 		this.height = HEIGHT;
 		this.width = WIDTH;
 	}
-	public Button(Image image, Image imageHit, int x, int y) {
+	public Button(Image image, Image imageHit, float x, float y) {
 		this.image = image;
 		this.imageHit = imageHit;
 		this.x = x;
@@ -43,7 +43,7 @@ public class Button {
 
 	}
 	
-	public boolean isHovering(int x, int y) {
+	public boolean isHovering(float x, float y) {
 		return this.x < x && (this.x + this.width) > x && this.y < y
 				&& (this.y + this.height) > y;
 	}
