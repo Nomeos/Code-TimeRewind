@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -44,6 +43,7 @@ public class GuiCharacter extends BasicGameState {
 	private int character_defense;
 	private int character_attack;
 	private int character_speed;
+	private Image character_image;
 	private int stateId;
 	private float character_max_experience_point;
 	private int character_level;
@@ -145,8 +145,11 @@ public class GuiCharacter extends BasicGameState {
 
 			g.drawString(this.player.getListOfOwnedCharacter().get(0).getExperience() + " / "
 					+ this.player.getListOfOwnedCharacter().get(0).getMaxExperience(), 195, 192);
-			Animation animationIdle = this.player.getListOfOwnedCharacter().get(0).getAnimations().get(1);
-			animationIdle.draw(600, 500, 750, 400);
+			//Animation animationIdle = this.player.getListOfOwnedCharacter().get(0).getAnimations().get(1);
+			//animationIdle.draw(600, 500, 750, 400);
+			this.character_image.draw(600,500,750,400);
+			
+			
 
 		}
 
@@ -180,6 +183,7 @@ public class GuiCharacter extends BasicGameState {
 			this.character_experience_point = this.player.getListOfOwnedCharacter().get(0).getExperience();
 			this.character_max_experience_point = this.player.getListOfOwnedCharacter().get(0).getMaxExperience();
 			this.character_description = this.player.getListOfOwnedCharacter().get(0).getDescription();
+			this.character_image = this.player.getListOfOwnedCharacter().get(0).getCharacter();
 		}
 
 	}

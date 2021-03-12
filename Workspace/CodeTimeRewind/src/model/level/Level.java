@@ -6,13 +6,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import model.entity.Entity;
+import model.entity.Enemy;
 
 @NoArgsConstructor
 @Getter
 @Setter
 public class Level {
-	List<Entity> listOfEntity = new ArrayList<Entity>();
+	List<Enemy> listOfEnemy = new ArrayList<Enemy>();
 	private String name;
 	private boolean isLevelClear;
 	private int xPosition;

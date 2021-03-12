@@ -101,10 +101,11 @@ public class GuiAdventure extends BasicGameState {
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		for (LevelButton button1 : this.listOfButtons) {
-			button1.setPressed(false);
-			if (button1.isHovering(x, y) && button == 0) {
-				Game.getInstance().setCurrentLevel(button1.getLevelId());
+		for (LevelButton level : this.listOfButtons) {
+			level.setPressed(false);
+			if (level.isHovering(x, y) && button == 0) {
+				System.out.println(level.getLevelId());
+				Game.getInstance().setCurrentLevel(level.getLevelId());
 				Game.getInstance().enterState(7, new FadeOutTransition(), new FadeInTransition());
 			}
 		}

@@ -1,8 +1,6 @@
 package model.entity;
 
-import java.util.List;
-
-import org.newdawn.slick.Animation;
+import org.newdawn.slick.Image;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,26 +16,37 @@ public class Character extends Entity {
 	private int experience;
 	private int maxExperience;
 	private int firstLevelMaxExperience;
-	
-	private List<Animation> animations;
 
-	public Character(String name, int level, int health, int defense, int attack, int speed, int experience,
-			String Description) {
-		super(name, level, health, defense, attack, speed);
+	private Image character;
+	// private List<Animation> animations;
+
+	public Character(String name, int level, int health, int defense, int attack, int speed, int x, int y, int width,
+			int height, int experience, String Description) {
+		super(name, level, health, defense, attack, speed, x, y, width, height);
 
 		this.experience = experience;
 		this.description = Description;
 		this.firstLevelMaxExperience = 150;
 		calculateMaxExperience();
-		this.animations = DatabaseCharacterManager.getInstance().getAllAnimations(name);
+		this.character = DatabaseCharacterManager.getInstance().getCharacterPicture(this.name);
+
+		// this.animations =
+		// DatabaseCharacterManager.getInstance().getAllAnimations(name);
 	}
 
 	public void calculateMaxExperience() {
 		for (int i = 1; i <= level; i++) {
 			if (i == 1)
 				maxExperience = 150;
-			maxExperience *= 1.5;
+			else
+				maxExperience *= 1.5;
 		}
+	}
+
+	public void render(int x, int y) {
+		this.x = x;
+		this.y = y;
+		this.character.draw(x, y);
 	}
 
 }

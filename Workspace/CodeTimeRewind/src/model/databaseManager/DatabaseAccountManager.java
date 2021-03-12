@@ -1,6 +1,8 @@
 package model.databaseManager;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -8,6 +10,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import lombok.NoArgsConstructor;
 import main.Game;
@@ -93,7 +100,7 @@ public class DatabaseAccountManager {
 					+ "  FOREIGN KEY (Type_Of_Sprite_Id) REFERENCES Type_Of_Sprites(Type_Of_Sprite_Id))";
 			this.statement.executeUpdate(this.sqlQuery);
 			InsertSpriteCategory();
-			InsertAllSpritesIntoEachCharacters();
+			// InsertAllSpritesIntoEachCharacters();
 		} catch (SQLException e) {
 			if (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") || e.getSQLState().equals("X0Y32")) {
 			} else {
@@ -169,7 +176,7 @@ public class DatabaseAccountManager {
 			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Enemies(Name, Health, Defense, Attack, Speed )values('Zombie',150,20,100,0)";
 			this.statement.executeUpdate(this.sqlQuery);
-			this.sqlQuery = "INSERT INTO Enemies(Name, Health, Defense, Attack, Speed )values('Robot',300,50,10,20)";
+			this.sqlQuery = "INSERT INTO Enemies(Name, Health, Defense, Attack, Speed )values('Boar',300,50,10,20)";
 			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Chapters(Name)values('Chapter One')";
 			this.statement.executeUpdate(this.sqlQuery);
@@ -183,6 +190,8 @@ public class DatabaseAccountManager {
 			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name,XPosition,YPosition)values(1,'Difficile',70,800)";
 			this.statement.executeUpdate(this.sqlQuery);
+			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name,XPosition,YPosition)values(1,'Difficile+',600,900)";
+			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Levels(Chapter_Id,Name,XPosition,YPosition)values(2,'Ultra Difficile',150,70)";
 			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(1,1,1)";
@@ -193,8 +202,17 @@ public class DatabaseAccountManager {
 			this.statement.executeUpdate(this.sqlQuery);
 			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(3,3,2)";
 			this.statement.executeUpdate(this.sqlQuery);
-			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(4,3,3)";
+			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(5,3,3)";
 			this.statement.executeUpdate(this.sqlQuery);
+			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(4,1,2)";
+			this.statement.executeUpdate(this.sqlQuery);
+			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(4,1,2)";
+			this.statement.executeUpdate(this.sqlQuery);
+			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(4,2,2)";
+			this.statement.executeUpdate(this.sqlQuery);
+			this.sqlQuery = "INSERT INTO Enemy_Per_Levels(Level_Id,Enemy_Id,Level)values(4,2,1)";
+			this.statement.executeUpdate(this.sqlQuery);
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -229,36 +247,28 @@ public class DatabaseAccountManager {
 		}
 	}
 
-	public void InsertAllSpritesIntoEachCharacters() {
-		try {
-			File characterFolder = new File(System.getProperty("user.dir") + "/res/entity/");
-			for (String characterName : characterFolder.list()) {
-				File spriteFolder = new File(System.getProperty("user.dir") + "/res/entity/" + characterName + "/");
-				for (String characterSpriteFolder : spriteFolder.list()) {
-					if (!(characterSpriteFolder == "NotUse")) {
-						File spriteFiles = new File(System.getProperty("user.dir") + "/res/entity/" + characterName
-								+ "/" + characterSpriteFolder + "/");
-						for (String spritePng : spriteFiles.list()) {
-							if (spritePng.contains(".png")) {
-								this.sqlQuery = "INSERT INTO Character_Sprites(Character_Id,Sprite_Path,Type_Of_Sprite_Id)values((Select Character_Id from Characters where Name = '"
-										+ characterName + "'),'/res/entity/" + characterName + "/"
-										+ characterSpriteFolder + "/" + spritePng
-										+ "',(SELECT Type_Of_Sprite_Id from Type_Of_Sprites where name = '"
-										+ characterSpriteFolder + "'))";
-								this.statement.executeUpdate(this.sqlQuery);
-							}
-						}
-					}
-				}
-
-				this.sqlQuery = "INSERT INTO Type_Of_Sprites(Name)values('Walk')";
-				this.statement.executeUpdate(this.sqlQuery);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	/*
+	 * public void InsertAllSpritesIntoEachCharacters() { try { File characterFolder
+	 * = new File(System.getProperty("user.dir") + "/res/entity/"); for (String
+	 * characterName : characterFolder.list()) { File spriteFolder = new
+	 * File(System.getProperty("user.dir") + "/res/entity/" + characterName + "/");
+	 * for (String characterSpriteFolder : spriteFolder.list()) { if
+	 * (!(characterSpriteFolder == "NotUse")) { File spriteFiles = new
+	 * File(System.getProperty("user.dir") + "/res/entity/" + characterName + "/" +
+	 * characterSpriteFolder + "/"); for (String spritePng : spriteFiles.list()) {
+	 * if (spritePng.contains(".png")) { this.sqlQuery =
+	 * "INSERT INTO Character_Sprites(Character_Id,Sprite_Path,Type_Of_Sprite_Id)values((Select Character_Id from Characters where Name = '"
+	 * + characterName + "'),'/res/entity/" + characterName + "/" +
+	 * characterSpriteFolder + "/" + spritePng +
+	 * "',(SELECT Type_Of_Sprite_Id from Type_Of_Sprites where name = '" +
+	 * characterSpriteFolder + "'))"; this.statement.executeUpdate(this.sqlQuery); }
+	 * } } }
+	 * 
+	 * this.sqlQuery = "INSERT INTO Type_Of_Sprites(Name)values('Walk')";
+	 * this.statement.executeUpdate(this.sqlQuery); }
+	 * 
+	 * } catch (SQLException e) { e.printStackTrace(); } }
+	 */
 
 	public Statement OpenDatabaseConnection() {
 
@@ -356,6 +366,7 @@ public class DatabaseAccountManager {
 		int chapterId = 1;
 		List<Level> listOfLevel = new ArrayList<>();
 		List<List<Level>> listOfChapter = new ArrayList<>();
+		BufferedImage bimg;
 
 		try {
 			this.sqlQuery = "SELECT C.CHAPTER_ID,L.LEVEL_ID,L.NAME,LBA.IS_LEVEL_CLEAR,E.NAME,EPL.LEVEL,E.ATTACK,E.DEFENSE,E.HEALTH,E.SPEED, L.XPOSITION,L.YPOSITION FROM ACCOUNTS A\r\n"
@@ -367,45 +378,61 @@ public class DatabaseAccountManager {
 					+ userAccount.getUsername() + "'";
 			resultQuery = statement.executeQuery(sqlQuery);
 			while (resultQuery.next()) {
-				System.out.println(resultQuery.getInt(11) + " + " + resultQuery.getInt(12));
 				if (resultQuery.getInt(1) == chapterId) {
 					if (resultQuery.getInt(2) == levelId) {
-						listOfLevel.get(levelId - 1).getListOfEntity()
+						bimg = ImageIO.read(new File(
+								"./res/entity/" + resultQuery.getString(5) + "/" + resultQuery.getString(5) + ".png"));
+						listOfLevel.get(levelId - 1).getListOfEnemy()
 								.add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
 										resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
-										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
+										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED"), 0, 0,
+										bimg.getWidth(), bimg.getHeight(), new Image("/res/entity/"
+												+ resultQuery.getString(5) + "/" + resultQuery.getString(5) + ".png")));
+						bimg = null;
 					} else {
 						levelId = resultQuery.getInt("LEVEL_ID");
 						listOfLevel.add(new Level(resultQuery.getString(3), resultQuery.getBoolean(4),
 								resultQuery.getInt(11), resultQuery.getInt(12)));
-						listOfLevel.get(levelId - 1).getListOfEntity()
+						bimg = ImageIO.read(new File(
+								"./res/entity/" + resultQuery.getString(5) + "/" + resultQuery.getString(5) + ".png"));
+						listOfLevel.get(levelId - 1).getListOfEnemy()
 								.add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
 										resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
-										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
+										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED"), 0, 0,
+										bimg.getWidth(), bimg.getHeight(), new Image("/res/entity/"
+												+ resultQuery.getString(5) + "/" + resultQuery.getString(5) + ".png")));
 
 					}
 				} else {
 					listOfChapter.add(new ArrayList<>(listOfLevel));
 					listOfLevel.clear();
 					if (resultQuery.getInt(2) == levelId) {
-						listOfLevel.get(levelId - 1).getListOfEntity()
+						bimg = ImageIO.read(new File(
+								"./res/entity/" + resultQuery.getString(5) + "/" + resultQuery.getString(5) + ".png"));
+						listOfLevel.get(levelId - 1).getListOfEnemy()
 								.add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
 										resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
-										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
+										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED"), 0, 0,
+										bimg.getWidth(), bimg.getHeight(), new Image("/res/entity/"
+												+ resultQuery.getString(5) + "/" + resultQuery.getString(5) + ".png")));
 					} else {
 						levelId = resultQuery.getInt("LEVEL_ID");
 						listOfLevel.add(new Level(resultQuery.getString(3), resultQuery.getBoolean(4),
 								resultQuery.getInt(11), resultQuery.getInt(12)));
-						listOfLevel.get(0).getListOfEntity()
+						bimg = ImageIO.read(new File(
+								"./res/entity/" + resultQuery.getString(5) + "/" + resultQuery.getString(5) + ".png"));
+						listOfLevel.get(0).getListOfEnemy()
 								.add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
 										resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
-										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED")));
+										resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED"), 0, 0,
+										bimg.getWidth(), bimg.getHeight(), new Image("/res/entity/"
+												+ resultQuery.getString(5) + "/" + resultQuery.getString(5) + ".png")));
 					}
 
 				}
 
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | SlickException | IOException e) {
 			e.printStackTrace();
 		}
 		if (Game.getInstance() != null) {
@@ -418,6 +445,7 @@ public class DatabaseAccountManager {
 	// login and register).
 	public boolean IsTheUserAlreadyExist(Account userAccount) {
 		boolean result = false;
+		BufferedImage bimg;
 		if (isRegister) {
 			Statement statement = OpenDatabaseConnection();
 			ResultSet resultQuery;
@@ -454,11 +482,13 @@ public class DatabaseAccountManager {
 							+ userAccount.getUsername() + "'";
 					resultQueryOwnCharacters = statement.executeQuery(sqlQuery);
 					while (resultQueryOwnCharacters.next()) {
+						bimg = ImageIO.read(new File(
+								"./res/entity/" + resultQueryOwnCharacters.getString("Name") + "/" + resultQueryOwnCharacters.getString("Name") + ".png"));
 						userAccount.getListOfOwnedCharacter().add(new Character(
 								resultQueryOwnCharacters.getString("Name"), resultQueryOwnCharacters.getInt("Level"),
 								resultQueryOwnCharacters.getInt("health"), resultQueryOwnCharacters.getInt("defense"),
-								resultQueryOwnCharacters.getInt("attack"), resultQueryOwnCharacters.getInt("speed"),
-								resultQueryOwnCharacters.getInt("experience_point"),
+								resultQueryOwnCharacters.getInt("attack"), resultQueryOwnCharacters.getInt("speed"), 0,
+								0,bimg.getWidth(),bimg.getHeight(), resultQueryOwnCharacters.getInt("experience_point"),
 								resultQueryOwnCharacters.getString("description")));
 					}
 				}
@@ -466,7 +496,7 @@ public class DatabaseAccountManager {
 				if (Game.getInstance() != null) {
 					Game.getInstance().setPlayerAccount(userAccount);
 				}
-			} catch (SQLException e) {
+			} catch (SQLException | IOException e) {
 				e.printStackTrace();
 			}
 

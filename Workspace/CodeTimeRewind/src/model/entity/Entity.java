@@ -14,15 +14,24 @@ public class Entity {
 	protected int defense;
 	protected int attack;
 	protected int speed;
+	protected int x;
+	protected int y;
+	protected int width;
+	protected int height;
 
-	public Entity(String name, int level, int health, int defense, int attack, int speed) {
+	public Entity(String name, int level, int health, int defense, int attack, int speed, int x, int y, int width, int height) {
 		this.name = name;
 		this.level = level;
 		this.health = health;
 		this.defense = defense;
 		this.attack = attack;
 		this.speed = speed;
-
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
 	}
+	
+	
 
 }

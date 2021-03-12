@@ -7,7 +7,6 @@
     <fullyQualifiedTypeName name="java.lang.Runtime"/>
     <fullyQualifiedTypeName name="model.account.Account"/>
     <fullyQualifiedTypeName name="model.entity.Character"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.Graphics"/>
     <fullyQualifiedTypeName name="java.awt.Graphics"/>
     <fullyQualifiedTypeName name="model.button.MediumButton"/>
     <fullyQualifiedTypeName name="model.button.BigButton"/>
@@ -17,16 +16,8 @@
     <fullyQualifiedTypeName name="java.awt.List"/>
     <fullyQualifiedTypeName name="model.entity.Entity"/>
     <fullyQualifiedTypeName name="model.level.ListOfLevel"/>
-    <fullyQualifiedTypeName name="model.entity.Enemy"/>
-    <fullyQualifiedTypeName name="model.level.Level"/>
-    <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
-    <fullyQualifiedTypeName name="lombok.Getter"/>
-    <fullyQualifiedTypeName name="lombok.Setter"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.geom.Circle"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="view.guis.GuiAdventure"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="main.Game"/>
     <fullyQualifiedTypeName name="java.awt.Button"/>
     <fullyQualifiedTypeName name="model.button.LevelButton"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.TrueTypeFont"/>
@@ -34,6 +25,18 @@
     <fullyQualifiedTypeName name="org.newdawn.slick.Color"/>
     <fullyQualifiedTypeName name="model.button.Button"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.state.BasicGameState"/>
+    <fullyQualifiedTypeName name="main.Game"/>
+    <fullyQualifiedTypeName name="model.level.Level"/>
+    <fullyQualifiedTypeName name="model.databaseManager.DatabaseCharacterManager"/>
     <fullyQualifiedTypeName name="view.guis.GuiFight"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.Graphics"/>
+    <fullyQualifiedTypeName name="model.entity.Enemy"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="model.fight.Fight"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
+    <fullyQualifiedTypeName name="lombok.Getter"/>
+    <fullyQualifiedTypeName name="lombok.Setter"/>
+    <fullyQualifiedTypeName name="java.awt.image.BufferedImage"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.Image"/>
 </qualifiedTypeNameHistroy>

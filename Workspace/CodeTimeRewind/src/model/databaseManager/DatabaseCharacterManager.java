@@ -5,29 +5,26 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class DatabaseCharacterManager {
 	private String connectionStatement;
-	private String sqlQuery, currentCategory = "";
+//	private String sqlQuery, currentCategory = "";
 	private Connection connection;
 	private Statement statement;
-	private ResultSet resultQueryAllAnimations;
-	private List<Animation> animations = new ArrayList<>();
-	private List<Image> images = new ArrayList<>();
-	private Image[] imageArray;
+//	private ResultSet resultQueryAllAnimations;
+//	private List<Animation> animations = new ArrayList<>();
+//	private List<Image> images = new ArrayList<>();
+//	private Image[] imageArray;
 	private static DatabaseCharacterManager instance;
 
 	public static DatabaseCharacterManager getInstance() {
 		return instance == null ? instance = new DatabaseCharacterManager() : instance;
 	}
 
-	public List<Animation> getAllAnimations(String characterName) {
+	/*public List<Animation> getAllAnimations(String characterName) {
 		try {
 			OpenDatabaseConnection();
 			this.sqlQuery = "SELECT cs.Sprite_Path, tos.name FROM Character_Sprites cs"
@@ -67,8 +64,20 @@ public class DatabaseCharacterManager {
 			e.printStackTrace();
 		}
 		return animations;
+	}*/
+	
+	public Image getCharacterPicture(String characterName) {
+		Image image = null;
+		try {
+			
+			image = new Image("/res/entity/"+characterName+"/"+characterName+".png");
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return image;
 	}
-
+	
 	public Statement OpenDatabaseConnection() {
 
 		try {
