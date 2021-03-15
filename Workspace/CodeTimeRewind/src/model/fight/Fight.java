@@ -1,11 +1,7 @@
 package model.fight;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,174 +9,63 @@ import lombok.Setter;
 import model.entity.Character;
 import model.entity.Enemy;
 
+
 @NoArgsConstructor
 @Getter
 @Setter
 public class Fight {
 	private List<Character> listOfCharacter;
 	private List<Enemy> listOfEnemy;
+	private List<List<Object>> listOfLifeBars;
 
 	public Fight(List<Character> listOfCharacter, List<Enemy> listOfEnemy) {
 		this.listOfCharacter = listOfCharacter;
 		this.listOfEnemy = listOfEnemy;
+		this.listOfLifeBars = new ArrayList<List<Object>>();
 	}
 
-	public void drawEntities(GameContainer gc, Graphics g) {
-		int numberOfCharacter = getListOfCharacter().size();
-		int numberOfEnnemy = getListOfEnemy().size();
-
-		drawCharacters(numberOfCharacter, gc, g);
-		drawEnnemies(numberOfEnnemy, gc, g);
-
-	}
-
-	private void drawEnnemies(int numberOfEnnemy, GameContainer gc, Graphics g) {
-		int i = 0;
-		try {
-			switch (numberOfEnnemy) {
-			case 1:
-				for (Enemy e : getListOfEnemy()) {
-					e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth(),
-							gc.getHeight() - gc.getHeight() / 4 - (e.getHeight() / 2));
-
-					g.drawImage(new Image("/res/zones/LifePoint.png"), e.getX(), e.getY() - 20);
+	public boolean Attack(int x, int y) {
+		boolean isAlive = true;
+		for (Enemy currentEnemy : this.listOfEnemy) {
+			if (currentEnemy.isHovering(x, y)) {
+				currentEnemy.setHealth(currentEnemy.getHealth()-damageCalculation(currentEnemy));
+				if(currentEnemy.getHealth() == 0) {
+					isAlive = false;
 				}
-				break;
-			case 2:
-				i = 1;
-				for (Enemy e : getListOfEnemy()) {
-					if (i == 1) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth(),
-								gc.getHeight() - gc.getHeight() / 4 - (e.getHeight() / 2));
-						i++;
-					} else if (i == 2) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
-								gc.getHeight() - gc.getHeight() / 4 - (e.getHeight() / 2) - 30);
-					}
-					g.drawImage(new Image("/res/zones/LifePoint.png"), e.getX(), e.getY() - 20);
-				}
-
-				break;
-			case 3:
-				i = 1;
-				for (Enemy e : getListOfEnemy()) {
-					if (i == 1) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth(),
-								gc.getHeight() - gc.getHeight() / 4 - (e.getHeight() / 2));
-						i++;
-					} else if (i == 2) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
-								gc.getHeight() - gc.getHeight() / 4 - (e.getHeight() / 2) - 30);
-						i++;
-					} else {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200,
-								gc.getHeight() - gc.getHeight() / 4 - (e.getHeight() / 2) - 155);
-					}
-					g.drawImage(new Image("/res/zones/LifePoint.png"), e.getX(), e.getY() - 20);
-				}
-				break;
-			case 4:
-				i = 1;
-				for (Enemy e : getListOfEnemy()) {
-					if (i == 1) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth(),
-								gc.getHeight() - gc.getHeight() / 4 - (e.getHeight() / 2));
-						i++;
-					} else if (i == 2) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
-								gc.getHeight() - gc.getHeight() / 4 - (e.getHeight() / 2) - 30);
-						i++;
-					} else if (i == 3) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200,
-								gc.getHeight() - gc.getHeight() / 4 - (e.getHeight() / 2) - 155);
-						i++;
-					} else {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 175,
-								gc.getHeight() - gc.getHeight() / 4 - (e.getHeight() / 2) + 125);
-					}
-					g.drawImage(new Image("/res/zones/LifePoint.png"), e.getX(), e.getY() - 20);
-				}
-				break;
-
 			}
-		} catch (SlickException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
+		return isAlive;
+
 	}
 
-	private void drawCharacters(int numberOfCharacter, GameContainer gc, Graphics g) {
-		int i = 0;
-		try {
-			switch (numberOfCharacter) {
-			case 1:
-				for (Character c : getListOfCharacter()) {
-					c.render(gc.getWidth() / 4 - c.getWidth(),
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2));
-					g.drawImage(new Image("/res/zones/LifePoint.png"), c.getX(), c.getY() - 20);
-				}
+	public boolean isAttacking(int x, int y) {
+		boolean bool = false;
+		for (Enemy currentEnemy : this.listOfEnemy) {
+			if (currentEnemy.isHovering(x, y)) {
+				bool = true;
 				break;
-			case 2:
-				for (Character c : getListOfCharacter()) {
-					if (i == 1) {
-						c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth(),
-								gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2));
-						i++;
-					} else {
-						c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 350,
-								gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30);
-					}
-					g.drawImage(new Image("/res/zones/LifePoint.png"), c.getX(), c.getY() - 20);
-				}
-				break;
-			case 3:
-				for (Character c : getListOfCharacter()) {
-					if (i == 1) {
-						c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth(),
-								gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2));
-						i++;
-					} else if (i == 2) {
-						c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 350,
-								gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30);
-						i++;
-					} else {
-						c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 200,
-								gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 155);
-					}
-					g.drawImage(new Image("/res/zones/LifePoint.png"), c.getX(), c.getY() - 20);
-				}
-				break;
-			case 4:
-				for (Character c : getListOfCharacter()) {
-					if (i == 1) {
-						c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth(),
-								gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2));
-						i++;
-					} else if (i == 2) {
-						c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 350,
-								gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30);
-						i++;
-					} else if (i == 3) {
-						c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 200,
-								gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 155);
-						i++;
-					} else {
-						c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 175,
-								gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) + 125);
-					}
-					g.drawImage(new Image("/res/zones/LifePoint.png"), c.getX(), c.getY() - 20);
-				}
-				break;
-
 			}
-		} catch (SlickException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			bool = false;
 		}
+		return bool;
 	}
-
-	public void Attack() {
-
+	
+	public int whoAmIAttacking(int x, int y) {
+		int i = 0;
+		for (Enemy currentEnemy : this.listOfEnemy) {
+			if (currentEnemy.isHovering(x, y)) {
+				break;
+			}
+			i++;
+		}
+		return i;
+	}
+	
+	private int damageCalculation(Enemy e) {
+		int result = this.listOfCharacter.get(0).getAttack();
+		float result1 = 100/(100+(float)e.getDefense());
+		int result2 = Math.round(result*result1);
+		return result2;
 	}
 
 }

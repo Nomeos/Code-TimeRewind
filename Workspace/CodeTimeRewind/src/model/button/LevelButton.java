@@ -17,5 +17,8 @@ public class LevelButton extends Button {
 	public LevelButton(Image image, Image imageHit, int x, int y) {
 		super(image, imageHit, x, y,WIDTH,HEIGHT);
 	}
+	public LevelButton(Image image, Image imageHit) {
+		super(image, imageHit,WIDTH,HEIGHT);
+	}
 	
 }

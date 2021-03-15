@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="java.lang.System"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.geom.Shape"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.geom.Rectangle"/>
     <fullyQualifiedTypeName name="java.lang.Process"/>
     <fullyQualifiedTypeName name="java.lang.Runtime"/>
     <fullyQualifiedTypeName name="model.account.Account"/>
@@ -14,7 +12,6 @@
     <fullyQualifiedTypeName name="org.newdawn.slick.gui.TextField"/>
     <fullyQualifiedTypeName name="model.textfield.TextField"/>
     <fullyQualifiedTypeName name="java.awt.List"/>
-    <fullyQualifiedTypeName name="model.entity.Entity"/>
     <fullyQualifiedTypeName name="model.level.ListOfLevel"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.geom.Circle"/>
     <fullyQualifiedTypeName name="view.guis.GuiAdventure"/>
@@ -22,7 +19,6 @@
     <fullyQualifiedTypeName name="model.button.LevelButton"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.TrueTypeFont"/>
     <fullyQualifiedTypeName name="java.awt.Font"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.Color"/>
     <fullyQualifiedTypeName name="model.button.Button"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.state.BasicGameState"/>
     <fullyQualifiedTypeName name="main.Game"/>
@@ -31,12 +27,21 @@
     <fullyQualifiedTypeName name="view.guis.GuiFight"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.Graphics"/>
     <fullyQualifiedTypeName name="model.entity.Enemy"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="model.fight.Fight"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
     <fullyQualifiedTypeName name="lombok.Getter"/>
     <fullyQualifiedTypeName name="lombok.Setter"/>
     <fullyQualifiedTypeName name="java.awt.image.BufferedImage"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.Image"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.geom.Shape"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.geom.Rectangle"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.Color"/>
+    <fullyQualifiedTypeName name="model.entity.Entity"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.geom.Path"/>
+    <fullyQualifiedTypeName name="model.animation.BezierPath"/>
+    <fullyQualifiedTypeName name="model.fight.Fight"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.geom.Vector2f"/>
+    <fullyQualifiedTypeName name="java.lang.Math"/>
+    <fullyQualifiedTypeName name="model.animation.PathAnimation"/>
 </qualifiedTypeNameHistroy>

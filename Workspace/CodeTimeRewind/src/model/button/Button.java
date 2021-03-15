@@ -33,8 +33,26 @@ public class Button {
 		this.y = y;
 
 	}
+	public Button(Image image, Image imageHit,int WIDTH,int HEIGHT) {
+		this.image = image;
+		this.imageHit = imageHit;
+		this.height = HEIGHT;
+		this.width = WIDTH;
+
+	}
 
 	public void draw() {
+		if (isPressed) {
+			this.imageHit.draw(x, y);
+		} else {
+			this.image.draw(x, y);
+		}
+
+	}
+	public void draw(int x, int y) {
+		this.x = x;
+		this.y = y;
+		
 		if (isPressed) {
 			this.imageHit.draw(x, y);
 		} else {

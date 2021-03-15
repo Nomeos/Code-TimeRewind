@@ -18,7 +18,7 @@ public class Entity {
 	protected int y;
 	protected int width;
 	protected int height;
-
+	protected int maxHealth;
 	public Entity(String name, int level, int health, int defense, int attack, int speed, int x, int y, int width, int height) {
 		this.name = name;
 		this.level = level;
@@ -30,8 +30,22 @@ public class Entity {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.maxHealth = health;
+	}
+	public boolean isHovering(float x, float y) {
+		return this.x < x && (this.x + this.width) > x && this.y < y
+				&& (this.y + this.height) > y;
 	}
 	
+	public void setHealth(int health) {
+		if(health <= 0) {
+			this.health = 0;
+		}else {
+			this.health = health;
+		}
+		
+		
+	}
 	
 
 }

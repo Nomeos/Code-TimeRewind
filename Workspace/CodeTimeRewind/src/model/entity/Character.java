@@ -16,6 +16,7 @@ public class Character extends Entity {
 	private int experience;
 	private int maxExperience;
 	private int firstLevelMaxExperience;
+	private int maxHealth;
 
 	private Image character;
 	// private List<Animation> animations;
@@ -24,6 +25,7 @@ public class Character extends Entity {
 			int height, int experience, String Description) {
 		super(name, level, health, defense, attack, speed, x, y, width, height);
 
+		this.maxHealth = health;
 		this.experience = experience;
 		this.description = Description;
 		this.firstLevelMaxExperience = 150;
