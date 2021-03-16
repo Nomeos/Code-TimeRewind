@@ -47,11 +47,9 @@ public class BattleGameState extends BasicGameState {
 	private List<Entity> orderedBattleTurn;
 	private int currentTurn;
 
-	private List<PathAnimation> animations;
 	private PathAnimation animation;
 
 	private AnimationListener endPlayerAttack;
-
 
 	public BattleGameState(int stateId) {
 		this.stateId = stateId;
@@ -66,14 +64,7 @@ public class BattleGameState extends BasicGameState {
 		this.lifeBars = new ArrayList<List<Object>>();
 		this.currentTurn = 0;
 
-		this.animations = new ArrayList<PathAnimation>();
-		this.animation = new PathAnimation(new BezierPath(0, 0, 1700, 50, -50, 20, 0, 0), 2000);
-		this.animations.add(new PathAnimation(new BezierPath(0, 0, 1600, 50, -50, 20, 0, 0), 2000));
-		this.animations.add(new PathAnimation(new BezierPath(0, 0, 2200, -100, -50, 20, 0, 0), 2000));
-		this.animations.add(new PathAnimation(new BezierPath(0, 0, 1900, -300, -50, 20, 0, 0), 2000));
-		this.animations.add(new PathAnimation(new BezierPath(0, 0, 1900, 300, -50, 20, 0, 0), 2000));
-		initAnimationListener();
-		this.animations.forEach(a ->{a.addListener(2000, endPlayerAttack);});
+		this.animation = new PathAnimation(new BezierPath(0, 0, 400, 1, -50, 20, 0, 0), 2000);
 
 	}
 
@@ -86,22 +77,7 @@ public class BattleGameState extends BasicGameState {
 		}
 
 	}
-	private void initAnimationListener() {
-		AnimationListener endPlayerAttack = new AnimationListener() {
-			
-			@Override
-			public void on() {
-				endPlayerAttack();
-				
-			}
-		};
-		this.endPlayerAttack = endPlayerAttack;
-	}
-	
-	private void endPlayerAttack() {
-		
-	}
-	
+
 	public void drawEntities(GameContainer gc, Graphics g) {
 		int numberOfCharacter = getListOfCharacter().size();
 		int numberOfEnnemy = getListOfEnemy().size();
@@ -285,19 +261,20 @@ public class BattleGameState extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		initializeVariables();
-		for (PathAnimation animation : this.animations)
-			animation.update(delta);
-		Enemy e = new Enemy();
-		if (this.orderedBattleTurn.get(currentTurn).getClass() == e.getClass()) {
+
+		this.animation.update(delta);
+
+		if (this.orderedBattleTurn.get(currentTurn) instanceof Enemy) {
+
 			this.battleController.setCurrentEnemy((Enemy) this.orderedBattleTurn.get(currentTurn));
 			this.battleController.setCurrentCharacter(this.listOfCharacter.get(0));
 			this.battleController.setEnemiesTurn(true);
 			this.battleController.controlPressed(BattleCommand.SPELLONE);
-			System.out.println("Enemies's turn !");
+			this.currentTurn++;
 		} else {
 			this.battleController.setEnemiesTurn(false);
-			System.out.println("My Turn !");
 		}
+
 		if (this.currentTurn == this.orderedBattleTurn.size()) {
 			this.currentTurn = 0;
 		}
@@ -312,31 +289,26 @@ public class BattleGameState extends BasicGameState {
 	@Override
 	public void mouseReleased(int button, int x, int y) {
 		this.hud.updateButton(button, x, y, false);
-		int j = 0;
 		int i = 0;
 		for (Enemy e : this.listOfEnemy) {
-			if(e.isHovering(x, y)) {
-				for (PathAnimation animation : this.animations) {
-					if (j == i) {
-						this.animation = animation;
-						animation.start();
-						if(this.hud.getCurrentButtonPressed() == 0) {
-							this.battleController.controlPressed(BattleCommand.SPELLTHREE);
-						} else if(this.hud.getCurrentButtonPressed() == 1) {
-							this.battleController.controlPressed(BattleCommand.SPELLTWO);
-						} else {
-							this.battleController.controlPressed(BattleCommand.SPELLONE);
-						}
-						
-						break;
-					}
-					j++;
-
+			if (e.isHovering(x, y)) {
+				this.listOfCharacter.get(0).setAnimation(animation);
+				this.battleController.setCurrentEnemy(this.listOfEnemy.get(i));
+				this.battleController.setCurrentCharacter(this.listOfCharacter.get(0));
+				this.battleController.init();
+				if (this.hud.getCurrentButtonPressed() == 0) {
+					this.battleController.controlPressed(BattleCommand.SPELLONE);
+				} else if (this.hud.getCurrentButtonPressed() == 1) {
+					this.battleController.controlPressed(BattleCommand.SPELLTWO);
+				} else {
+					this.battleController.controlPressed(BattleCommand.SPELLTHREE);
 				}
+
 				break;
 			}
 			i++;
 		}
+		this.currentTurn++;
 	}
 
 	private void initializeVariables() {
@@ -353,6 +325,9 @@ public class BattleGameState extends BasicGameState {
 			}
 			setListOfCharacter(Game.getInstance().getPlayerAccount().getListOfOwnedCharacter());
 			setListOfEnemy(this.currentLevel.getListOfEnemy());
+			this.listOfEnemy.forEach(f -> {
+				f.setAnimation(animation);
+			});
 			this.battleController = new BattleController(listOfCharacter, listOfEnemy);
 			this.initiliazeVariable = true;
 			calculateTurnOrder();
@@ -360,12 +335,9 @@ public class BattleGameState extends BasicGameState {
 	}
 
 	private void calculateTurnOrder() {
-		for (Enemy e : this.listOfEnemy) {
-			this.orderedBattleTurn.add(e);
-		}
-		for (Character c : this.listOfCharacter) {
-			this.orderedBattleTurn.add(c);
-		}
+
+		this.orderedBattleTurn.addAll(listOfEnemy);
+		this.orderedBattleTurn.addAll(listOfCharacter);
 		Collections.sort(this.orderedBattleTurn);
 		Collections.reverse(this.orderedBattleTurn);
 	}

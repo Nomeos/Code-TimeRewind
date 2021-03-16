@@ -5,6 +5,8 @@ import org.newdawn.slick.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import model.animation.AnimationListener;
+import model.animation.PathAnimation;
 import model.databaseManager.DatabaseCharacterManager;
 
 @Getter
@@ -17,6 +19,7 @@ public class Character extends Entity {
 	private int maxExperience;
 	private int firstLevelMaxExperience;
 	private int maxHealth;
+	private PathAnimation animation;
 
 	private Image character;
 	// private List<Animation> animations;
@@ -32,7 +35,6 @@ public class Character extends Entity {
 		calculateMaxExperience();
 		this.character = DatabaseCharacterManager.getInstance().getCharacterPicture(this.name);
 
-		// this.animations =
 		// DatabaseCharacterManager.getInstance().getAllAnimations(name);
 	}
 
@@ -51,4 +53,12 @@ public class Character extends Entity {
 		this.character.draw(x, y);
 	}
 
+	public void addAnimationListener(AnimationListener assignDamage, AnimationListener endAttack) {
+		this.animation.addListener(1000, assignDamage);
+		this.animation.addListener(2000, endAttack);
+	}
+
+	public void startAttack() {
+		this.animation.start();
+	}
 }
