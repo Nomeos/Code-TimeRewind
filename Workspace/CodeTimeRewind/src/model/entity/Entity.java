@@ -7,7 +7,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Entity {
+public class Entity implements Comparable<Object> {
 	protected String name;
 	protected int level;
 	protected int health;
@@ -45,6 +45,11 @@ public class Entity {
 		}
 		
 		
+	}
+	@Override
+	public int compareTo(Object o) {
+		Entity e = (Entity) o;
+		return this.speed - e.speed;
 	}
 	
 

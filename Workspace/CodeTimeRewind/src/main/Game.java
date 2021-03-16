@@ -49,8 +49,9 @@ public class Game extends StateBasedGame {
 		this.addState(new GuiCharacter(character));
 		this.addState(new GuiChapters(chapters));
 		this.addState(new GuiAdventure(adventure));
-		this.addState(new GuiFight(fight));
+		this.addState(new BattleGameState(fight));
 	}
+
 
 	@Override
 	public void keyReleased(int key, char c) {

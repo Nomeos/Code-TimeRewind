@@ -1,6 +1,7 @@
 package view.guis;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.newdawn.slick.Color;
@@ -18,112 +19,115 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import main.Game;
+import model.animation.AnimationListener;
 import model.animation.BezierPath;
 import model.animation.PathAnimation;
-import model.button.LevelButton;
 import model.entity.Character;
 import model.entity.Enemy;
 import model.entity.Entity;
-import model.fight.Fight;
+import model.fight.BattleCommand;
+import model.fight.BattleController;
+
 import model.level.Level;
 
 @NoArgsConstructor
 @Getter
 @Setter
-public class GuiFight extends BasicGameState {
+public class BattleGameState extends BasicGameState {
 
 	private int stateId;
-	private Image background;
-	private Image hud;
+
 	private Level currentLevel;
-	private Fight fight;
 	private boolean initiliazeVariable = false;
-	private List<Rectangle> lifeBars;
-	private List<LevelButton> listOfButton;
+	private GuiBattle hud;
+	private BattleController battleController;
+	private List<List<Object>> lifeBars;
 	private List<Character> listOfCharacter;
 	private List<Enemy> listOfEnemy;
-	private List<List<Object>> listOfLifeBars;
+	private List<Entity> orderedBattleTurn;
+	private int currentTurn;
+
 	private List<PathAnimation> animations;
 	private PathAnimation animation;
 
-	public GuiFight(int stateId) {
+	private AnimationListener endPlayerAttack;
+
+
+	public BattleGameState(int stateId) {
 		this.stateId = stateId;
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		this.background = new Image("/res/Start_SunsetM.png");
-		this.fight = new Fight();
-		this.hud = new Image("/res/zones/HudBar.png");
-		
-		this.listOfLifeBars = new ArrayList<List<Object>>();
+
+		this.hud = new GuiBattle();
+		this.hud.init(gc);
+		this.orderedBattleTurn = new ArrayList<Entity>();
+		this.lifeBars = new ArrayList<List<Object>>();
+		this.currentTurn = 0;
+
 		this.animations = new ArrayList<PathAnimation>();
 		this.animation = new PathAnimation(new BezierPath(0, 0, 1700, 50, -50, 20, 0, 0), 2000);
 		this.animations.add(new PathAnimation(new BezierPath(0, 0, 1600, 50, -50, 20, 0, 0), 2000));
 		this.animations.add(new PathAnimation(new BezierPath(0, 0, 2200, -100, -50, 20, 0, 0), 2000));
 		this.animations.add(new PathAnimation(new BezierPath(0, 0, 1900, -300, -50, 20, 0, 0), 2000));
 		this.animations.add(new PathAnimation(new BezierPath(0, 0, 1900, 300, -50, 20, 0, 0), 2000));
-
-		this.listOfButton = new ArrayList<LevelButton>();
-		for (int i = 0; i <= 2; i++) {
-			this.listOfButton.add(new LevelButton(new Image("/res/buttons/SortInLevels.png"),
-					new Image("/res/buttons/SortInLevelsHit.png")));
-			if (i == 0) {
-				this.listOfButton.get(i).setX(gc.getWidth() - 142);
-				this.listOfButton.get(i).setY(gc.getHeight() - 154);
-
-			} else if (i == 1) {
-				this.listOfButton.get(i).setX(gc.getWidth() - 279);
-				this.listOfButton.get(i).setY(gc.getHeight() - 154);
-
-			} else {
-				this.listOfButton.get(i).setX(gc.getWidth() - 415);
-				this.listOfButton.get(i).setY(gc.getHeight() - 154);
-
-			}
-
-		}
-		this.lifeBars = new ArrayList<Rectangle>();
+		initAnimationListener();
+		this.animations.forEach(a ->{a.addListener(2000, endPlayerAttack);});
 
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		this.background.draw(0, 0);
-		this.hud.draw(0, gc.getHeight() - 165);
+		this.hud.render(gc, g);
 		if (getListOfCharacter() != null && getListOfEnemy() != null) {
 			drawEntities(gc, g);
-
+			createLifeBars(gc, g);
 		}
 
-		for (LevelButton currentButton : listOfButton)
-			currentButton.draw();
-
 	}
-
+	private void initAnimationListener() {
+		AnimationListener endPlayerAttack = new AnimationListener() {
+			
+			@Override
+			public void on() {
+				endPlayerAttack();
+				
+			}
+		};
+		this.endPlayerAttack = endPlayerAttack;
+	}
+	
+	private void endPlayerAttack() {
+		
+	}
+	
 	public void drawEntities(GameContainer gc, Graphics g) {
 		int numberOfCharacter = getListOfCharacter().size();
 		int numberOfEnnemy = getListOfEnemy().size();
-		this.listOfLifeBars.clear();
-		int i = 0;
-		for (Character c : this.listOfCharacter) {
-			this.listOfLifeBars.add(new ArrayList<Object>());
-			this.listOfLifeBars.get(i).add(new Rectangle(c.getX() + 2, c.getY() - 18, calculateLifeBarWidth(c), 11));
-			i++;
-		}
-		for (Enemy e : this.listOfEnemy) {
-			this.listOfLifeBars.add(new ArrayList<Object>());
-			this.listOfLifeBars.get(i).add(new Rectangle(e.getX() + 2, e.getY() - 18, calculateLifeBarWidth(e), 11));
-			i++;
-		}
-		g.setColor(Color.red);
-		for (List<Object> o : this.listOfLifeBars) {
-			g.draw((Shape) o.get(0));
-			g.fill((Shape) o.get(0));
-		}
 		drawCharacters(numberOfCharacter, gc, g);
 		drawEnnemies(numberOfEnnemy, gc, g);
 
+	}
+
+	private void createLifeBars(GameContainer gc, Graphics g) {
+		this.lifeBars.clear();
+		int i = 0;
+		for (Character c : this.listOfCharacter) {
+			this.lifeBars.add(new ArrayList<Object>());
+			this.lifeBars.get(i).add(new Rectangle(c.getX() + 2, c.getY() - 18, calculateLifeBarWidth(c), 11));
+			i++;
+		}
+		for (Enemy e : this.listOfEnemy) {
+			this.lifeBars.add(new ArrayList<Object>());
+			this.lifeBars.get(i).add(new Rectangle(e.getX() + 2, e.getY() - 18, calculateLifeBarWidth(e), 11));
+			i++;
+		}
+		g.setColor(Color.red);
+		for (List<Object> o : this.lifeBars) {
+			g.draw((Shape) o.get(0));
+			g.fill((Shape) o.get(0));
+		}
 	}
 
 	private int calculateLifeBarWidth(Entity c) {
@@ -280,6 +284,62 @@ public class GuiFight extends BasicGameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+		initializeVariables();
+		for (PathAnimation animation : this.animations)
+			animation.update(delta);
+		Enemy e = new Enemy();
+		if (this.orderedBattleTurn.get(currentTurn).getClass() == e.getClass()) {
+			this.battleController.setCurrentEnemy((Enemy) this.orderedBattleTurn.get(currentTurn));
+			this.battleController.setCurrentCharacter(this.listOfCharacter.get(0));
+			this.battleController.setEnemiesTurn(true);
+			this.battleController.controlPressed(BattleCommand.SPELLONE);
+			System.out.println("Enemies's turn !");
+		} else {
+			this.battleController.setEnemiesTurn(false);
+			System.out.println("My Turn !");
+		}
+		if (this.currentTurn == this.orderedBattleTurn.size()) {
+			this.currentTurn = 0;
+		}
+
+	}
+
+	@Override
+	public void mousePressed(int button, int x, int y) {
+		this.hud.updateButton(button, x, y, true);
+	}
+
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+		this.hud.updateButton(button, x, y, false);
+		int j = 0;
+		int i = 0;
+		for (Enemy e : this.listOfEnemy) {
+			if(e.isHovering(x, y)) {
+				for (PathAnimation animation : this.animations) {
+					if (j == i) {
+						this.animation = animation;
+						animation.start();
+						if(this.hud.getCurrentButtonPressed() == 0) {
+							this.battleController.controlPressed(BattleCommand.SPELLTHREE);
+						} else if(this.hud.getCurrentButtonPressed() == 1) {
+							this.battleController.controlPressed(BattleCommand.SPELLTWO);
+						} else {
+							this.battleController.controlPressed(BattleCommand.SPELLONE);
+						}
+						
+						break;
+					}
+					j++;
+
+				}
+				break;
+			}
+			i++;
+		}
+	}
+
+	private void initializeVariables() {
 		if (Game.getInstance() != null && !initiliazeVariable) {
 			int i = 1;
 			int chapter = Game.getInstance().getCurrentChapter();
@@ -290,50 +350,24 @@ public class GuiFight extends BasicGameState {
 				} else {
 					i++;
 				}
-
 			}
 			setListOfCharacter(Game.getInstance().getPlayerAccount().getListOfOwnedCharacter());
 			setListOfEnemy(this.currentLevel.getListOfEnemy());
-			this.fight = new Fight(getListOfCharacter(), getListOfEnemy());
+			this.battleController = new BattleController(listOfCharacter, listOfEnemy);
 			this.initiliazeVariable = true;
-		}
-		for (PathAnimation animation : this.animations)
-			animation.update(delta);
-		
-
-	}
-
-
-	@Override
-	public void mousePressed(int button, int x, int y) {
-		for (LevelButton button1 : this.listOfButton) {
-			if (button1.isHovering(x, y) && button == 0) {
-				button1.setPressed(true);
-			}
+			calculateTurnOrder();
 		}
 	}
 
-	@Override
-	public void mouseReleased(int button, int x, int y) {
-		for (LevelButton button1 : this.listOfButton) {
-			if (!button1.isHovering(x, y) && button == 0) {
-				button1.setPressed(false);
-			}
+	private void calculateTurnOrder() {
+		for (Enemy e : this.listOfEnemy) {
+			this.orderedBattleTurn.add(e);
 		}
-		if (this.fight.isAttacking(x, y)) {
-			int i = this.fight.whoAmIAttacking(x, y);
-			int j = 0;
-			for (PathAnimation animation : this.animations) {
-				if(j == i) {
-					this.animation = animation;
-					animation.start();
-				}
-				j++;
-			}
-			if(!this.fight.Attack(x, y)) {
-			
-			}
+		for (Character c : this.listOfCharacter) {
+			this.orderedBattleTurn.add(c);
 		}
+		Collections.sort(this.orderedBattleTurn);
+		Collections.reverse(this.orderedBattleTurn);
 	}
 
 	@Override
