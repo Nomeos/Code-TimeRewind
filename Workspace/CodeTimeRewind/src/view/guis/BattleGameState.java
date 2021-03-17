@@ -271,7 +271,7 @@ public class BattleGameState extends BasicGameState {
 		this.characterAnimation.update(delta);
 		this.enemyAnimation.update(delta);
 
-		if (this.currentTurn > this.orderedBattleTurn.size()-1) {
+		if (this.currentTurn > this.orderedBattleTurn.size() - 1) {
 			this.currentTurn = 0;
 		} else {
 			if (this.orderedBattleTurn.get(currentTurn) instanceof Enemy) {
@@ -279,7 +279,6 @@ public class BattleGameState extends BasicGameState {
 				this.battleController.setCurrentEnemy((Enemy) this.orderedBattleTurn.get(currentTurn));
 				this.battleController.setCurrentCharacter(this.listOfCharacter.get(0));
 				this.battleController.setEnemiesTurn(true);
-				this.battleController.init();
 				this.battleController.controlPressed(BattleCommand.SPELLONE);
 			} else {
 				this.battleController.setEnemiesTurn(false);

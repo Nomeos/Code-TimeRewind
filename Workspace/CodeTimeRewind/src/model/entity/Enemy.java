@@ -39,8 +39,7 @@ public class Enemy extends Entity {
 		if(!done) {
 			this.animation.start();
 			System.out.println("Starting Animation");
-			this.done = true;
+			done = true;
 		}
-		
 	}
 }

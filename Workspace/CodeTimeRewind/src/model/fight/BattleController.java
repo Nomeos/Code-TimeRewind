@@ -23,7 +23,8 @@ public class BattleController implements InputProviderListener {
 	private Character currentCharacter;
 	private Enemy currentEnemy;
 	private boolean isEnemiesTurn;
-	private BattleCommand mode = BattleCommand.NONE;
+
+	private BattleCommand mode;
 	private BattleGameState game;
 
 	public BattleController(List<Character> c, List<Enemy> e, BattleGameState game) {
@@ -55,14 +56,14 @@ public class BattleController implements InputProviderListener {
 			@Override
 			public void on() {
 				ennemyAssignDamage();
-				System.out.println("Dealing you Damage");
+
 			}
 		};
 		AnimationListener endEnnemiAttack = new AnimationListener() {
 			@Override
 			public void on() {
 				endEnnemyAttack();
-				System.out.println("End Turn");
+
 			}
 		};
 		this.currentCharacter.addAnimationListener(playerAssignDamage, endPlayerAttack);
@@ -70,36 +71,41 @@ public class BattleController implements InputProviderListener {
 	}
 
 	private void playerAssignDamage() {
+
 		int result = this.currentCharacter.getAttack();
 		float result1 = 100 / (100 + (float) this.currentEnemy.getDefense());
 		int result2 = Math.round(result * result1);
 		this.currentEnemy.setHealth(this.currentEnemy.getHealth() - result2);
+
 	}
 
 	private void endPlayerAttack() {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
-		this.mode = BattleCommand.NONE;
+
 	}
 
 	private void ennemyAssignDamage() {
+
 		int result = this.currentEnemy.getAttack();
 		float result1 = 100 / (100 + (float) this.currentCharacter.getDefense());
 		int result2 = Math.round(result * result1);
 		this.currentCharacter.setHealth(this.currentCharacter.getHealth() - result2);
+		System.out.println("Dealing Damage");
 	}
 
 	private void endEnnemyAttack() {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
-		this.mode = BattleCommand.NONE;
+
+		System.out.println("End Turn");
 	}
 
 	@Override
 	public void controlPressed(Command command) {
-		if (this.mode == BattleCommand.NONE) {
-
+		//if (mode == BattleCommand.NONE) {
 			this.mode = (BattleCommand) command;
 			startBattle();
-		}
+		//}
+
 	}
 
 	private void startBattle() {
@@ -140,6 +146,8 @@ public class BattleController implements InputProviderListener {
 	}
 
 	@Override
-	public void controlReleased(Command command) {
+	public void controlReleased(Command arg0) {
+		// TODO Auto-generated method stub
+
 	}
 }
