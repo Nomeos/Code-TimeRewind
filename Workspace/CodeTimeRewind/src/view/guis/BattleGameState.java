@@ -45,9 +45,10 @@ public class BattleGameState extends BasicGameState {
 	private List<Character> listOfCharacter;
 	private List<Enemy> listOfEnemy;
 	private List<Entity> orderedBattleTurn;
-	private int currentTurn;
+	public int currentTurn;
 
-	private PathAnimation animation;
+	private PathAnimation characterAnimation;
+	private PathAnimation enemyAnimation;
 
 	private AnimationListener endPlayerAttack;
 
@@ -64,7 +65,8 @@ public class BattleGameState extends BasicGameState {
 		this.lifeBars = new ArrayList<List<Object>>();
 		this.currentTurn = 0;
 
-		this.animation = new PathAnimation(new BezierPath(0, 0, 400, 1, -50, 20, 0, 0), 2000);
+		this.characterAnimation = new PathAnimation(new BezierPath(0, 0, 400, 1, -50, 20, 0, 0), 2000);
+		this.enemyAnimation = new PathAnimation(new BezierPath(0, 0, 400, 1, -50, 20, 0, 0), 2000);
 
 	}
 
@@ -74,6 +76,7 @@ public class BattleGameState extends BasicGameState {
 		if (getListOfCharacter() != null && getListOfEnemy() != null) {
 			drawEntities(gc, g);
 			createLifeBars(gc, g);
+			g.drawString("Current turn : " + this.currentTurn, 50, 50);
 		}
 
 	}
@@ -117,11 +120,13 @@ public class BattleGameState extends BasicGameState {
 
 	private void drawEnnemies(int numberOfEnnemy, GameContainer gc, Graphics g) {
 		int i = 0;
+		Vector2f p = this.enemyAnimation.currentLocation();
 		try {
 			switch (numberOfEnnemy) {
 			case 1:
 				for (Enemy e : getListOfEnemy()) {
-					e.render((gc.getWidth() / 4) * 3, gc.getHeight() - gc.getHeight() / 2);
+					e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)),
+							Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)));
 
 					g.drawImage(new Image("/res/zones/LifePoint.png"), e.getX(), e.getY() - 20);
 				}
@@ -131,12 +136,12 @@ public class BattleGameState extends BasicGameState {
 				i = 1;
 				for (Enemy e : getListOfEnemy()) {
 					if (i == 1) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth(),
-								gc.getHeight() - gc.getHeight() / 2);
+						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)));
 						i++;
 					} else if (i == 2) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
-								gc.getHeight() - gc.getHeight() / 2 - 30);
+						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)));
 					}
 					g.drawImage(new Image("/res/zones/LifePoint.png"), e.getX(), e.getY() - 20);
 				}
@@ -146,16 +151,16 @@ public class BattleGameState extends BasicGameState {
 				i = 1;
 				for (Enemy e : getListOfEnemy()) {
 					if (i == 1) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth(),
-								gc.getHeight() - gc.getHeight() / 2);
+						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)));
 						i++;
 					} else if (i == 2) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
-								gc.getHeight() - gc.getHeight() / 2 - 30);
+						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)));
 						i++;
 					} else {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200,
-								gc.getHeight() - gc.getHeight() / 2 - 155);
+						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 155)));
 					}
 					g.drawImage(new Image("/res/zones/LifePoint.png"), e.getX(), e.getY() - 20);
 				}
@@ -164,20 +169,21 @@ public class BattleGameState extends BasicGameState {
 				i = 1;
 				for (Enemy e : getListOfEnemy()) {
 					if (i == 1) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth(),
-								gc.getHeight() - gc.getHeight() / 2);
+
+						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3 - e.getWidth())),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)));
 						i++;
 					} else if (i == 2) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
-								gc.getHeight() - gc.getHeight() / 2 - 30);
+						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)));
 						i++;
 					} else if (i == 3) {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200,
-								gc.getHeight() - gc.getHeight() / 2 - 155);
+						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 155)));
 						i++;
 					} else {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 175,
-								gc.getHeight() - gc.getHeight() / 2 + 125);
+						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 175)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 + 125)));
 					}
 					g.drawImage(new Image("/res/zones/LifePoint.png"), e.getX(), e.getY() - 20);
 				}
@@ -192,7 +198,7 @@ public class BattleGameState extends BasicGameState {
 
 	private void drawCharacters(int numberOfCharacter, GameContainer gc, Graphics g) {
 		int i = 0;
-		Vector2f p = this.animation.currentLocation();
+		Vector2f p = this.characterAnimation.currentLocation();
 		try {
 			switch (numberOfCharacter) {
 			case 1:
@@ -262,21 +268,22 @@ public class BattleGameState extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		initializeVariables();
 
-		this.animation.update(delta);
+		this.characterAnimation.update(delta);
+		this.enemyAnimation.update(delta);
 
-		if (this.orderedBattleTurn.get(currentTurn) instanceof Enemy) {
-
-			this.battleController.setCurrentEnemy((Enemy) this.orderedBattleTurn.get(currentTurn));
-			this.battleController.setCurrentCharacter(this.listOfCharacter.get(0));
-			this.battleController.setEnemiesTurn(true);
-			this.battleController.controlPressed(BattleCommand.SPELLONE);
-			this.currentTurn++;
-		} else {
-			this.battleController.setEnemiesTurn(false);
-		}
-
-		if (this.currentTurn == this.orderedBattleTurn.size()) {
+		if (this.currentTurn > this.orderedBattleTurn.size()-1) {
 			this.currentTurn = 0;
+		} else {
+			if (this.orderedBattleTurn.get(currentTurn) instanceof Enemy) {
+
+				this.battleController.setCurrentEnemy((Enemy) this.orderedBattleTurn.get(currentTurn));
+				this.battleController.setCurrentCharacter(this.listOfCharacter.get(0));
+				this.battleController.setEnemiesTurn(true);
+				this.battleController.init();
+				this.battleController.controlPressed(BattleCommand.SPELLONE);
+			} else {
+				this.battleController.setEnemiesTurn(false);
+			}
 		}
 
 	}
@@ -292,7 +299,7 @@ public class BattleGameState extends BasicGameState {
 		int i = 0;
 		for (Enemy e : this.listOfEnemy) {
 			if (e.isHovering(x, y)) {
-				this.listOfCharacter.get(0).setAnimation(animation);
+				this.listOfCharacter.get(0).setAnimation(characterAnimation);
 				this.battleController.setCurrentEnemy(this.listOfEnemy.get(i));
 				this.battleController.setCurrentCharacter(this.listOfCharacter.get(0));
 				this.battleController.init();
@@ -303,12 +310,11 @@ public class BattleGameState extends BasicGameState {
 				} else {
 					this.battleController.controlPressed(BattleCommand.SPELLTHREE);
 				}
-
 				break;
 			}
 			i++;
 		}
-		this.currentTurn++;
+
 	}
 
 	private void initializeVariables() {
@@ -326,9 +332,9 @@ public class BattleGameState extends BasicGameState {
 			setListOfCharacter(Game.getInstance().getPlayerAccount().getListOfOwnedCharacter());
 			setListOfEnemy(this.currentLevel.getListOfEnemy());
 			this.listOfEnemy.forEach(f -> {
-				f.setAnimation(animation);
+				f.setAnimation(enemyAnimation);
 			});
-			this.battleController = new BattleController(listOfCharacter, listOfEnemy);
+			this.battleController = new BattleController(listOfCharacter, listOfEnemy, this);
 			this.initiliazeVariable = true;
 			calculateTurnOrder();
 		}

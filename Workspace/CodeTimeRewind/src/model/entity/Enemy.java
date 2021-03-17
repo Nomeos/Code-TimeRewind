@@ -15,6 +15,7 @@ public class Enemy extends Entity {
 	private Image enemy;
 	private int maxHealth;
 	private PathAnimation animation;
+	private boolean done = false;
 
 	public Enemy(String name, int level, int health, int defense, int attack, int speed, int x, int y, int width,
 			int height, Image enemy) {
@@ -35,6 +36,11 @@ public class Enemy extends Entity {
 	}
 	
 	public void startAttack() {
-		this.animation.start();
+		if(!done) {
+			this.animation.start();
+			System.out.println("Starting Animation");
+			this.done = true;
+		}
+		
 	}
 }

@@ -33,6 +33,7 @@ public class Character extends Entity {
 		this.description = Description;
 		this.firstLevelMaxExperience = 150;
 		calculateMaxExperience();
+		
 		this.character = DatabaseCharacterManager.getInstance().getCharacterPicture(this.name);
 
 		// DatabaseCharacterManager.getInstance().getAllAnimations(name);

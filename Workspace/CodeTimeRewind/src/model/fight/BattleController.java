@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.newdawn.slick.command.Command;
 import org.newdawn.slick.command.InputProviderListener;
+import org.newdawn.slick.state.BasicGameState;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.Setter;
 import model.animation.AnimationListener;
 import model.entity.Character;
 import model.entity.Enemy;
+import view.guis.BattleGameState;
 
 @Getter
 @Setter
@@ -21,15 +23,17 @@ public class BattleController implements InputProviderListener {
 	private Character currentCharacter;
 	private Enemy currentEnemy;
 	private boolean isEnemiesTurn;
-	private BattleCommand mode;
+	private BattleCommand mode = BattleCommand.NONE;
+	private BattleGameState game;
 
-	public BattleController(List<Character> c, List<Enemy> e) {
+	public BattleController(List<Character> c, List<Enemy> e, BattleGameState game) {
 		this.listOfEnemy = e;
 		this.listOfCharacter = c;
 		this.isEnemiesTurn = false;
-		
+		this.game = game;
+
 	}
-	
+
 	public void init() {
 		initAnimationListeners();
 	}
@@ -51,12 +55,14 @@ public class BattleController implements InputProviderListener {
 			@Override
 			public void on() {
 				ennemyAssignDamage();
+				System.out.println("Dealing you Damage");
 			}
 		};
 		AnimationListener endEnnemiAttack = new AnimationListener() {
 			@Override
 			public void on() {
 				endEnnemyAttack();
+				System.out.println("End Turn");
 			}
 		};
 		this.currentCharacter.addAnimationListener(playerAssignDamage, endPlayerAttack);
@@ -71,6 +77,8 @@ public class BattleController implements InputProviderListener {
 	}
 
 	private void endPlayerAttack() {
+		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
+		this.mode = BattleCommand.NONE;
 	}
 
 	private void ennemyAssignDamage() {
@@ -81,16 +89,21 @@ public class BattleController implements InputProviderListener {
 	}
 
 	private void endEnnemyAttack() {
+		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
+		this.mode = BattleCommand.NONE;
 	}
 
 	@Override
 	public void controlPressed(Command command) {
-		this.mode = (BattleCommand) command;
-		startBattle();
+		if (this.mode == BattleCommand.NONE) {
+
+			this.mode = (BattleCommand) command;
+			startBattle();
+		}
 	}
 
 	private void startBattle() {
-		if(this.isEnemiesTurn) {
+		if (this.isEnemiesTurn) {
 			switch (this.mode) {
 			case SPELLONE:
 				this.currentEnemy.startAttack();
@@ -100,10 +113,13 @@ public class BattleController implements InputProviderListener {
 				break;
 			case SPELLTHREE:
 				this.currentEnemy.startAttack();
+				break;
+			default:
+				mode = BattleCommand.NONE;
 				break;
 
 			}
-		}else {
+		} else {
 			switch (this.mode) {
 			case SPELLONE:
 				this.currentCharacter.startAttack();
@@ -113,11 +129,14 @@ public class BattleController implements InputProviderListener {
 				break;
 			case SPELLTHREE:
 				this.currentCharacter.startAttack();
+				break;
+			default:
+				mode = BattleCommand.NONE;
 				break;
 
 			}
 		}
-		
+
 	}
 
 	@Override

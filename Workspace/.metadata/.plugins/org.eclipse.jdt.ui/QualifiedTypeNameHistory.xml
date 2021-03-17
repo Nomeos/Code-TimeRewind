@@ -19,7 +19,6 @@
     <fullyQualifiedTypeName name="org.newdawn.slick.TrueTypeFont"/>
     <fullyQualifiedTypeName name="java.awt.Font"/>
     <fullyQualifiedTypeName name="model.button.Button"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.state.BasicGameState"/>
     <fullyQualifiedTypeName name="main.Game"/>
     <fullyQualifiedTypeName name="model.level.Level"/>
     <fullyQualifiedTypeName name="model.databaseManager.DatabaseCharacterManager"/>
@@ -35,7 +34,6 @@
     <fullyQualifiedTypeName name="model.fight.Fight"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.geom.Vector2f"/>
     <fullyQualifiedTypeName name="java.lang.Math"/>
-    <fullyQualifiedTypeName name="model.animation.PathAnimation"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.command.Command"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.state.StateBasedGame"/>
     <fullyQualifiedTypeName name="java.util.Random"/>
@@ -53,6 +51,9 @@
     <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
     <fullyQualifiedTypeName name="lombok.Getter"/>
     <fullyQualifiedTypeName name="lombok.Setter"/>
-    <fullyQualifiedTypeName name="model.fight.BattleCommand"/>
     <fullyQualifiedTypeName name="model.animation.AnimationListener"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.state.BasicGameState"/>
+    <fullyQualifiedTypeName name="view.guis.BattleGameState"/>
+    <fullyQualifiedTypeName name="model.animation.PathAnimation"/>
+    <fullyQualifiedTypeName name="model.fight.BattleCommand"/>
 </qualifiedTypeNameHistroy>
