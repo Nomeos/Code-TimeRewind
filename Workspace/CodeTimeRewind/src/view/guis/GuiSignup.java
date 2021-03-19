@@ -275,7 +275,7 @@ public class GuiSignup extends BasicGameState {
 								resetTextFieldContent();
 							}
 
-						} catch (NoSuchAlgorithmException e) {
+						} catch (NoSuchAlgorithmException | SlickException e) {
 
 							e.printStackTrace();
 						}

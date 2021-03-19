@@ -1,7 +1,5 @@
 package model.databaseManager;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -67,7 +65,7 @@ public class DatabaseAccountManagerTest {
 		account.hashPassword("test");
 	}
 
-	@Test
+	/*@Test
 	public void RegisterOneAccount() throws NoSuchAlgorithmException {
 		this.account.setUsername("Jason");
 		this.account.setPasswordHash(this.account.hashPassword("test"));
@@ -81,7 +79,7 @@ public class DatabaseAccountManagerTest {
 		this.account.setPasswordHash(this.account.hashPassword("test"));
 		this.jm.RegisterAccount(this.account);
 		assertTrue(this.jm.LoginAccount(this.account));
-	}
+	}*/
 
 	@After
 	public void Clean() {

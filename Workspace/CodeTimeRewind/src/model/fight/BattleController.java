@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.newdawn.slick.command.Command;
 import org.newdawn.slick.command.InputProviderListener;
-import org.newdawn.slick.state.BasicGameState;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,9 @@ public class BattleController implements InputProviderListener {
 	private List<Enemy> listOfEnemy;
 	private Character currentCharacter;
 	private Enemy currentEnemy;
+	private int currentSpell;
 	private boolean isEnemiesTurn;
+	private boolean isInitDone = false;
 
 	private BattleCommand mode;
 	private BattleGameState game;
@@ -37,6 +38,7 @@ public class BattleController implements InputProviderListener {
 
 	public void init() {
 		initAnimationListeners();
+		
 	}
 
 	private void initAnimationListeners() {
@@ -71,16 +73,22 @@ public class BattleController implements InputProviderListener {
 	}
 
 	private void playerAssignDamage() {
-
+		this.currentCharacter.getSpells().get(currentSpell).startDebutPassiveEffects(this.currentCharacter,this.currentEnemy);
 		int result = this.currentCharacter.getAttack();
 		float result1 = 100 / (100 + (float) this.currentEnemy.getDefense());
 		int result2 = Math.round(result * result1);
 		this.currentEnemy.setHealth(this.currentEnemy.getHealth() - result2);
+		this.currentCharacter.getSpells().get(currentSpell).startEndPassiveEffects(this.currentCharacter,this.currentEnemy);
+		
 
 	}
 
 	private void endPlayerAttack() {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
+		if(this.currentEnemy.getHealth()<=0) {
+			this.currentEnemy.setFadingOut(true);
+			
+		}
 
 	}
 
@@ -90,21 +98,21 @@ public class BattleController implements InputProviderListener {
 		float result1 = 100 / (100 + (float) this.currentCharacter.getDefense());
 		int result2 = Math.round(result * result1);
 		this.currentCharacter.setHealth(this.currentCharacter.getHealth() - result2);
-		System.out.println("Dealing Damage");
+
 	}
 
 	private void endEnnemyAttack() {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
-
-		System.out.println("End Turn");
+		this.game.setCurrentEnemyAnimation(this.game.getCurrentEnemyAnimation() + 1);
+		this.currentEnemy.setDone(false);
+	
 	}
 
 	@Override
 	public void controlPressed(Command command) {
-		//if (mode == BattleCommand.NONE) {
-			this.mode = (BattleCommand) command;
-			startBattle();
-		//}
+
+		this.mode = (BattleCommand) command;
+		startBattle();
 
 	}
 
@@ -113,12 +121,15 @@ public class BattleController implements InputProviderListener {
 			switch (this.mode) {
 			case SPELLONE:
 				this.currentEnemy.startAttack();
+				this.currentSpell = 1;
 				break;
 			case SPELLTWO:
 				this.currentEnemy.startAttack();
+				this.currentSpell = 2;
 				break;
 			case SPELLTHREE:
 				this.currentEnemy.startAttack();
+				this.currentSpell = 3;
 				break;
 			default:
 				mode = BattleCommand.NONE;
@@ -129,12 +140,15 @@ public class BattleController implements InputProviderListener {
 			switch (this.mode) {
 			case SPELLONE:
 				this.currentCharacter.startAttack();
+				this.currentSpell = 1;
 				break;
 			case SPELLTWO:
 				this.currentCharacter.startAttack();
+				this.currentSpell = 2;
 				break;
 			case SPELLTHREE:
 				this.currentCharacter.startAttack();
+				this.currentSpell = 3;
 				break;
 			default:
 				mode = BattleCommand.NONE;

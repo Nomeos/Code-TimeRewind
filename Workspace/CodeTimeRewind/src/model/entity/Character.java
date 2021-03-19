@@ -1,13 +1,12 @@
 package model.entity;
 
-import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import model.animation.AnimationListener;
-import model.animation.PathAnimation;
 import model.databaseManager.DatabaseCharacterManager;
+import model.image.LifeBars;
 
 @Getter
 @Setter
@@ -18,25 +17,20 @@ public class Character extends Entity {
 	private int experience;
 	private int maxExperience;
 	private int firstLevelMaxExperience;
-	private int maxHealth;
-	private PathAnimation animation;
-
-	private Image character;
-	// private List<Animation> animations;
 
 	public Character(String name, int level, int health, int defense, int attack, int speed, int x, int y, int width,
-			int height, int experience, String Description) {
+			int height, int experience, String Description) throws SlickException {
 		super(name, level, health, defense, attack, speed, x, y, width, height);
 
 		this.maxHealth = health;
 		this.experience = experience;
 		this.description = Description;
 		this.firstLevelMaxExperience = 150;
+		this.lifeBars = new LifeBars();
 		calculateMaxExperience();
+		this.image = DatabaseCharacterManager.getInstance().getCharacterPicture(this.name);
+		takePlayerSpells();
 		
-		this.character = DatabaseCharacterManager.getInstance().getCharacterPicture(this.name);
-
-		// DatabaseCharacterManager.getInstance().getAllAnimations(name);
 	}
 
 	public void calculateMaxExperience() {
@@ -48,18 +42,8 @@ public class Character extends Entity {
 		}
 	}
 
-	public void render(int x, int y) {
-		this.x = x;
-		this.y = y;
-		this.character.draw(x, y);
+	private void takePlayerSpells() {
+		this.setSpells(DatabaseCharacterManager.getInstance().takeAllCharacterSpells(this.name)); 
 	}
 
-	public void addAnimationListener(AnimationListener assignDamage, AnimationListener endAttack) {
-		this.animation.addListener(1000, assignDamage);
-		this.animation.addListener(2000, endAttack);
-	}
-
-	public void startAttack() {
-		this.animation.start();
-	}
 }

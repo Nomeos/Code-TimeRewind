@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="java.lang.System"/>
-    <fullyQualifiedTypeName name="java.lang.Process"/>
-    <fullyQualifiedTypeName name="java.lang.Runtime"/>
-    <fullyQualifiedTypeName name="model.account.Account"/>
-    <fullyQualifiedTypeName name="java.awt.Graphics"/>
-    <fullyQualifiedTypeName name="model.button.MediumButton"/>
-    <fullyQualifiedTypeName name="model.button.BigButton"/>
-    <fullyQualifiedTypeName name="model.button.SmallButton"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.gui.TextField"/>
     <fullyQualifiedTypeName name="model.textfield.TextField"/>
     <fullyQualifiedTypeName name="java.awt.List"/>
     <fullyQualifiedTypeName name="model.level.ListOfLevel"/>
@@ -23,9 +14,6 @@
     <fullyQualifiedTypeName name="model.level.Level"/>
     <fullyQualifiedTypeName name="model.databaseManager.DatabaseCharacterManager"/>
     <fullyQualifiedTypeName name="java.awt.image.BufferedImage"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.Image"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.geom.Shape"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.geom.Rectangle"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.Color"/>
@@ -36,19 +24,14 @@
     <fullyQualifiedTypeName name="java.lang.Math"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.command.Command"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.state.StateBasedGame"/>
-    <fullyQualifiedTypeName name="java.util.Random"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.MouseListener"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.Graphics"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.gui.ComponentListener"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.command.InputProviderListener"/>
     <fullyQualifiedTypeName name="view.guis.GuiFight"/>
-    <fullyQualifiedTypeName name="model.entity.Entity"/>
     <fullyQualifiedTypeName name="java.util.Collections"/>
     <fullyQualifiedTypeName name="java.lang.Comparable"/>
-    <fullyQualifiedTypeName name="model.fight.BattleController"/>
     <fullyQualifiedTypeName name="model.entity.Enemy"/>
     <fullyQualifiedTypeName name="model.entity.Character"/>
-    <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
     <fullyQualifiedTypeName name="lombok.Getter"/>
     <fullyQualifiedTypeName name="lombok.Setter"/>
     <fullyQualifiedTypeName name="model.animation.AnimationListener"/>
@@ -56,4 +39,25 @@
     <fullyQualifiedTypeName name="view.guis.BattleGameState"/>
     <fullyQualifiedTypeName name="model.animation.PathAnimation"/>
     <fullyQualifiedTypeName name="model.fight.BattleCommand"/>
+    <fullyQualifiedTypeName name="model.animation.EnemyPathAnimation"/>
+    <fullyQualifiedTypeName name="com.sun.tools.classfile.Annotation.element_value"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.particles.Particle"/>
+    <fullyQualifiedTypeName name="javax.swing.Timer"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.Graphics"/>
+    <fullyQualifiedTypeName name="org.lwjgl.util.Timer"/>
+    <fullyQualifiedTypeName name="model.image.LifeBars"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.Image"/>
+    <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
+    <fullyQualifiedTypeName name="model.fight.BattleController"/>
+    <fullyQualifiedTypeName name="java.util.Random"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="model.spell.Spell"/>
+    <fullyQualifiedTypeName name="model.spell.MultipleTargetSpell"/>
+    <fullyQualifiedTypeName name="model.spell.SingleTargetSpell"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
+    <fullyQualifiedTypeName name="model.effect.debuff.DefenseReduction"/>
+    <fullyQualifiedTypeName name="model.effect.PassiveEffect"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="model.entity.Entity"/>
+    <fullyQualifiedTypeName name="model.effect.Effect"/>
 </qualifiedTypeNameHistroy>

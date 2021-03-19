@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import model.entity.Character;
 
 

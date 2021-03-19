@@ -295,7 +295,7 @@ public class DatabaseAccountManager {
 	}
 
 	// Principal method for check if the user can register
-	public boolean RegisterAccount(Account userAccount) {
+	public boolean RegisterAccount(Account userAccount) throws SlickException {
 		this.isRegister = true;
 		if (IsTheUserAlreadyExist(userAccount)) {
 			CloseDatabaseConnection();
@@ -309,7 +309,7 @@ public class DatabaseAccountManager {
 	}
 
 	// Principal method for check if the user can login
-	public boolean LoginAccount(Account userAccount) {
+	public boolean LoginAccount(Account userAccount) throws SlickException {
 		this.isRegister = false;
 		if (IsTheUserAlreadyExist(userAccount)) {
 			TakePlayerProgression(userAccount);
@@ -443,7 +443,7 @@ public class DatabaseAccountManager {
 
 	// Check if the user already exist in the json, it returns a boolean (works with
 	// login and register).
-	public boolean IsTheUserAlreadyExist(Account userAccount) {
+	public boolean IsTheUserAlreadyExist(Account userAccount) throws SlickException {
 		boolean result = false;
 		BufferedImage bimg;
 		if (isRegister) {

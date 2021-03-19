@@ -237,7 +237,7 @@ public class GuiLogin extends BasicGameState {
 							this.errorText = this.usernameTextField.errorManagement(6);
 							resetTextFieldContent();
 						}
-					} catch (NoSuchAlgorithmException e) {
+					} catch (NoSuchAlgorithmException | SlickException e) {
 
 						e.printStackTrace();
 					}

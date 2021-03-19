@@ -183,7 +183,7 @@ public class GuiCharacter extends BasicGameState {
 			this.character_experience_point = this.player.getListOfOwnedCharacter().get(0).getExperience();
 			this.character_max_experience_point = this.player.getListOfOwnedCharacter().get(0).getMaxExperience();
 			this.character_description = this.player.getListOfOwnedCharacter().get(0).getDescription();
-			this.character_image = this.player.getListOfOwnedCharacter().get(0).getCharacter();
+			this.character_image = this.player.getListOfOwnedCharacter().get(0).getImage();
 		}
 
 	}
