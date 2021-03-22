@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -50,7 +51,7 @@ public class GuiAdventure extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		this.background.draw(0, 0);
 		g.setFont(new TrueTypeFont(new Font("Yu Gothic UI", Font.BOLD, 30), true));
-
+		g.setColor(Color.white);
 		if (!this.listOfLevels.isEmpty()) {
 			int i = 1;
 			int chapterId = Game.getInstance().getCurrentChapter();
@@ -72,8 +73,7 @@ public class GuiAdventure extends BasicGameState {
 				for (Button button : this.listOfButtons) {
 					button.draw();
 					String s = chapterId + " - " + i;
-					g.drawString(s, button.getX() + button.getWidth() - 100,
-							button.getY() + button.getHeight() - 100);
+					g.drawString(s, button.getX() + button.getWidth() - 100, button.getY() + button.getHeight() - 100);
 					i++;
 				}
 
@@ -104,7 +104,6 @@ public class GuiAdventure extends BasicGameState {
 		for (LevelButton level : this.listOfButtons) {
 			level.setPressed(false);
 			if (level.isHovering(x, y) && button == 0) {
-				System.out.println(level.getLevelId());
 				Game.getInstance().setCurrentLevel(level.getLevelId());
 				Game.getInstance().enterState(7, new FadeOutTransition(), new FadeInTransition());
 			}

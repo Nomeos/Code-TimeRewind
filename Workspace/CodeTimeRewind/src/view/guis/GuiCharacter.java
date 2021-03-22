@@ -143,7 +143,7 @@ public class GuiCharacter extends BasicGameState {
 			this.backgroundProgressBar.draw(75, 175);
 			g.resetFont();
 
-			g.drawString(this.player.getListOfOwnedCharacter().get(0).getExperience() + " / "
+			g.drawString(this.player.getListOfOwnedCharacter().get(0).getOldExperience() + " / "
 					+ this.player.getListOfOwnedCharacter().get(0).getMaxExperience(), 195, 192);
 			//Animation animationIdle = this.player.getListOfOwnedCharacter().get(0).getAnimations().get(1);
 			//animationIdle.draw(600, 500, 750, 400);
@@ -180,7 +180,7 @@ public class GuiCharacter extends BasicGameState {
 			this.character_defense = this.player.getListOfOwnedCharacter().get(0).getDefense();
 			this.character_level = this.player.getListOfOwnedCharacter().get(0).getLevel();
 			this.character_speed = this.player.getListOfOwnedCharacter().get(0).getSpeed();
-			this.character_experience_point = this.player.getListOfOwnedCharacter().get(0).getExperience();
+			this.character_experience_point = this.player.getListOfOwnedCharacter().get(0).getOldExperience();
 			this.character_max_experience_point = this.player.getListOfOwnedCharacter().get(0).getMaxExperience();
 			this.character_description = this.player.getListOfOwnedCharacter().get(0).getDescription();
 			this.character_image = this.player.getListOfOwnedCharacter().get(0).getImage();

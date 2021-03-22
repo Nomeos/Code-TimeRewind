@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="model.textfield.TextField"/>
-    <fullyQualifiedTypeName name="java.awt.List"/>
     <fullyQualifiedTypeName name="model.level.ListOfLevel"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.geom.Circle"/>
     <fullyQualifiedTypeName name="view.guis.GuiAdventure"/>
@@ -10,13 +8,11 @@
     <fullyQualifiedTypeName name="org.newdawn.slick.TrueTypeFont"/>
     <fullyQualifiedTypeName name="java.awt.Font"/>
     <fullyQualifiedTypeName name="model.button.Button"/>
-    <fullyQualifiedTypeName name="main.Game"/>
     <fullyQualifiedTypeName name="model.level.Level"/>
     <fullyQualifiedTypeName name="model.databaseManager.DatabaseCharacterManager"/>
     <fullyQualifiedTypeName name="java.awt.image.BufferedImage"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.geom.Shape"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.geom.Rectangle"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.Color"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.geom.Path"/>
     <fullyQualifiedTypeName name="model.animation.BezierPath"/>
     <fullyQualifiedTypeName name="model.fight.Fight"/>
@@ -31,7 +27,6 @@
     <fullyQualifiedTypeName name="java.util.Collections"/>
     <fullyQualifiedTypeName name="java.lang.Comparable"/>
     <fullyQualifiedTypeName name="model.entity.Enemy"/>
-    <fullyQualifiedTypeName name="model.entity.Character"/>
     <fullyQualifiedTypeName name="lombok.Getter"/>
     <fullyQualifiedTypeName name="lombok.Setter"/>
     <fullyQualifiedTypeName name="model.animation.AnimationListener"/>
@@ -46,18 +41,23 @@
     <fullyQualifiedTypeName name="org.newdawn.slick.Graphics"/>
     <fullyQualifiedTypeName name="org.lwjgl.util.Timer"/>
     <fullyQualifiedTypeName name="model.image.LifeBars"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.Image"/>
     <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
     <fullyQualifiedTypeName name="model.fight.BattleController"/>
     <fullyQualifiedTypeName name="java.util.Random"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="model.spell.Spell"/>
     <fullyQualifiedTypeName name="model.spell.MultipleTargetSpell"/>
-    <fullyQualifiedTypeName name="model.spell.SingleTargetSpell"/>
     <fullyQualifiedTypeName name="java.util.Arrays"/>
     <fullyQualifiedTypeName name="model.effect.debuff.DefenseReduction"/>
     <fullyQualifiedTypeName name="model.effect.PassiveEffect"/>
+    <fullyQualifiedTypeName name="model.effect.Effect"/>
+    <fullyQualifiedTypeName name="model.effect.activeEffect.debuff.DefenseReduction"/>
+    <fullyQualifiedTypeName name="model.spell.SingleTargetSpell"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="model.entity.Entity"/>
-    <fullyQualifiedTypeName name="model.effect.Effect"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.Image"/>
+    <fullyQualifiedTypeName name="main.Game"/>
+    <fullyQualifiedTypeName name="model.entity.Character"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="model.button.SmallButton"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.Color"/>
 </qualifiedTypeNameHistroy>

@@ -8,8 +8,8 @@ import model.effect.passiveEffect.PassiveEffect;
 
 public class SingleTargetSpell extends Spell {
 
-	public SingleTargetSpell(List<DebuffEffect> debuffs, List<PassiveEffect> passives, List<BuffEffect> buffs) {
-		super(debuffs, passives, buffs);
+	public SingleTargetSpell(List<DebuffEffect> debuffs, List<PassiveEffect> passives, List<BuffEffect> buffs, int cooldown) {
+		super(debuffs, passives, buffs, cooldown);
 		// TODO Auto-generated constructor stub
 	}
 

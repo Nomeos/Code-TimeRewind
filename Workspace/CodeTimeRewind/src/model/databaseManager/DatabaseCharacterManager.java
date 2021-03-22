@@ -52,12 +52,12 @@ public class DatabaseCharacterManager {
 
 			ls.add(new SingleTargetSpell(new ArrayList<DebuffEffect>(),
 					new ArrayList<PassiveEffect>(Arrays.asList(new LifeAbsorption(0.2))),
-					new ArrayList<BuffEffect>()));
+					new ArrayList<BuffEffect>(),0));
 			ls.add(new SingleTargetSpell(
 					new ArrayList<DebuffEffect>(Arrays.asList(new DefenseReduction(0.5, 2, false))),
-					new ArrayList<PassiveEffect>(), new ArrayList<BuffEffect>()));
+					new ArrayList<PassiveEffect>(), new ArrayList<BuffEffect>(),1));
 			ls.add(new MultipleTargetSpell(new ArrayList<DebuffEffect>(), new ArrayList<PassiveEffect>(),
-					new ArrayList<BuffEffect>(Arrays.asList(new AttackImprove(2, true)))));
+					new ArrayList<BuffEffect>(Arrays.asList(new AttackImprove(2, true))),3));
 			break;
 		default:
 

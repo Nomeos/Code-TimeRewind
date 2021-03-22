@@ -14,8 +14,7 @@ import model.image.LifeBars;
 public class Enemy extends Entity {
 	
 	private Image enemy;
-	private boolean isFadingOut;
-
+	
 	public Enemy(String name, int level, int health, int defense, int attack, int speed, int x, int y, int width,
 			int height, Image enemy) throws SlickException {
 		super(name, level, health, defense, attack, speed, x, y, width, height,enemy);

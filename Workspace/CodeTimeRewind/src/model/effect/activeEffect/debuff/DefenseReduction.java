@@ -7,18 +7,18 @@ import model.entity.Entity;
 @Getter
 @Setter
 public class DefenseReduction extends DebuffEffect{
-	private final static float DEFENSEREDUCTION = 0.15f;
+	private final static float DEFENSEREDUCTION = 0.30f;
 	private final static String DISPLAYEFFECT = "-15% Defense";
 	private final static boolean ISACTIVATEDBEGINNING = true;
 	
 	
 	public DefenseReduction(double pourcentChance,int numberTurnEffectActive,boolean isAppliedBeginning) {
-		super(DISPLAYEFFECT,pourcentChance,numberTurnEffectActive,isAppliedBeginning);
+		super(DISPLAYEFFECT,pourcentChance,numberTurnEffectActive,isAppliedBeginning,ISACTIVATEDBEGINNING);
 
 	}
 	
 	@Override
-	public void applyEffect(Entity e) {
-		e.setDefense(Math.round(e.getDefense() - (e.getDefense() * DEFENSEREDUCTION)));
+	public void applyEffect(Entity target) {
+		target.setDefense(Math.round(target.getDefense() - (target.getDefense() * DEFENSEREDUCTION)));
 	}
 }

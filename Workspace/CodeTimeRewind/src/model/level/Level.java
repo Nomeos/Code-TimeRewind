@@ -7,10 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.entity.Enemy;
+import model.entity.Entity;
 
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 public class Level {
 	List<Enemy> listOfEnemy = new ArrayList<Enemy>();
 	private String name;

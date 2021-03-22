@@ -111,6 +111,11 @@ public class BattleGameState extends BasicGameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		if (this.battleController != null) {
+			if (this.battleController.isEnemiesTurn() == false) {
+				this.hud.setDrawButton(true);
+			}
+		}
 		this.hud.render(gc, g);
 		if (getListOfCharacter() != null && getListOfEnemy() != null) {
 			drawEntities(gc, g);
@@ -292,8 +297,8 @@ public class BattleGameState extends BasicGameState {
 		switch (numberOfCharacter) {
 		case 1:
 			for (Character c : getListOfCharacter()) {
-				c.render(Math.round(p.x + (gc.getWidth() / 4)),
-						Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
+				c.render(Math.round(p.x + (gc.getWidth() / 4)), Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)),
+						g);
 			}
 			break;
 		case 2:
@@ -305,8 +310,6 @@ public class BattleGameState extends BasicGameState {
 					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 350,
 							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30, g);
 				}
-
-
 
 			}
 			break;
@@ -322,7 +325,6 @@ public class BattleGameState extends BasicGameState {
 				} else {
 					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
 				}
-
 
 			}
 			break;

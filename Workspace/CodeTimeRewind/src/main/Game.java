@@ -20,6 +20,7 @@ public class Game extends StateBasedGame {
 	public final int chapters = 5;
 	public final int adventure = 6;
 	public final int fight = 7;
+	public final int endFight = 8;
 	private int currentChapter;
 	private int currentLevel;
 	private static Game instance;
@@ -50,6 +51,7 @@ public class Game extends StateBasedGame {
 		this.addState(new GuiChapters(chapters));
 		this.addState(new GuiAdventure(adventure));
 		this.addState(new BattleGameState(fight));
+		this.addState(new GuiEndFight(endFight));
 	}
 
 

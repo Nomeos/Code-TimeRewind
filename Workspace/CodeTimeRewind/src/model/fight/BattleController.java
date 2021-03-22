@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.newdawn.slick.command.Command;
 import org.newdawn.slick.command.InputProviderListener;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import main.Game;
 import model.animation.AnimationListener;
 import model.entity.Character;
 import model.entity.Enemy;
@@ -24,6 +27,7 @@ public class BattleController implements InputProviderListener {
 	private int currentSpell;
 	private boolean isEnemiesTurn;
 	private boolean isInitDone = false;
+	private boolean isEndBattle = false;
 
 	private BattleCommand mode;
 	private BattleGameState game;
@@ -38,7 +42,7 @@ public class BattleController implements InputProviderListener {
 
 	public void init() {
 		initAnimationListeners();
-		
+
 	}
 
 	private void initAnimationListeners() {
@@ -53,7 +57,7 @@ public class BattleController implements InputProviderListener {
 			public void on() {
 				endPlayerAttack();
 			}
-		}; 
+		};
 		AnimationListener ennemiAssignDamage = new AnimationListener() {
 			@Override
 			public void on() {
@@ -74,23 +78,47 @@ public class BattleController implements InputProviderListener {
 
 	private void playerAssignDamage() {
 		this.currentCharacter.setCurrentSpell(currentSpell);
-		this.currentCharacter.dealDamage(this.currentCharacter,this.currentEnemy);
+		if (this.currentCharacter.isSingleAttack()) {
+			this.currentCharacter.dealDamage(this.currentCharacter, this.currentEnemy);
+		} else {
+			for (Enemy e : this.listOfEnemy) {
+				this.currentCharacter.dealDamage(this.currentCharacter, e);
+			}
+		}
+
 	}
 
 	private void endPlayerAttack() {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
-		if(this.currentEnemy.getHealth()<=0) {
-			this.currentEnemy.setFadingOut(true);
+		for (Enemy e : this.listOfEnemy) {
+			if (e.getHealth() <= 0) {
+				e.setFadingOut(true);
+			}
+		}
+		boolean end = false;
+		for (Enemy e : this.listOfEnemy) {
+			if (e.isFadingOut()) {
+				end = true;
+			}else {
+				end = false;
+				break;
+			}
 		}
 		this.currentCharacter.setDone(false);
+		if (end) {
+			for(Enemy e : this.listOfEnemy) {
+				this.currentCharacter.calculateExperienceEarned(e.getLevel());
+			}
+			Game.getInstance().enterState(8, new FadeOutTransition(), new FadeInTransition());
+		}
+		
+	
 	}
 
 	private void ennemyAssignDamage() {
 
-		int result = this.currentEnemy.getAttack();
-		float result1 = 100 / (100 + (float) this.currentCharacter.getDefense());
-		int result2 = Math.round(result * result1);
-		this.currentCharacter.setHealth(this.currentCharacter.getHealth() - result2);
+		this.currentEnemy.setCurrentSpell(currentSpell);
+		this.currentEnemy.dealDamage(this.currentEnemy, this.currentCharacter);
 
 	}
 
@@ -98,7 +126,7 @@ public class BattleController implements InputProviderListener {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
 		this.game.setCurrentEnemyAnimation(this.game.getCurrentEnemyAnimation() + 1);
 		this.currentEnemy.setDone(false);
-	
+
 	}
 
 	@Override

@@ -13,16 +13,14 @@ public class ActiveEffect extends Effect {
 	protected boolean isAppliedBeginning;
 	protected int numberTurnEffectActive;
 	protected String displayEffect;
-	
-	public ActiveEffect(String displayEffect,int numberTurnEffectActive, boolean isAppliedBeginning) {
+	protected boolean isActivatedBeginning;
+
+	public ActiveEffect(String displayEffect, int numberTurnEffectActive, boolean isAppliedBeginning,
+			boolean isActivatedBeginning) {
 		this.isAppliedBeginning = isAppliedBeginning;
 		this.numberTurnEffectActive = numberTurnEffectActive;
 		this.displayEffect = displayEffect;
+		this.isActivatedBeginning = isActivatedBeginning;
 	}
-
-
-
-
-
 
 }

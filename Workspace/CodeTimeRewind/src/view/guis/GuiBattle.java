@@ -21,6 +21,7 @@ public class GuiBattle implements ComponentListener {
 	private Image background;
 	private Image hud;
 	private int currentButtonPressed;
+	private boolean drawButton;
 
 	private List<LevelButton> listOfButton;
 	
@@ -40,8 +41,11 @@ public class GuiBattle implements ComponentListener {
 	public void render(GameContainer gc, Graphics g) {
 		this.background.draw(0, 0);
 		this.hud.draw(0, gc.getHeight() - 165);
-		for (LevelButton currentButton : listOfButton)
-			currentButton.draw();
+		if(this.drawButton == true) {
+			for (LevelButton currentButton : listOfButton)
+				currentButton.draw();
+		}
+	
 	}
 
 	public void updateButton(int button, int x, int y, boolean isPressed) {
@@ -95,6 +99,5 @@ public class GuiBattle implements ComponentListener {
 	@Override
 	public void componentActivated(AbstractComponent ac) {
 		System.out.println("test");
-
 	}
 }

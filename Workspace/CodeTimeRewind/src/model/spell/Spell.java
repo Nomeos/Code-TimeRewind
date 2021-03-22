@@ -26,10 +26,11 @@ public class Spell {
 	protected Image image;
 	protected Random rnd;
 
-	public Spell(List<DebuffEffect> debuffs, List<PassiveEffect> passives, List<BuffEffect> buffs) {
+	public Spell(List<DebuffEffect> debuffs, List<PassiveEffect> passives, List<BuffEffect> buffs, int cooldown) {
 		this.debuffs = debuffs;
 		this.buffs = buffs;
 		this.passives = passives;
+		this.cooldown = cooldown;
 	}
 
 	public void startDebutActiveEffects(Entity c, Entity e) {
@@ -52,7 +53,12 @@ public class Spell {
 		if (buffs != null) {
 			for (BuffEffect b : buffs) {
 				if (b.isAppliedBeginning()) {
-					c.getActiveBuffs().add(b);
+					if(c.getActiveBuffs().contains(b)) {
+						c.getActiveBuffs().remove(b);
+						c.getActiveBuffs().add(b);
+					}else{
+						c.getActiveBuffs().add(b);
+					}
 				}
 			}
 		}
