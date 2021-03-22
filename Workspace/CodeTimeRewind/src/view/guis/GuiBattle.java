@@ -45,7 +45,7 @@ public class GuiBattle implements ComponentListener {
 	}
 
 	public void updateButton(int button, int x, int y, boolean isPressed) {
-		int i = 0;
+		int i = 1;
 		if (isPressed) {
 			for (LevelButton button1 : this.listOfButton) {
 				if (button1.isHovering(x, y) && button == 0) {

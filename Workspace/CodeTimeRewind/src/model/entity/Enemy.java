@@ -18,7 +18,7 @@ public class Enemy extends Entity {
 
 	public Enemy(String name, int level, int health, int defense, int attack, int speed, int x, int y, int width,
 			int height, Image enemy) throws SlickException {
-		super(name, level, health, defense, attack, speed, x, y, width, height);
+		super(name, level, health, defense, attack, speed, x, y, width, height,enemy);
 		this.enemy = enemy;
 		this.maxHealth = health;
 		this.lifeBars = new LifeBars();

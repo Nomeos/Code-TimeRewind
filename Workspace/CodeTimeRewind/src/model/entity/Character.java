@@ -43,7 +43,7 @@ public class Character extends Entity {
 	}
 
 	private void takePlayerSpells() {
-		this.setSpells(DatabaseCharacterManager.getInstance().takeAllCharacterSpells(this.name)); 
+		this.setSpells(DatabaseCharacterManager.getInstance().getAllCharacterSpells(this.name)); 
 	}
 
 }

@@ -1,10 +1,24 @@
 package model.effect.activeEffect.buff;
 
-public class AttackImprove extends BuffEffect{
+import lombok.Getter;
+import lombok.Setter;
 
-	public AttackImprove(double defensereduction, double pourcent, int numberTurnEffectActive) {
-		super(defensereduction, pourcent, numberTurnEffectActive);
-		
+@Getter
+@Setter
+public class AttackImprove extends BuffEffect {
+
+	private final static double ATTACKAIMPROVEMENT = 0.15;
+	private int numberTurnEffectActive;
+	private final static String DISPLAYEFFECT = "+15% Attack";
+	
+	private final static boolean ISACTIVATEDBEGINNING = true;
+
+	public AttackImprove(int numberTurnEffectActive, boolean isAppliedBeginning) {
+		super(DISPLAYEFFECT,numberTurnEffectActive,isAppliedBeginning);
+	}
+
+	public int applyEffect(int currentAttack) {
+		return Math.round(currentAttack += (currentAttack * ATTACKAIMPROVEMENT));
 	}
 
 }

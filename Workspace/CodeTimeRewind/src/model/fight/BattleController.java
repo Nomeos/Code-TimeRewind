@@ -53,7 +53,7 @@ public class BattleController implements InputProviderListener {
 			public void on() {
 				endPlayerAttack();
 			}
-		};
+		}; 
 		AnimationListener ennemiAssignDamage = new AnimationListener() {
 			@Override
 			public void on() {
@@ -73,23 +73,16 @@ public class BattleController implements InputProviderListener {
 	}
 
 	private void playerAssignDamage() {
-		this.currentCharacter.getSpells().get(currentSpell).startDebutPassiveEffects(this.currentCharacter,this.currentEnemy);
-		int result = this.currentCharacter.getAttack();
-		float result1 = 100 / (100 + (float) this.currentEnemy.getDefense());
-		int result2 = Math.round(result * result1);
-		this.currentEnemy.setHealth(this.currentEnemy.getHealth() - result2);
-		this.currentCharacter.getSpells().get(currentSpell).startEndPassiveEffects(this.currentCharacter,this.currentEnemy);
-		
-
+		this.currentCharacter.setCurrentSpell(currentSpell);
+		this.currentCharacter.dealDamage(this.currentCharacter,this.currentEnemy);
 	}
 
 	private void endPlayerAttack() {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
 		if(this.currentEnemy.getHealth()<=0) {
 			this.currentEnemy.setFadingOut(true);
-			
 		}
-
+		this.currentCharacter.setDone(false);
 	}
 
 	private void ennemyAssignDamage() {

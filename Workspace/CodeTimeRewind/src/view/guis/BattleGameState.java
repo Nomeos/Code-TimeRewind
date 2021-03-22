@@ -19,6 +19,7 @@ import lombok.Setter;
 import main.Game;
 import model.animation.BezierPath;
 import model.animation.PathAnimation;
+import model.databaseManager.DatabaseCharacterManager;
 import model.entity.Character;
 import model.entity.Enemy;
 import model.entity.Entity;
@@ -114,6 +115,8 @@ public class BattleGameState extends BasicGameState {
 		if (getListOfCharacter() != null && getListOfEnemy() != null) {
 			drawEntities(gc, g);
 			createLifeBars(gc, g);
+			g.drawString("current turn : " + this.currentTurn, 50, 50);
+
 		}
 
 	}
@@ -173,7 +176,7 @@ public class BattleGameState extends BasicGameState {
 
 			for (Enemy e : getListOfEnemy()) {
 				e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3) - e.getWidth()),
-						Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)));
+						Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
 
 			}
 
@@ -184,19 +187,19 @@ public class BattleGameState extends BasicGameState {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3) - e.getWidth()),
-								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)));
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
 					} else {
-						e.render((gc.getWidth() / 4) * 3 - e.getWidth(), gc.getHeight() - gc.getHeight() / 2);
+						e.render((gc.getWidth() / 4) * 3 - e.getWidth(), gc.getHeight() - gc.getHeight() / 2, g);
 					}
 
 					i++;
 				} else if (i == 2) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350)),
-								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)));
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)), g);
 					} else {
 						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
-								gc.getHeight() - gc.getHeight() / 2 - 30);
+								gc.getHeight() - gc.getHeight() / 2 - 30, g);
 					}
 
 				}
@@ -210,27 +213,27 @@ public class BattleGameState extends BasicGameState {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3) - e.getWidth()),
-								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)));
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
 					} else {
-						e.render((gc.getWidth() / 4) * 3 - e.getWidth(), gc.getHeight() - gc.getHeight() / 2);
+						e.render((gc.getWidth() / 4) * 3 - e.getWidth(), gc.getHeight() - gc.getHeight() / 2, g);
 					}
 					i++;
 				} else if (i == 2) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350)),
-								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)));
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)), g);
 					} else {
 						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
-								gc.getHeight() - gc.getHeight() / 2 - 30);
+								gc.getHeight() - gc.getHeight() / 2 - 30, g);
 					}
 					i++;
 				} else {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200)),
-								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 155)));
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 155)), g);
 					} else {
 						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200,
-								gc.getHeight() - gc.getHeight() / 2 - 155);
+								gc.getHeight() - gc.getHeight() / 2 - 155, g);
 					}
 
 				}
@@ -243,36 +246,36 @@ public class BattleGameState extends BasicGameState {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3) - e.getWidth()),
-								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)));
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
 					} else {
-						e.render((gc.getWidth() / 4) * 3 - e.getWidth(), gc.getHeight() - gc.getHeight() / 2);
+						e.render((gc.getWidth() / 4) * 3 - e.getWidth(), gc.getHeight() - gc.getHeight() / 2, g);
 					}
 					i++;
 				} else if (i == 2) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350)),
-								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)));
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)), g);
 					} else {
 						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
-								gc.getHeight() - gc.getHeight() / 2 - 30);
+								gc.getHeight() - gc.getHeight() / 2 - 30, g);
 					}
 					i++;
 				} else if (i == 3) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200)),
-								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 155)));
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 155)), g);
 					} else {
 						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200,
-								gc.getHeight() - gc.getHeight() / 2 - 155);
+								gc.getHeight() - gc.getHeight() / 2 - 155, g);
 					}
 					i++;
 				} else {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 175)),
-								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 + 125)));
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 + 125)), g);
 					} else {
 						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 175,
-								gc.getHeight() - gc.getHeight() / 2 + 125);
+								gc.getHeight() - gc.getHeight() / 2 + 125, g);
 					}
 
 				}
@@ -290,62 +293,56 @@ public class BattleGameState extends BasicGameState {
 		case 1:
 			for (Character c : getListOfCharacter()) {
 				c.render(Math.round(p.x + (gc.getWidth() / 4)),
-						Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)));
-
-				g.drawImage(c.getLifeBars(), c.getX(), c.getY() - 20);
-
+						Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
 			}
 			break;
 		case 2:
 			for (Character c : getListOfCharacter()) {
 				if (i == 1) {
-					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2);
+					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
 					i++;
 				} else {
 					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 350,
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30);
+							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30, g);
 				}
 
-				g.drawImage(c.getLifeBars(), c.getX(), c.getY() - 20);
+
 
 			}
 			break;
 		case 3:
 			for (Character c : getListOfCharacter()) {
 				if (i == 1) {
-					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2);
+					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
 					i++;
 				} else if (i == 2) {
 					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 350,
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30);
+							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30, g);
 					i++;
 				} else {
-					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2);
+					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
 				}
 
-				g.drawImage(c.getLifeBars(), c.getX(), c.getY() - 20);
 
 			}
 			break;
 		case 4:
 			for (Character c : getListOfCharacter()) {
 				if (i == 1) {
-					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2 - 100);
+					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2 - 100, g);
 					i++;
 				} else if (i == 2) {
 					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 350,
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30);
+							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30, g);
 					i++;
 				} else if (i == 3) {
 					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 200,
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 155);
+							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 155, g);
 					i++;
 				} else {
 					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 175,
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) + 125);
+							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) + 125, g);
 				}
-
-				g.drawImage(c.getLifeBars(), c.getX(), c.getY() - 20);
 
 			}
 			break;
@@ -371,9 +368,9 @@ public class BattleGameState extends BasicGameState {
 					this.battleController.init();
 					this.battleController.setInitDone(true);
 				}
-				if (this.hud.getCurrentButtonPressed() == 0) {
+				if (this.hud.getCurrentButtonPressed() == 0 || this.hud.getCurrentButtonPressed() == 3) {
 					this.battleController.controlPressed(BattleCommand.SPELLONE);
-				} else if (this.hud.getCurrentButtonPressed() == 1) {
+				} else if (this.hud.getCurrentButtonPressed() == 2) {
 					this.battleController.controlPressed(BattleCommand.SPELLTWO);
 				} else {
 					this.battleController.controlPressed(BattleCommand.SPELLTHREE);
@@ -401,6 +398,8 @@ public class BattleGameState extends BasicGameState {
 			setListOfEnemy(this.currentLevel.getListOfEnemy());
 			this.listOfEnemy.forEach(f -> {
 				f.setAnimation(enemyAnimation);
+				f.setSpells(DatabaseCharacterManager.getInstance().getAllCharacterSpells(f.getName()));
+
 			});
 			this.battleController = new BattleController(listOfCharacter, listOfEnemy, this);
 			this.initiliazeVariable = true;

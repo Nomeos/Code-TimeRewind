@@ -12,8 +12,11 @@ import java.util.List;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import model.effect.activeEffect.buff.AttackImprove;
+import model.effect.activeEffect.buff.BuffEffect;
 import model.effect.activeEffect.debuff.DebuffEffect;
 import model.effect.activeEffect.debuff.DefenseReduction;
+import model.effect.passiveEffect.LifeAbsorption;
 import model.effect.passiveEffect.PassiveEffect;
 import model.spell.MultipleTargetSpell;
 import model.spell.SingleTargetSpell;
@@ -42,14 +45,19 @@ public class DatabaseCharacterManager {
 		return image;
 	}
 
-	public List<Spell> takeAllCharacterSpells(String entityName) {
+	public List<Spell> getAllCharacterSpells(String entityName) {
 		List<Spell> ls = new ArrayList<Spell>();
 		switch (entityName) {
 		case "Nom-eos":
 
-			ls.add(new SingleTargetSpell(null, new ArrayList<PassiveEffect>(Arrays.asList(new))));
-			ls.add(new SingleTargetSpell(new ArrayList<DebuffEffect>(Arrays.asList(new DefenseReduction(0.5, 2)))));
-			ls.add(new MultipleTargetSpell());
+			ls.add(new SingleTargetSpell(new ArrayList<DebuffEffect>(),
+					new ArrayList<PassiveEffect>(Arrays.asList(new LifeAbsorption(0.2))),
+					new ArrayList<BuffEffect>()));
+			ls.add(new SingleTargetSpell(
+					new ArrayList<DebuffEffect>(Arrays.asList(new DefenseReduction(0.5, 2, false))),
+					new ArrayList<PassiveEffect>(), new ArrayList<BuffEffect>()));
+			ls.add(new MultipleTargetSpell(new ArrayList<DebuffEffect>(), new ArrayList<PassiveEffect>(),
+					new ArrayList<BuffEffect>(Arrays.asList(new AttackImprove(2, true)))));
 			break;
 		default:
 

@@ -1,10 +1,35 @@
 package model.effect.activeEffect.debuff;
 
-import model.effect.activeEffect.ActiveEffect;
+import java.util.Random;
 
-public class DebuffEffect extends ActiveEffect{
+import model.effect.activeEffect.ActiveEffect;
+import model.entity.Entity;
+
+public class DebuffEffect extends ActiveEffect {
+
+	protected double pourcentChance;
+	protected Random rnd;
+	protected boolean isAppliedBeginning;
 	
-	public DebuffEffect(double defensereduction, double pourcent, int cooldown) {
-		super(defensereduction, pourcent, cooldown);
+	public DebuffEffect() {
+		super();
+	}
+	public DebuffEffect(String DISPLAYEFFECT, double pourcentChance, int numberTurnEffectActive,
+			boolean isAppliedBeginning) {
+		super(DISPLAYEFFECT, numberTurnEffectActive, isAppliedBeginning);
+		this.pourcentChance = pourcentChance;
+	}
+	
+	public void applyEffect(Entity target) {
+	}
+	
+	public boolean isDebuffApplied() {
+		this.rnd = new Random();
+		double resultRnd = Math.round((this.rnd.nextDouble()*100)/100);
+		System.out.println(resultRnd + " >= " + pourcentChance);
+		if (resultRnd >= pourcentChance) {
+			return true;
+		}
+		return false;
 	}
 }
