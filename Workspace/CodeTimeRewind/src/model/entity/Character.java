@@ -45,7 +45,7 @@ public class Character extends Entity {
 		}
 	}
 
-	public void calculateExperienceEarned(int levelOfTheEnemy) {i
+	public void calculateExperienceEarned(int levelOfTheEnemy) {
 		int current = xpObtained;
 		for (int i = 1; i <= levelOfTheEnemy; i++) {
 			xpObtained *= 1.5;
