@@ -2,26 +2,28 @@ package model.effect.activeEffect.debuff;
 
 import java.util.Random;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import model.effect.activeEffect.ActiveEffect;
 import model.entity.Entity;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public class DebuffEffect extends ActiveEffect {
 
 	protected double pourcentChance;
 	protected Random rnd;
 	protected boolean isAppliedBeginning;
-	
-
-
-	public DebuffEffect() {
-		super();
-	}
+	protected boolean isActivatedBeginning;
 
 	public DebuffEffect(String DISPLAYEFFECT, double pourcentChance, int numberTurnEffectActive,
-			boolean isAppliedBeginning, boolean ISACTIVATEDBEGINNING) {
-		super(DISPLAYEFFECT, numberTurnEffectActive, isAppliedBeginning,ISACTIVATEDBEGINNING);
+			boolean isAppliedBeginning, boolean isActivatedBeginning) {
+		super(DISPLAYEFFECT, numberTurnEffectActive, isAppliedBeginning);
+		this.isActivatedBeginning = isActivatedBeginning;
 		this.pourcentChance = pourcentChance;
-		
+
 	}
 
 	public void applyEffect(Entity target) {
@@ -37,6 +39,5 @@ public class DebuffEffect extends ActiveEffect {
 		}
 		return false;
 	}
-
 
 }

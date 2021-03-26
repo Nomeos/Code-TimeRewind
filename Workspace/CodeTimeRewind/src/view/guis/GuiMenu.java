@@ -17,6 +17,11 @@ import lombok.NoArgsConstructor;
 import main.Game;
 import model.button.*;
 
+/**
+ * 
+ * @author mathieu.rabot
+ *
+ */
 @NoArgsConstructor
 public class GuiMenu extends BasicGameState {
 
@@ -65,7 +70,9 @@ public class GuiMenu extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawImage(backgroundImage, backX, backY);
 		g.drawImage(secondBackgroundImage, backDX, backDY);
-		for (Button button : this.listOfButton) button.draw();
+		for (Button button : this.listOfButton) {
+			button.draw();
+		}
 		knightWalkingAnimation.draw(100, 700);
 	}
 
@@ -76,8 +83,7 @@ public class GuiMenu extends BasicGameState {
 		backDX -= speed * delta;
 		if (backX <= -1910) {
 			backX = 1910;
-		}
-		if (backDX <= -1910) {
+		} else if (backDX <= -1910) {
 			backDX = 1910;
 		}
 

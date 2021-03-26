@@ -113,7 +113,7 @@ public class GuiChapters extends BasicGameState {
 			Game.getInstance().enterState(6, new FadeOutTransition(), new FadeInTransition());
 		}
 		if (this.lobbyButton.isHovering(x, y) && button == 0) {
-			Game.getInstance().enterState(6, new FadeOutTransition(), new FadeInTransition());
+			Game.getInstance().enterState(3, new FadeOutTransition(), new FadeInTransition());
 		}
 	}
 

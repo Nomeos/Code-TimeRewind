@@ -27,10 +27,13 @@ public class TextField extends org.newdawn.slick.gui.TextField {
 			break;
 		case 5: 
 			s = "Registration Successful !";
+			break;
 		case 6:
 			s = "The Login failed. Try to reconnect or create a new account.";
+			break;
 		default:
 			 s = "";
+			 break;
 
 		}
 		return s;

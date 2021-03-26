@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="model.level.ListOfLevel"/>
-    <fullyQualifiedTypeName name="org.newdawn.slick.geom.Circle"/>
-    <fullyQualifiedTypeName name="view.guis.GuiAdventure"/>
-    <fullyQualifiedTypeName name="java.awt.Button"/>
-    <fullyQualifiedTypeName name="model.button.LevelButton"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.TrueTypeFont"/>
     <fullyQualifiedTypeName name="java.awt.Font"/>
     <fullyQualifiedTypeName name="model.button.Button"/>
@@ -58,6 +53,11 @@
     <fullyQualifiedTypeName name="main.Game"/>
     <fullyQualifiedTypeName name="model.entity.Character"/>
     <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="model.button.SmallButton"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.Color"/>
+    <fullyQualifiedTypeName name="com.sun.tools.javac.util.Assert"/>
+    <fullyQualifiedTypeName name="model.account.Account"/>
+    <fullyQualifiedTypeName name="java.lang.String"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.gui.TextField"/>
+    <fullyQualifiedTypeName name="model.button.SmallButton"/>
+    <fullyQualifiedTypeName name="com.sun.java.swing.action.NewAction"/>
 </qualifiedTypeNameHistroy>

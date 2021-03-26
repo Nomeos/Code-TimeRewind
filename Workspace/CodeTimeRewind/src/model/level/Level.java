@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.entity.Enemy;
-import model.entity.Entity;
 
 @NoArgsConstructor
 @Setter

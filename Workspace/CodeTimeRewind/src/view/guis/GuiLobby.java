@@ -82,7 +82,7 @@ public class GuiLobby extends BasicGameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int g) throws SlickException {
-		if (this.playerAccount != null) {
+		if (Game.getInstance().getPlayerAccount() != null) {
 			this.playerAccount = Game.getInstance().getPlayerAccount();
 			this.username = this.playerAccount.getUsername();
 			this.level = this.playerAccount.getAccount_Level();

@@ -78,14 +78,14 @@ public class GuiCharacter extends BasicGameState {
 		this.zoneLibreStatsHeight = 350;
 
 		this.backgroundImage = new Image("/res/Half_Sunset.png");
-		
+
 		this.backgroundProgressBarWidth = 276;
-		
+
 		this.zoneLibreStats = new Image("/res/zones/ZoneLibre.png");
-		
+
 		this.characterNameFont = new Font(centuryFont, Font.BOLD, 50);
 		this.characterNameTTF = new TrueTypeFont(characterNameFont, true);
-		
+
 		this.backgroundProgressBar = new Image("/res/zones/ProgressionBar.png");
 
 		this.backgroundSort1 = new Image(backgroundSortPath);
@@ -96,7 +96,6 @@ public class GuiCharacter extends BasicGameState {
 				new Image("/res/buttons/LobbyButtonHit.png"), lobbyButtonXPosition, lobbyButtonYPosition);
 		this.listOfButton = new ArrayList<>();
 		this.listOfButton.add(lobbyButton);
-		
 
 	}
 
@@ -108,8 +107,10 @@ public class GuiCharacter extends BasicGameState {
 		g.drawImage(backgroundSort2, this.lobbyButtonXPosition, this.lobbyButtonYPosition - 175);
 		g.drawImage(backgroundSort3, this.lobbyButtonXPosition, this.lobbyButtonYPosition - 90);
 
-		for(Button button : this.listOfButton) button.draw();
-		
+		for (Button button : this.listOfButton) {
+			button.draw();
+		}
+
 		if (this.player != null) {
 			g.setFont(characterNameTTF);
 
@@ -145,11 +146,8 @@ public class GuiCharacter extends BasicGameState {
 
 			g.drawString(this.player.getListOfOwnedCharacter().get(0).getOldExperience() + " / "
 					+ this.player.getListOfOwnedCharacter().get(0).getMaxExperience(), 195, 192);
-			//Animation animationIdle = this.player.getListOfOwnedCharacter().get(0).getAnimations().get(1);
-			//animationIdle.draw(600, 500, 750, 400);
-			this.character_image.draw(600,500,750,400);
 			
-			
+			this.character_image.draw(850, 700,200,250);
 
 		}
 

@@ -1,8 +1,9 @@
 package model.databaseManager;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.junit.After;
@@ -24,99 +25,79 @@ public class DatabaseAccountManagerTest {
 	public void Init() {
 		this.jm = new DatabaseAccountManager();
 		this.account = new Account();
-		this.statement = jm.OpenDatabaseConnection();
-		try {
-			this.sqlQuery = "Drop table Account_Own_Characters";
-			this.statement.executeUpdate(this.sqlQuery);
-		} catch (SQLException e) {
-			if (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05")) {
-
-			} else {
-				e.printStackTrace();
-			}
-		}
-		try {
-			this.sqlQuery = "Drop table Accounts";
-			this.statement.executeUpdate(this.sqlQuery);
-		} catch (SQLException e) {
-			if (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05")) {
-
-			} else {
-				e.printStackTrace();
-			}
-		}
-		try {
-			this.sqlQuery = "Drop table Characters";
-			this.statement.executeUpdate(this.sqlQuery);
-		} catch (SQLException e) {
-			if (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05")) {
-
-			} else {
-				e.printStackTrace();
-			}
-		}
 		this.jm.DatabaseCreation();
+		this.setStatement(jm.OpenDatabaseConnection());
 		this.jm.CloseDatabaseConnection();
 
 	}
+
+	
 
 	@Test
 	public void HashPasswordTest() throws NoSuchAlgorithmException {
 		account.hashPassword("test");
 	}
 
-	/*@Test
-	public void RegisterOneAccount() throws NoSuchAlgorithmException {
-		this.account.setUsername("Jason");
-		this.account.setPasswordHash(this.account.hashPassword("test"));
-		assertTrue(this.jm.RegisterAccount(this.account));
+	@Test
+	public void IsTheUserAlreadyExistFalse() {
+		try {
+			this.jm.DeleteDatabase();
+			this.jm.DatabaseCreation();
+			Account account = new Account();
+			account.setUsername("test");
+			account.setPassword("test");
+			account.setPasswordHash(account.hashPassword("test"));
+			assertTrue(!this.jm.IsTheUserAlreadyExist(account));
+
+		} catch (NoSuchAlgorithmException e) {
+			
+		}
 	}
 
 	@Test
-	public void loginAccount() throws NoSuchAlgorithmException {
-		this.account.setUsername("Jason");
-		this.account.setPassword("test");
-		this.account.setPasswordHash(this.account.hashPassword("test"));
-		this.jm.RegisterAccount(this.account);
-		assertTrue(this.jm.LoginAccount(this.account));
-	}*/
+	public void InsertTheFirstLevel() {
+		this.jm.OpenDatabaseConnection();
+		assertTrue(this.jm.InsertTheFirstLevel());
+	}
+
+	@Test
+	public void InsertAllDifferentCharacters() {
+		this.jm.OpenDatabaseConnection();
+		assertTrue(this.jm.InsertAllDifferentCharacters());
+	}
 
 	@After
 	public void Clean() {
 		this.account = null;
-		this.statement = this.jm.OpenDatabaseConnection();
+		this.setStatement(this.jm.OpenDatabaseConnection());
+		this.jm.DeleteDatabase();
 		this.jm = null;
-		try {
-			this.sqlQuery = "Drop table Account_Own_Characters";
-			this.statement.executeUpdate(this.sqlQuery);
-		} catch (SQLException e) {
-			if (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05")) {
+		
+		this.setStatement(null);
 
-			} else {
-				e.printStackTrace();
-			}
-		}
-		try {
-			this.sqlQuery = "Drop table Accounts";
-			this.statement.executeUpdate(this.sqlQuery);
-		} catch (SQLException e) {
-			if (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05")) {
+	}
 
-			} else {
-				e.printStackTrace();
-			}
-		}
-		try {
-			this.sqlQuery = "Drop table Characters";
-			this.statement.executeUpdate(this.sqlQuery);
-		} catch (SQLException e) {
-			if (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05")) {
 
-			} else {
-				e.printStackTrace();
-			}
-		}
-		this.statement = null;
 
+	public Statement getStatement() {
+		return statement;
+	}
+
+
+
+	public void setStatement(Statement statement) {
+		this.statement = statement;
+	}
+
+
+
+	public String getSqlQuery() {
+		return sqlQuery;
+	}
+
+
+
+	public void setSqlQuery(String sqlQuery) {
+		this.sqlQuery = sqlQuery;
 	}
 }

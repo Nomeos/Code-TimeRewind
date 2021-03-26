@@ -6,7 +6,10 @@ public class PassiveEffect extends Effect {
 
 	protected double extraHealing;
 
-	public PassiveEffect(double extraHealing) {
+	protected boolean isActivatedBeginning;
+	public PassiveEffect(double extraHealing,boolean ISACTIVATEDBEGINNING) {
+		
+		this.isActivatedBeginning = ISACTIVATEDBEGINNING;
 		this.extraHealing = extraHealing;
 	}
 }

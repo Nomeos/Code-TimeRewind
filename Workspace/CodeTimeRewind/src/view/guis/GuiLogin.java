@@ -29,6 +29,7 @@ import model.textfield.TextField;
 @NoArgsConstructor
 public class GuiLogin extends BasicGameState {
 	private int middleButtonXPosition;
+	private int middleButtonYPositionStarting;
 	private int stateId;
 	private int[] duration = { 200, 200, 200, 200, 200, 200 };
 	private Font ft = null;
@@ -57,7 +58,7 @@ public class GuiLogin extends BasicGameState {
 		int textFieldHeight = 30;
 		int middleComponentsWidth = 600;
 		this.middleButtonXPosition = ((gc.getWidth() / 2) - (middleComponentsWidth / 2));
-		int middleButtonYPositionStarting = 500;
+		this.middleButtonYPositionStarting = 500;
 
 		this.ft = new Font("Century Gothic", Font.BOLD, 20);
 		this.trueTypeFont = new TrueTypeFont(ft, true);
@@ -111,7 +112,7 @@ public class GuiLogin extends BasicGameState {
 		this.passwordTextField.render(gc, g);
 
 		g.setColor(Color.red);
-		g.drawString(errorText, middleButtonXPosition, middleButtonXPosition);
+		g.drawString(errorText, middleButtonXPosition, middleButtonYPositionStarting - 115);
 		g.drawAnimation(knightIdleAnimation, 100, 700);
 
 	}
@@ -130,7 +131,9 @@ public class GuiLogin extends BasicGameState {
 
 	@Override
 	public void keyReleased(int key, char c) {
-		this.errorText = this.usernameTextField.errorManagement(0);
+		if(!this.errorText.isEmpty()) {
+			this.errorText = this.usernameTextField.errorManagement(0);
+		}
 		Game.getInstance().setTheRegisterSucessfull(false);
 		StepsIfPasswordHasFocus(key, c);
 		StepsIfUsernameHasFocus(key, c);
@@ -234,8 +237,8 @@ public class GuiLogin extends BasicGameState {
 						if (this.jm.LoginAccount(this.account)) {
 							Game.getInstance().enterState(3, new FadeOutTransition(), new FadeInTransition());
 						} else {
-							this.errorText = this.usernameTextField.errorManagement(6);
 							resetTextFieldContent();
+							this.errorText = this.usernameTextField.errorManagement(6);
 						}
 					} catch (NoSuchAlgorithmException | SlickException e) {
 
