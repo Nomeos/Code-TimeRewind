@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.newdawn.slick.TrueTypeFont"/>
-    <fullyQualifiedTypeName name="java.awt.Font"/>
     <fullyQualifiedTypeName name="model.button.Button"/>
     <fullyQualifiedTypeName name="model.level.Level"/>
     <fullyQualifiedTypeName name="model.databaseManager.DatabaseCharacterManager"/>
@@ -60,4 +58,6 @@
     <fullyQualifiedTypeName name="org.newdawn.slick.gui.TextField"/>
     <fullyQualifiedTypeName name="model.button.SmallButton"/>
     <fullyQualifiedTypeName name="com.sun.java.swing.action.NewAction"/>
+    <fullyQualifiedTypeName name="junit.framework.Assert"/>
+    <fullyQualifiedTypeName name="org.newdawn.slick.SlickException"/>
 </qualifiedTypeNameHistroy>

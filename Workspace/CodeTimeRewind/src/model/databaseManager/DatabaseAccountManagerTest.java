@@ -1,5 +1,6 @@
 package model.databaseManager;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -9,7 +10,9 @@ import java.sql.Statement;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.newdawn.slick.SlickException;
 
+import junit.framework.Assert;
 import model.account.Account;
 
 public class DatabaseAccountManagerTest {
@@ -30,13 +33,11 @@ public class DatabaseAccountManagerTest {
 		this.jm.CloseDatabaseConnection();
 
 	}
-
-	
-
-	@Test
-	public void HashPasswordTest() throws NoSuchAlgorithmException {
-		account.hashPassword("test");
+	@Test 
+	public void DatabaseConnection(){
+		this.jm.OpenDatabaseConnection();
 	}
+
 
 	@Test
 	public void IsTheUserAlreadyExistFalse() {
@@ -50,7 +51,7 @@ public class DatabaseAccountManagerTest {
 			assertTrue(!this.jm.IsTheUserAlreadyExist(account));
 
 		} catch (NoSuchAlgorithmException e) {
-			
+
 		}
 	}
 
@@ -72,30 +73,22 @@ public class DatabaseAccountManagerTest {
 		this.setStatement(this.jm.OpenDatabaseConnection());
 		this.jm.DeleteDatabase();
 		this.jm = null;
-		
+
 		this.setStatement(null);
 
 	}
-
-
 
 	public Statement getStatement() {
 		return statement;
 	}
 
-
-
 	public void setStatement(Statement statement) {
 		this.statement = statement;
 	}
 
-
-
 	public String getSqlQuery() {
 		return sqlQuery;
 	}
-
-
 
 	public void setSqlQuery(String sqlQuery) {
 		this.sqlQuery = sqlQuery;
