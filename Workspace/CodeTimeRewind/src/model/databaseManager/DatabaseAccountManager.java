@@ -34,13 +34,6 @@ public class DatabaseAccountManager {
 
 	public void DatabaseCreation() {
 		
-		 String driver = "org.apache.derby.jdbc.EmbeddedDriver";
-		    try {
-		        Class.forName(driver); 
-		    } catch(java.lang.ClassNotFoundException e) {
-		        e.printStackTrace();
-		    }
-		
 		try {
 			this.connectionStatement = "jdbc:derby:codetimerewinddb;create=true";
 			this.connection = DriverManager.getConnection(this.connectionStatement);
@@ -307,34 +300,10 @@ public class DatabaseAccountManager {
 		}
 	}
 
-	/*
-	 * public void InsertAllSpritesIntoEachCharacters() { try { File characterFolder
-	 * = new File(System.getProperty("user.dir") + "/res/entity/"); for (String
-	 * characterName : characterFolder.list()) { File spriteFolder = new
-	 * File(System.getProperty("user.dir") + "/res/entity/" + characterName + "/");
-	 * for (String characterSpriteFolder : spriteFolder.list()) { if
-	 * (!(characterSpriteFolder == "NotUse")) { File spriteFiles = new
-	 * File(System.getProperty("user.dir") + "/res/entity/" + characterName + "/" +
-	 * characterSpriteFolder + "/"); for (String spritePng : spriteFiles.list()) {
-	 * if (spritePng.contains(".png")) { this.sqlQuery =
-	 * "INSERT INTO Character_Sprites(Character_Id,Sprite_Path,Type_Of_Sprite_Id)values((Select Character_Id from Characters where Name = '"
-	 * + characterName + "'),'/res/entity/" + characterName + "/" +
-	 * characterSpriteFolder + "/" + spritePng +
-	 * "',(SELECT Type_Of_Sprite_Id from Type_Of_Sprites where name = '" +
-	 * characterSpriteFolder + "'))"; this.statement.executeUpdate(this.sqlQuery); }
-	 * } } }
-	 * 
-	 * this.sqlQuery = "INSERT INTO Type_Of_Sprites(Name)values('Walk')";
-	 * this.statement.executeUpdate(this.sqlQuery); }
-	 * 
-	 * } catch (SQLException e) { e.printStackTrace(); } }
-	 */
-
 	public Statement OpenDatabaseConnection() {
 
 		try {
-
-			this.connectionStatement = "jdbc:derby:C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/codetimerewinddb";
+			this.connectionStatement = "jdbc:derby:codetimerewinddb";
 			this.connection = DriverManager.getConnection(this.connectionStatement);
 			this.statement = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			return this.statement;
