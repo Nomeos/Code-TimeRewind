@@ -33,6 +33,12 @@ public class DatabaseAccountManager {
 	private Statement statement;
 
 	public void DatabaseCreation() {
+		try {
+			String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+			Class.forName(driver);
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			this.connectionStatement = "jdbc:derby:codetimerewinddb;create=true";
