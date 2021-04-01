@@ -118,8 +118,8 @@
 		</section>
 	</section>
 	<section name="JarPackageWizard">
-		<item key="JarPackageWizardPage.EXPORT_CLASS_FILES" value="true"/>
-		<item key="JarPackageWizardPage.EXPORT_OUTPUT_FOLDER" value="false"/>
+		<item key="JarPackageWizardPage.EXPORT_CLASS_FILES" value="false"/>
+		<item key="JarPackageWizardPage.EXPORT_OUTPUT_FOLDER" value="true"/>
 		<item key="JarPackageWizardPage.EXPORT_JAVA_FILES" value="false"/>
 		<item key="JarPackageWizardPage.REFACTORINGS" value="false"/>
 		<item key="JarPackageWizardPage.COMPRESS" value="true"/>

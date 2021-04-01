@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="model.button.Button"/>
     <fullyQualifiedTypeName name="model.level.Level"/>
     <fullyQualifiedTypeName name="model.databaseManager.DatabaseCharacterManager"/>
     <fullyQualifiedTypeName name="java.awt.image.BufferedImage"/>
@@ -60,4 +59,5 @@
     <fullyQualifiedTypeName name="com.sun.java.swing.action.NewAction"/>
     <fullyQualifiedTypeName name="junit.framework.Assert"/>
     <fullyQualifiedTypeName name="org.newdawn.slick.SlickException"/>
+    <fullyQualifiedTypeName name="java.sql.DriverManager"/>
 </qualifiedTypeNameHistroy>

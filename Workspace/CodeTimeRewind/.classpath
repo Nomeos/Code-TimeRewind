@@ -10,8 +10,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/hamcrest-2.2.jar"/>
-	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/javax.persistence_2.2.1.v201807122140.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/junit-4.13.1.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/lombok-1.18.4.jar"/>
 	<classpathentry kind="lib" path="C:/Projet TPI/Code-TimeRewind/Workspace/CodeTimeRewind/libs/lwjgl.jar"/>
