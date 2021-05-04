@@ -17,6 +17,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import controller.CharacterController;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +29,7 @@ import model.button.SmallButton;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GuiCharacter extends BasicGameState {
+public class GuiCharacter extends Gui {
 
 	private Account player;
 	private int smallButtonHeight;
@@ -62,14 +63,17 @@ public class GuiCharacter extends BasicGameState {
 	private String centuryFont = "Century Gothic";
 	private String character_description;
 	private Button lobbyButton;
-	private List<Button> listOfButton;
+	private List<Button> listOfCurrentButton;
+	private CharacterController controller;
 
 	public GuiCharacter(int state) {
-		this.stateId = state;
+		super(state);
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		this.controller = new CharacterController(this);
+		this.buttonNeeded = new int[] { 8 };
 
 		this.lobbyButtonXPosition = 50;
 		this.lobbyButtonYPosition = (gc.getHeight() - 110);
@@ -92,10 +96,10 @@ public class GuiCharacter extends BasicGameState {
 		this.backgroundSort2 = new Image(backgroundSortPath);
 		this.backgroundSort3 = new Image(backgroundSortPath);
 
-		this.lobbyButton = new SmallButton(new Image("/res/buttons/LobbyButton.png"),
-				new Image("/res/buttons/LobbyButtonHit.png"), lobbyButtonXPosition, lobbyButtonYPosition);
-		this.listOfButton = new ArrayList<>();
-		this.listOfButton.add(lobbyButton);
+		this.listOfCurrentButton = new ArrayList<Button>();
+		for (int i : this.buttonNeeded) {
+			this.listOfCurrentButton.add(this.getListOfButtons().get(i));
+		}
 
 	}
 
@@ -107,7 +111,7 @@ public class GuiCharacter extends BasicGameState {
 		g.drawImage(backgroundSort2, this.lobbyButtonXPosition, this.lobbyButtonYPosition - 175);
 		g.drawImage(backgroundSort3, this.lobbyButtonXPosition, this.lobbyButtonYPosition - 90);
 
-		for (Button button : this.listOfButton) {
+		for (Button button : this.listOfCurrentButton) {
 			button.draw();
 		}
 
@@ -146,8 +150,8 @@ public class GuiCharacter extends BasicGameState {
 
 			g.drawString(this.player.getListOfOwnedCharacter().get(0).getOldExperience() + " / "
 					+ this.player.getListOfOwnedCharacter().get(0).getMaxExperience(), 195, 192);
-			
-			this.character_image.draw(850, 700,200,250);
+
+			this.character_image.draw(850, 700, 200, 250);
 
 		}
 
@@ -198,16 +202,24 @@ public class GuiCharacter extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (this.lobbyButton.isHovering(x, y) && button == 0) {
-			this.lobbyButton.setPressed(true);
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				b.setPressed(true);
+			}
 		}
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		this.lobbyButton.setPressed(false);
-		if (this.lobbyButton.isHovering(x, y) && button == 0) {
-			Game.getInstance().enterState(3, new FadeOutTransition(), new FadeInTransition());
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				b.setPressed(false);
+			}
+		}
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				this.controller.activeButton(b);
+			}
 		}
 	}
 

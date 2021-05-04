@@ -2,6 +2,8 @@ package model.button.bigButton;
 
 import org.newdawn.slick.Image;
 
+import model.button.BigButton;
+
 /**
  * this is a subclass from the BigButton class
  * 

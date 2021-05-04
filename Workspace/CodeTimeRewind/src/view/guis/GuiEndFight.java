@@ -9,23 +9,22 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import controller.EndFightController;
 import main.Game;
 import model.button.Button;
 import model.button.SmallButton;
 import model.entity.Character;
 
-public class GuiEndFight extends BasicGameState {
+public class GuiEndFight extends Gui {
 
 	private Image backgroundImage;
 	private Image title;
 	private Character currentCharacter;
 	private SmallButton leaveLevel;
-	private List<SmallButton> buttons;
+	private List<Button> listOfCurrentButton;
+	private EndFightController controller;
 	private List<Rectangle> experienceBars;
 
 	public GuiEndFight(int endFight) {
@@ -34,15 +33,16 @@ public class GuiEndFight extends BasicGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		int smallButtonXPosition = gc.getWidth() - 400;
-		int smallButtonYPosition = (gc.getHeight() - 110);
+
+		this.controller = new EndFightController(this);
+		this.buttonNeeded = new int[] {};
 		this.backgroundImage = new Image("/res/Night.png");
 		this.title = new Image("/res/zones/StageClear.png");
-		this.buttons = new ArrayList<SmallButton>();
-		this.leaveLevel = new SmallButton(new Image("/res/buttons/LeaveButton.png"),
-				new Image("/res/buttons/LeaveButtonHit.png"), smallButtonXPosition, smallButtonYPosition);
+		this.listOfCurrentButton = new ArrayList<Button>();
+		for (int i : this.buttonNeeded) {
+			this.listOfCurrentButton.add(this.getListOfButtons().get(i));
+		}
 
-		this.buttons.add(leaveLevel);
 		this.experienceBars = new ArrayList<Rectangle>();
 
 	}
@@ -118,9 +118,9 @@ public class GuiEndFight extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		for (Button button1 : this.buttons) {
-			if (button1.isHovering(x, y) && button == 0) {
-				button1.setPressed(true);
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				b.setPressed(true);
 			}
 		}
 
@@ -128,10 +128,14 @@ public class GuiEndFight extends BasicGameState {
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		for (Button button1 : this.buttons) {
-			button1.setPressed(false);
-			if (button1.isHovering(x, y) && button == 0) {
-				Game.getInstance().enterState(6, new FadeOutTransition(), new FadeInTransition());
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				b.setPressed(false);
+			}
+		}
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				this.controller.activeButton(b);
 			}
 		}
 	}

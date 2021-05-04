@@ -1,8 +1,6 @@
 package view.guis;
 
-
 import java.awt.Font;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,22 +11,19 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import controller.SignupController;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import main.Game;
-import model.account.Account;
+import lombok.Setter;
 import model.button.Button;
-import model.button.MediumButton;
-import model.button.SmallButton;
-import model.databaseManager.DatabaseAccountManager;
 import model.textfield.TextField;
 
+@Getter
+@Setter
 @NoArgsConstructor
-public class GuiSignup extends BasicGameState {
+public class GuiSignup extends Gui {
 	private int middleButtonXPosition;
 	private int requirementY;
 	private int stateId;
@@ -42,28 +37,26 @@ public class GuiSignup extends BasicGameState {
 	private String currentHiddenPassword = "";
 	private String currentHiddenPasswordConfirmation = "";
 	private String errorText = "";
-	private Account account;
-	private DatabaseAccountManager jm;
 	private TextField usernameTextField;
 	private TextField passwordTextField;
 	private TextField passwordConfirmationTextField;
-	private Button submitButton;
-	private Button loginButton;
-	private List<Button> listOfButton;
+
+	private List<Button> listOfCurrentButton;
+	private SignupController controller;
 
 	public GuiSignup(int state) {
-		this.stateId = state;
+		super(state);
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		this.controller = new SignupController(this);
+		this.buttonNeeded = new int[] {2,4};
 		int textFieldHeight = 30;
 		int middleComponentsWidth = 600;
-		int loginButtonXPosition = (gc.getWidth() - 400);
-		int loginButtonYPosition = (gc.getHeight() - 110);
 		int middleButtonYPositionStarting = 380;
 		this.trueTypeFont = new TrueTypeFont(new Font("Century Gothic", Font.BOLD, 20), true);
-		
+
 		this.middleButtonXPosition = ((gc.getWidth() / 2) - (middleComponentsWidth / 2));
 
 		this.passwordTextField = new TextField(gc, trueTypeFont, middleButtonXPosition,
@@ -74,17 +67,17 @@ public class GuiSignup extends BasicGameState {
 				middleButtonYPositionStarting + 140, middleComponentsWidth, textFieldHeight);
 
 		this.requirementY = passwordConfirmationTextField.getY() + passwordConfirmationTextField.getHeight() + 10;
-		
-		this.loginButton = new SmallButton(new Image("/res/buttons/LoginButton.png"),
-				new Image("/res/buttons/LoginButtonHit.png"), loginButtonXPosition, loginButtonYPosition);
-		this.submitButton = new MediumButton(new Image("/res/buttons/SubmitButton.png"),
-				new Image("/res/buttons/SubmitButtonHit.png"), middleButtonXPosition, requirementY + 140);
-		this.listOfButton = new ArrayList<Button>();
-		this.listOfButton.add(loginButton);
-		this.listOfButton.add(submitButton);
 
-		this.account = new Account();
-		this.jm = new DatabaseAccountManager();
+		this.listOfCurrentButton = new ArrayList<Button>();
+		for(int i :this.buttonNeeded) {
+			if (i == 2) {
+				this.getListOfButtons().get(i).setY(700);
+				this.getListOfButtons().get(i).setX(660);
+				this.listOfCurrentButton.add(this.getListOfButtons().get(i));
+			}else {
+				this.listOfCurrentButton.add(this.getListOfButtons().get(i));
+			}
+		}
 
 		this.usernameTextField.setText("");
 		this.passwordTextField.setText("");
@@ -103,7 +96,8 @@ public class GuiSignup extends BasicGameState {
 		// Draw the background image
 		g.drawImage(backgroundImage, 0, 0);
 		// Draw the buttons
-		for (Button button : this.listOfButton) button.draw();
+		for (Button button : this.listOfCurrentButton)
+			button.draw();
 		// Draw the three labels in white
 		g.setColor(Color.white);
 		g.drawString("* Enter your username : ", middleButtonXPosition, this.usernameTextField.getY() - 20);
@@ -139,14 +133,14 @@ public class GuiSignup extends BasicGameState {
 		// Draw the string for every error in the page
 		g.setColor(Color.red);
 		g.drawString(errorText, this.usernameTextField.getX(), this.usernameTextField.getY() - 40);
-		//Draw the standing character animaton
+		// Draw the standing character animaton
 		g.drawAnimation(knightIdleAnimation, 100, 700);
 
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		
+
 	}
 
 	@Override
@@ -241,60 +235,25 @@ public class GuiSignup extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (this.submitButton.isHovering(x, y) && button == 0) {
-			this.submitButton.setPressed(true);
-		}
-		if (this.loginButton.isHovering(x, y) && button == 0) {
-			this.loginButton.setPressed(true);
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				b.setPressed(true);
+			}
 		}
 
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		this.submitButton.setPressed(false);
-		this.loginButton.setPressed(false);
-		// Check if the button is hovering and if the button is clicked
-		if (this.submitButton.isHovering(x, y) && button == 0) {
-			// Check if the TextFields are fill
-			if (this.usernameTextField.getText() != "" && this.passwordTextField.getText() != ""
-					&& this.passwordConfirmationTextField.getText() != "") {
-				// Check if the username respect the length requirement.
-				if (usernameTextField.getText().length() <= 12 && usernameTextField.getText().length() >= 4) {
-					// check if the passwords TextField are equals
-					if (this.currentPassword.equals(currentPasswordConfirmation)) {
-						this.account.setUsername(this.usernameTextField.getText());
-						try {
-							this.account.setPasswordHash(this.account.hashPassword(this.currentPassword));
-							if (this.jm.RegisterAccount(account)) {
-								Game.getInstance().setTheRegisterSucessfull(true);
-								resetTextFieldContent();
-								Game.getInstance().enterState(1, new FadeOutTransition(), new FadeInTransition());
-							} else {
-								this.errorText = this.usernameTextField.errorManagement(4);
-								resetTextFieldContent();
-							}
-
-						} catch (NoSuchAlgorithmException | SlickException e) {
-
-							e.printStackTrace();
-						}
-					} else {
-						this.errorText = this.usernameTextField.errorManagement(3);
-					}
-				} else {
-					this.errorText = this.usernameTextField.errorManagement(1);
-
-				}
-			} else {
-				this.errorText = this.usernameTextField.errorManagement(2);
-
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				b.setPressed(false);
 			}
 		}
-		if (this.loginButton.isHovering(x, y) && button == 0) {
-			this.errorText = this.usernameTextField.errorManagement(0);
-			resetTextFieldContent();
-			Game.getInstance().enterState(1, new FadeOutTransition(), new FadeInTransition());
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				this.controller.activeButton(b);
+			}
 		}
 
 		if (isHoveringTextField(this.usernameTextField, x, y) && button == 0) {
@@ -340,11 +299,6 @@ public class GuiSignup extends BasicGameState {
 		return s != null && s.matches("^[a-zA-Z0-9 +@\\\"*$#%&()=?'^~!{}\\/\\\\.:,;°§_<>]*");
 	}
 
-	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return this.stateId;
-	}
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {

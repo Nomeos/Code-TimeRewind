@@ -8,8 +8,8 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import main.Game;
 import model.button.Button;
+import model.button.MediumButton;
 import model.button.SmallButton;
-import model.button.mediumButton.MediumButton;
 import view.guis.GuiSignup;
 
 /**

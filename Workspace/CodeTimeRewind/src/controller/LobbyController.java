@@ -1,8 +1,8 @@
 package controller;
 
+import model.button.BigButton;
 import model.button.Button;
 import model.button.SmallButton;
-import model.button.bigButton.BigButton;
 import view.guis.GuiLobby;
 
 /**

@@ -13,52 +13,41 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import controller.LobbyController;
 import main.Game;
 import model.account.Account;
 import model.button.BigButton;
 import model.button.Button;
 import model.button.SmallButton;
 
-public class GuiLobby extends BasicGameState {
+public class GuiLobby extends Gui {
 	private int stateID;
 	private String username;
 	private int level;
 	private Account playerAccount;
 	private Image backgroundImage;
-	private Button characterButton;
-	private Button inventoryButton;
-	private Button adventureButton;
-	private List<Button> listOfButton;
+
+	private List<Button> listOfCurrentButton;
+	private LobbyController controller;
 
 	public GuiLobby() {
 	}
 
 	public GuiLobby(int lobby) {
-		this.stateID = lobby;
+		super(lobby);
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 
-		int characterButtonXPosition = 50;
-		int smallButtonYPosition = (gc.getHeight() - 110);
-		int inventoryButtonXPosition = characterButtonXPosition + 50;
-		int adventureButtonXPosition = (gc.getWidth() / 2) - (350 / 2);
-		int adventureButtonYPosition = (gc.getHeight() / 2) - (350 / 2);
+		this.controller = new LobbyController(this);
+		this.buttonNeeded = new int[] { 5, 6, 7 };
+this.backgroundImage = this.getListOfBackgrounds().get(1);
+		this.listOfCurrentButton = new ArrayList<Button>();
+		for (int i : this.buttonNeeded) {
+			this.listOfCurrentButton.add(this.getListOfButtons().get(i));
 
-		this.characterButton = new SmallButton(new Image("/res/buttons/CharacterButton.png"),
-				new Image("/res/buttons/CharacterButtonHit.png"), characterButtonXPosition, smallButtonYPosition);
-		this.inventoryButton = new SmallButton(new Image("/res/buttons/InventoryButton.png"),
-				new Image("/res/buttons/InventoryButtonHit.png"),
-				inventoryButtonXPosition + this.characterButton.getWidth(), smallButtonYPosition);
-		this.adventureButton = new BigButton(new Image("/res/buttons/AdventureButton.png"),
-				new Image("/res/buttons/AdventureButtonHit.png"), adventureButtonXPosition, adventureButtonYPosition);
-		this.backgroundImage = new Image("/res/Half_Night.png");
-
-		this.listOfButton = new ArrayList<Button>();
-		this.listOfButton.add(adventureButton);
-		this.listOfButton.add(characterButton);
-		this.listOfButton.add(inventoryButton);
+		}
 
 		this.username = "";
 		this.level = 0;
@@ -67,7 +56,7 @@ public class GuiLobby extends BasicGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawImage(backgroundImage, 0, 0);
-		for (Button button : this.listOfButton)
+		for (Button button : this.listOfCurrentButton)
 			button.draw();
 
 		g.setColor(Color.white);
@@ -104,31 +93,26 @@ public class GuiLobby extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (this.characterButton.isHovering(x, y) && button == 0) {
-			this.characterButton.setPressed(true);
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				b.setPressed(true);
+			}
 		}
-		if (this.inventoryButton.isHovering(x, y) && button == 0) {
-			this.inventoryButton.setPressed(true);
-		}
-		if (this.adventureButton.isHovering(x, y) && button == 0) {
-			this.adventureButton.setPressed(true);
-		}
+
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		this.characterButton.setPressed(false);
-		this.inventoryButton.setPressed(false);
-		this.adventureButton.setPressed(false);
 
-		if (this.characterButton.isHovering(x, y) && button == 0) {
-			Game.getInstance().enterState(4, new FadeOutTransition(), new FadeInTransition());
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				b.setPressed(false);
+			}
 		}
-		if (this.inventoryButton.isHovering(x, y) && button == 0) {
-
-		}
-		if (this.adventureButton.isHovering(x, y) && button == 0) {
-			Game.getInstance().enterState(5, new FadeOutTransition(), new FadeInTransition());
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				this.controller.activeButton(b);
+			}
 		}
 	}
 
@@ -138,9 +122,6 @@ public class GuiLobby extends BasicGameState {
 
 	}
 
-	@Override
-	public int getID() {
-		return this.stateID;
-	}
+
 
 }

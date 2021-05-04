@@ -14,14 +14,14 @@ import org.newdawn.slick.state.StateBasedGame;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import model.button.BigButton;
 import model.button.Button;
 import model.button.LevelButton;
+import model.button.MediumButton;
 import model.button.SmallButton;
-import model.button.bigButton.BigButton;
 import model.button.bigButton.BigChapterOneButton;
 import model.button.bigButton.BigChapterThreeButton;
 import model.button.bigButton.BigChapterTwoButton;
-import model.button.mediumButton.MediumButton;
 import model.button.mediumButton.MediumExitButton;
 import model.button.mediumButton.MediumPlayButton;
 

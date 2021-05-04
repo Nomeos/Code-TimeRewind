@@ -2,6 +2,8 @@ package model.button.mediumButton;
 
 import org.newdawn.slick.Image;
 
+import model.button.MediumButton;
+
 /**
  * 
  * this is a subclass from the MediumButton class
@@ -20,6 +22,6 @@ public class MediumPlayButton extends MediumButton {
 	 * @param imageHit this is the image if the the button is press
 	 */
 	public MediumPlayButton(Image image, Image imageHit) {
-		super(X, Y, image, imageHit);
+		super(image, imageHit, X, Y);
 	}
 }

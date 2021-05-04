@@ -73,8 +73,8 @@ public class GuiBattle implements ComponentListener {
 
 		for (int i = 0; i <= 2; i++) {
 			try {
-				this.listOfButton.add(new LevelButton(new Image("/res/buttons/SortInLevels.png"),
-						new Image("/res/buttons/SortInLevelsHit.png")));
+				this.listOfButton.add(new LevelButton(new Image("/res/buttons/Button_14.png"),
+						new Image("/res/buttons/Button_14_Hit.png")));
 				if (i == 0) {
 					this.listOfButton.get(i).setX(gc.getWidth() - 142);
 					this.listOfButton.get(i).setY(gc.getHeight() - 154);

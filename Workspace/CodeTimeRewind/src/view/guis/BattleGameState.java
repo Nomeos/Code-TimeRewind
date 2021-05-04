@@ -30,7 +30,7 @@ import model.level.Level;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BattleGameState extends BasicGameState {
+public class BattleGameState extends Gui {
 
 	private int stateId;
 

@@ -13,7 +13,7 @@ public class BigButton extends Button {
 	protected static final int WIDTH = 350;
 	protected static final int HEIGHT = 350;
 
-	public BigButton(Image image, Image imageHit, int x, int y) {
+	public BigButton(Image image, Image imageHit, float x, float y) {
 		super(image, imageHit, x, y, WIDTH, HEIGHT);
 	}
 

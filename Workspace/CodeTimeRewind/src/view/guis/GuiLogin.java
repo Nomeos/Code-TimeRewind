@@ -1,7 +1,6 @@
 package view.guis;
 
 import java.awt.Font;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,22 +11,22 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import controller.LoginController;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import main.Game;
 import model.account.Account;
 import model.button.Button;
-import model.button.MediumButton;
-import model.button.SmallButton;
 import model.databaseManager.DatabaseAccountManager;
 import model.textfield.TextField;
 
+@Getter
+@Setter
 @NoArgsConstructor
-public class GuiLogin extends BasicGameState {
+public class GuiLogin extends Gui {
 	private int middleButtonXPosition;
 	private int middleButtonYPositionStarting;
 	private int stateId;
@@ -44,16 +43,18 @@ public class GuiLogin extends BasicGameState {
 	private TextField passwordTextField;
 	private Image backgroundImage;
 	private Animation knightIdleAnimation;
-	private Button submitButton;
-	private Button signupButton;
-	private List<Button> listOfButton;
+
+	private List<Button> listOfCurrentButton;
+	private LoginController controller;
 
 	public GuiLogin(int state) {
-		this.stateId = state;
+		super(state);
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		this.controller = new LoginController(this);
+		this.buttonNeeded = new int[] { 2, 3 };
 
 		int textFieldHeight = 30;
 		int middleComponentsWidth = 600;
@@ -69,20 +70,18 @@ public class GuiLogin extends BasicGameState {
 		this.usernameTextField = new TextField(gc, trueTypeFont, middleButtonXPosition,
 				middleButtonYPositionStarting - 70, middleComponentsWidth, textFieldHeight);
 
-		this.signupButton = new SmallButton(new Image("/res/buttons/SignupButton.png"),
-				new Image("/res/buttons/SignupButtonHit.png"), (gc.getWidth() - 400), (gc.getHeight() - 110));
+		this.listOfCurrentButton = new ArrayList<Button>();
+		for (int i : this.buttonNeeded) {
+			if (i == 2) {
+				this.getListOfButtons().get(i).setY(550);
+				this.getListOfButtons().get(i).setX(660);
+				this.listOfCurrentButton.add(this.getListOfButtons().get(i));
+			} else {
+				this.listOfCurrentButton.add(this.getListOfButtons().get(i));
+			}
+		}
 
-		this.submitButton = new MediumButton(new Image("/res/buttons/SubmitButton.png"),
-				new Image("/res/buttons/SubmitButtonHit.png"), middleButtonXPosition,
-				this.passwordTextField.getY() + 50);
-		this.listOfButton = new ArrayList<Button>();
-		this.listOfButton.add(signupButton);
-		this.listOfButton.add(submitButton);
-		
-		this.account = new Account();
-		this.jm = new DatabaseAccountManager();
-
-		this.backgroundImage = new Image("/res/Main_Screen_Background.png");
+		this.backgroundImage = this.getListOfBackgrounds().get(0);
 
 		Image[] knightIdle = new Image[6];
 		for (int i = 1; i < 7; i++)
@@ -94,7 +93,8 @@ public class GuiLogin extends BasicGameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawImage(backgroundImage, 0, 0);
-		for (Button button : this.listOfButton) button.draw();
+		for (Button button : this.listOfCurrentButton)
+			button.draw();
 		g.setColor(Color.white);
 
 		g.drawString("* Enter your username : ", middleButtonXPosition, this.usernameTextField.getY() - 25);
@@ -124,14 +124,10 @@ public class GuiLogin extends BasicGameState {
 		}
 	}
 
-	@Override
-	public int getID() {
-		return this.stateId;
-	}
 
 	@Override
 	public void keyReleased(int key, char c) {
-		if(!this.errorText.isEmpty()) {
+		if (!this.errorText.isEmpty()) {
 			this.errorText = this.usernameTextField.errorManagement(0);
 		}
 		Game.getInstance().setTheRegisterSucessfull(false);
@@ -207,11 +203,10 @@ public class GuiLogin extends BasicGameState {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (this.submitButton.isHovering(x, y) && button == 0) {
-			this.submitButton.setPressed(true);
-		}
-		if (this.signupButton.isHovering(x, y) && button == 0) {
-			this.signupButton.setPressed(true);
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				b.setPressed(true);
+			}
 		}
 
 	}
@@ -223,42 +218,15 @@ public class GuiLogin extends BasicGameState {
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		this.signupButton.setPressed(false);
-		this.submitButton.setPressed(false);
-		String username = this.usernameTextField.getText();
-
-		if (this.submitButton.isHovering(x, y) && button == 0) {
-			if (!username.isEmpty() && !this.currentPassword.isEmpty()) {
-				if (username.length() <= 12 && username.length() >= 4) {
-					this.account.setUsername(username);
-					try {
-						this.account.setPassword(currentPassword);
-						this.account.setPasswordHash(this.account.hashPassword(this.currentPassword));
-						if (this.jm.LoginAccount(this.account)) {
-							Game.getInstance().enterState(3, new FadeOutTransition(), new FadeInTransition());
-						} else {
-							resetTextFieldContent();
-							this.errorText = this.usernameTextField.errorManagement(6);
-						}
-					} catch (NoSuchAlgorithmException | SlickException e) {
-
-						e.printStackTrace();
-					}
-				} else {
-					this.errorText = this.usernameTextField.errorManagement(1);
-
-				}
-			} else {
-				this.errorText = this.usernameTextField.errorManagement(2);
-
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				b.setPressed(false);
 			}
-
 		}
-		if (this.signupButton.isHovering(x, y) && button == 0) {
-			this.errorText = this.usernameTextField.errorManagement(0);
-			resetTextFieldContent();
-			Game.getInstance().setTheRegisterSucessfull(false);
-			Game.getInstance().enterState(2, new FadeOutTransition(), new FadeInTransition());
+		for (Button b : this.listOfCurrentButton) {
+			if (b.isHovering(x, y) && button == 0) {
+				this.controller.activeButton(b);
+			}
 		}
 	}
 
@@ -269,7 +237,7 @@ public class GuiLogin extends BasicGameState {
 		this.currentPassword = "";
 		this.currentUsername = "";
 	}
-	
+
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		// Do nothing because no action while use the mouse mouvement feature.

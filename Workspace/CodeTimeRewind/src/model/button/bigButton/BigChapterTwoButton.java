@@ -5,6 +5,7 @@ import org.newdawn.slick.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import model.button.BigButton;
 
 /**
  * this is a subclass from the Button class
