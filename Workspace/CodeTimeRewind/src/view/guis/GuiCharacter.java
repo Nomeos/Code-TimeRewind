@@ -12,10 +12,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import controller.CharacterController;
 import lombok.Getter;
@@ -24,7 +21,6 @@ import lombok.Setter;
 import main.Game;
 import model.account.Account;
 import model.button.Button;
-import model.button.SmallButton;
 
 @Getter
 @Setter

@@ -3,6 +3,9 @@ package model.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -22,7 +25,11 @@ import model.spell.Spell;
 @NoArgsConstructor
 @Getter
 @Setter
+@javax.persistence.Entity
 public class Entity implements Comparable<Object> {
+	@Id
+	@GeneratedValue
+	protected long id;
 	protected String name;
 	protected int level;
 	protected int health;
@@ -221,7 +228,7 @@ public class Entity implements Comparable<Object> {
 	}
 
 	public void render(int x, int y, Graphics g) {
-		if(isInBattle) {
+		if (isInBattle) {
 			this.x = x;
 			this.y = y;
 			this.image.draw(x, y);
@@ -242,15 +249,14 @@ public class Entity implements Comparable<Object> {
 					i += 20;
 				}
 			}
-		}else {
+		} else {
 			this.x = x;
 			this.y = y;
 			this.image.draw(x, y);
-			this.lifeBars.draw(x + this.width, y + (this.height/2) + 20);
-			g.drawString("Lv. " + this.level, x + this.width, y + (this.height/2));
-			
+			this.lifeBars.draw(x + this.width, y + (this.height / 2) + 20);
+			g.drawString("Lv. " + this.level, x + this.width, y + (this.height / 2));
+
 		}
-		
 
 	}
 

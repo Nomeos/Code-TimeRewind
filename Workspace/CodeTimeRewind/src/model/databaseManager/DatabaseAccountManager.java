@@ -19,8 +19,8 @@ import org.newdawn.slick.SlickException;
 import lombok.NoArgsConstructor;
 import main.Game;
 import model.account.Account;
-import model.entity.Character;
 import model.entity.Enemy;
+import model.entity.Character;
 import model.level.Level;
 
 @NoArgsConstructor

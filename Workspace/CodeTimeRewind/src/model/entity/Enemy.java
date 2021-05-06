@@ -11,6 +11,7 @@ import model.image.LifeBars;
 @Getter
 @Setter
 @NoArgsConstructor
+@javax.persistence.Entity
 public class Enemy extends Entity {
 	
 	private Image enemy;

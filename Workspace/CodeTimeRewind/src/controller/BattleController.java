@@ -1,4 +1,4 @@
-package model.fight;
+package controller;
 
 import java.util.List;
 
@@ -12,8 +12,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import main.Game;
 import model.animation.AnimationListener;
-import model.entity.Character;
 import model.entity.Enemy;
+import model.fight.BattleCommand;
+import model.entity.Character;
 import view.guis.BattleGameState;
 
 @Getter

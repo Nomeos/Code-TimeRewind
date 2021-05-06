@@ -10,9 +10,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import controller.BattleController;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,11 +20,10 @@ import main.Game;
 import model.animation.BezierPath;
 import model.animation.PathAnimation;
 import model.databaseManager.DatabaseCharacterManager;
-import model.entity.Character;
 import model.entity.Enemy;
 import model.entity.Entity;
+import model.entity.Character;
 import model.fight.BattleCommand;
-import model.fight.BattleController;
 import model.level.Level;
 
 @NoArgsConstructor

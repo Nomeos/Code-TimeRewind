@@ -1,6 +1,5 @@
 package model.databaseManager;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -10,9 +9,7 @@ import java.sql.Statement;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.newdawn.slick.SlickException;
 
-import junit.framework.Assert;
 import model.account.Account;
 
 public class DatabaseAccountManagerTest {

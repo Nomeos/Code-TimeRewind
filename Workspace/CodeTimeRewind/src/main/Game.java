@@ -8,7 +8,15 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import model.account.Account;
 import model.level.Level;
-import view.guis.*;
+import view.guis.BattleGameState;
+import view.guis.GuiAdventure;
+import view.guis.GuiChapters;
+import view.guis.GuiCharacter;
+import view.guis.GuiEndFight;
+import view.guis.GuiLobby;
+import view.guis.GuiLogin;
+import view.guis.GuiMenu;
+import view.guis.GuiSignup;
 
 
 public class Game extends StateBasedGame {

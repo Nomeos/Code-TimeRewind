@@ -13,6 +13,7 @@ import model.image.LifeBars;
 @NoArgsConstructor
 public class Character extends Entity {
 
+	
 	private String description;
 	private int oldExperience;
 	private int maxExperience;
