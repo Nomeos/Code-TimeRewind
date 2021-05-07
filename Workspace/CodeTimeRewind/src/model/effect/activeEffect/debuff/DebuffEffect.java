@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.effect.activeEffect.ActiveEffect;
-import model.entity.Entity;
+import model.livingEntity.LivingEntity;
 
 @NoArgsConstructor
 @Getter
@@ -26,7 +26,7 @@ public class DebuffEffect extends ActiveEffect {
 
 	}
 
-	public void applyEffect(Entity target) {
+	public void applyEffect(LivingEntity target) {
 
 	}
 

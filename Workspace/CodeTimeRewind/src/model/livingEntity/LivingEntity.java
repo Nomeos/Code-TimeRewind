@@ -1,10 +1,14 @@
-package model.entity;
+package model.livingEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -26,47 +30,81 @@ import model.spell.Spell;
 @Getter
 @Setter
 @javax.persistence.Entity
-public class Entity implements Comparable<Object> {
+@Table(name = "LivingEntities")
+public class LivingEntity implements Comparable<Object> {
 	@Id
-	@GeneratedValue
-	protected long id;
-	protected String name;
-	protected int level;
-	protected int health;
-	protected int defense;
-	protected int attack;
-	protected int speed;
-	protected int maxDefense;
-	protected int maxAttack;
-	protected int maxSpeed;
-	protected List<Spell> spells;
-	protected List<DebuffEffect> activeDebuffs;
-	protected List<BuffEffect> activeBuffs;
-	protected int x;
-	protected int y;
-	protected int width;
-	protected int height;
-	protected int maxHealth;
-	protected LifeBars lifeBars;
-	protected float alpha = 1;
-	protected PathAnimation animation;
-	protected boolean done = false;
-	protected Image image;
-	protected int currentSpell;
-	private List<Entity> listOfEntity;
-	protected boolean isFadingOut;
-	protected boolean isInBattle = true;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "LivingEntity_Id")
+	protected int id;
 
-	public Entity(String name, int level, int health, int defense, int attack, int speed, int x, int y, int width,
-			int height, Image image) throws SlickException {
+	@Column(name = "Name")
+	protected String name;
+
+	protected int level;
+
+	@Column(name = "Health")
+	protected int health;
+
+	@Column(name = "Defense")
+	protected int defense;
+
+	@Column(name = "Attack")
+	protected int attack;
+
+	@Column(name = "Speed")
+	protected int speed;
+
+	@Transient
+	protected int maxDefense;
+	@Transient
+	protected int maxAttack;
+	@Transient
+	protected int maxSpeed;
+	@Transient
+	protected List<Spell> spells;
+	@Transient
+	protected List<DebuffEffect> activeDebuffs;
+	@Transient
+	protected List<BuffEffect> activeBuffs;
+	@Transient
+	protected int x;
+	@Transient
+	protected int y;
+	@Transient
+	protected int width;
+	@Transient
+	protected int height;
+	@Transient
+	protected int maxHealth;
+	@Transient
+	protected LifeBars lifeBars;
+	@Transient
+	protected float alpha = 1;
+	@Transient
+	protected PathAnimation animation;
+	@Transient
+	protected boolean done = false;
+	@Transient
+	protected Image image;
+	@Transient
+	protected int currentSpell;
+	@Transient
+	private List<LivingEntity> listOfEntity;
+	@Transient
+	protected boolean isFadingOut;
+	@Transient
+	protected boolean isInBattle = true;
+	@Transient
+	protected String description;
+
+	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, int width, int height,
+			Image image) throws SlickException {
 		this.name = name;
 		this.level = level;
 		this.health = health;
 		this.defense = defense;
 		this.attack = attack;
 		this.speed = speed;
-		this.x = x;
-		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.maxHealth = health;
@@ -79,12 +117,7 @@ public class Entity implements Comparable<Object> {
 
 	}
 
-	public Entity(List<Spell> spells) {
-		this.spells = spells;
-	}
-
-	public Entity(String name, int level, int health, int defense, int attack, int speed, int x, int y, int width,
-			int height) {
+	public LivingEntity(String name, int level, int health, int defense, int attack, int speed) {
 		super();
 		this.name = name;
 		this.level = level;
@@ -92,8 +125,30 @@ public class Entity implements Comparable<Object> {
 		this.defense = defense;
 		this.attack = attack;
 		this.speed = speed;
-		this.x = x;
-		this.y = y;
+	}
+	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, String description) {
+		super();
+		this.name = name;
+		this.level = level;
+		this.health = health;
+		this.defense = defense;
+		this.attack = attack;
+		this.speed = speed;
+		this.description = description;
+	}
+
+	public LivingEntity(List<Spell> spells) {
+		this.spells = spells;
+	}
+
+	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, int width, int height) {
+		super();
+		this.name = name;
+		this.level = level;
+		this.health = health;
+		this.defense = defense;
+		this.attack = attack;
+		this.speed = speed;
 		this.width = width;
 		this.height = height;
 		this.activeBuffs = new ArrayList<BuffEffect>();
@@ -119,7 +174,7 @@ public class Entity implements Comparable<Object> {
 		}
 	}
 
-	public void dealDamage(Entity c, Entity e) {
+	public void dealDamage(LivingEntity c, LivingEntity e) {
 		activateCurrentSpell(c, e);
 		effectThatApplyBeforeDamage(c, e);
 		int result = c.getAttack();
@@ -132,7 +187,7 @@ public class Entity implements Comparable<Object> {
 		System.out.println(result2);
 	}
 
-	private void effectThatApplyBeforeDamage(Entity c, Entity e) {
+	private void effectThatApplyBeforeDamage(LivingEntity c, LivingEntity e) {
 		if (c.getActiveDebuffs() != null) {
 			for (DebuffEffect d : c.getActiveDebuffs()) {
 				if (d.isActivatedBeginning()) {
@@ -149,7 +204,7 @@ public class Entity implements Comparable<Object> {
 		}
 	}
 
-	private void effectThatApplyAfterDamage(Entity c, Entity e) {
+	private void effectThatApplyAfterDamage(LivingEntity c, LivingEntity e) {
 		if (this.activeDebuffs != null) {
 			for (DebuffEffect d : this.activeDebuffs) {
 				if (!d.isAppliedBeginning()) {
@@ -167,7 +222,7 @@ public class Entity implements Comparable<Object> {
 		}
 	}
 
-	private void minusEffectCooldown(Entity currentEntity) {
+	private void minusEffectCooldown(LivingEntity currentEntity) {
 		if (currentEntity.getActiveDebuffs() != null) {
 			for (DebuffEffect d : currentEntity.getActiveDebuffs()) {
 				d.setNumberTurnEffectActive(d.getNumberTurnEffectActive() - 1);
@@ -189,7 +244,7 @@ public class Entity implements Comparable<Object> {
 		}
 	}
 
-	private void activateCurrentSpell(Entity c, Entity e) {
+	private void activateCurrentSpell(LivingEntity c, LivingEntity e) {
 		int i = 1;
 		for (Spell s : this.spells) {
 			if (i == this.currentSpell) {
@@ -216,7 +271,7 @@ public class Entity implements Comparable<Object> {
 		return bool;
 	}
 
-	private void activateCurrentSpell(Entity c, Entity e, int damageInflicated) {
+	private void activateCurrentSpell(LivingEntity c, LivingEntity e, int damageInflicated) {
 		int i = 1;
 		for (Spell s : this.spells) {
 			if (i == this.currentSpell) {
@@ -276,7 +331,7 @@ public class Entity implements Comparable<Object> {
 
 	@Override
 	public int compareTo(Object o) {
-		Entity e = (Entity) o;
+		LivingEntity e = (LivingEntity) o;
 		return this.speed - e.speed;
 	}
 

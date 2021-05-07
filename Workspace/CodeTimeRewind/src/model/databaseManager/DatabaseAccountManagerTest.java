@@ -6,17 +6,22 @@ import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Statement;
 
+import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import lombok.Getter;
+import lombok.Setter;
 import model.account.Account;
 
+@Getter
+@Setter
 public class DatabaseAccountManagerTest {
 
 	private DatabaseAccountManager jm;
 	private Account account;
-	private Statement statement;
+	private Session session;
 	private String sqlQuery;
 
 	File file;
@@ -26,7 +31,7 @@ public class DatabaseAccountManagerTest {
 		this.jm = new DatabaseAccountManager();
 		this.account = new Account();
 		this.jm.DatabaseCreation();
-		this.setStatement(jm.OpenDatabaseConnection());
+		this.setSession(jm.OpenDatabaseConnection());
 		this.jm.CloseDatabaseConnection();
 
 	}
@@ -67,27 +72,11 @@ public class DatabaseAccountManagerTest {
 	@After
 	public void Clean() {
 		this.account = null;
-		this.setStatement(this.jm.OpenDatabaseConnection());
+		this.setSession(this.jm.OpenDatabaseConnection());
 		this.jm.DeleteDatabase();
 		this.jm = null;
 
-		this.setStatement(null);
+		this.setSession(null);
 
-	}
-
-	public Statement getStatement() {
-		return statement;
-	}
-
-	public void setStatement(Statement statement) {
-		this.statement = statement;
-	}
-
-	public String getSqlQuery() {
-		return sqlQuery;
-	}
-
-	public void setSqlQuery(String sqlQuery) {
-		this.sqlQuery = sqlQuery;
 	}
 }

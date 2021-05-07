@@ -2,7 +2,7 @@ package model.effect.activeEffect.buff;
 
 import lombok.Getter;
 import lombok.Setter;
-import model.entity.Entity;
+import model.livingEntity.LivingEntity;
 
 @Getter
 @Setter
@@ -19,7 +19,7 @@ public class DefenseImprove extends BuffEffect {
 	}
 
 	@Override
-	public void applyEffect(Entity target) {
+	public void applyEffect(LivingEntity target) {
 		target.setDefense(Math.round(target.getDefense() + (target.getDefense() * DEFENSEIMPROVEMENT))); 
 	}
 

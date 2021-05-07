@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.effect.activeEffect.ActiveEffect;
-import model.entity.Entity;
+import model.livingEntity.LivingEntity;
 
 
 @NoArgsConstructor
@@ -18,6 +18,6 @@ public abstract class BuffEffect extends ActiveEffect {
 		super(displayEffect, numberTurnEffectActive, isAppliedBeginning);
 		this.isActivatedBeginning = isActivatedBeginning;
 	}
-	public abstract void applyEffect(Entity target);
+	public abstract void applyEffect(LivingEntity target);
 
 }

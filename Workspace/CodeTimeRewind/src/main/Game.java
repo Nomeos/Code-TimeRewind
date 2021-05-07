@@ -7,7 +7,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import model.account.Account;
-import model.level.Level;
+import model.stage.Stage;
 import view.guis.BattleGameState;
 import view.guis.GuiAdventure;
 import view.guis.GuiChapters;
@@ -33,7 +33,7 @@ public class Game extends StateBasedGame {
 	private int currentLevel;
 	private static Game instance;
 	private Account playerAccount;
-	private List<List<Level>> ListOfChapters;
+	private List<List<Stage>> ListOfChapters;
 	private boolean isTheRegisterSucessfull = false;
 	
 
@@ -104,11 +104,11 @@ public class Game extends StateBasedGame {
 	public void setPlayerAccount(Account user) {
 		this.playerAccount = user;
 	}
-	public List<List<Level>> getListOfChapters() {
+	public List<List<Stage>> getListOfChapters() {
 		return ListOfChapters;
 	}
 
-	public void setListOfChapters(List<List<Level>> listOfChapters) {
+	public void setListOfChapters(List<List<Stage>> listOfChapters) {
 		ListOfChapters = listOfChapters;
 	}
 

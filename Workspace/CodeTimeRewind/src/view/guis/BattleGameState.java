@@ -20,11 +20,11 @@ import main.Game;
 import model.animation.BezierPath;
 import model.animation.PathAnimation;
 import model.databaseManager.DatabaseCharacterManager;
-import model.entity.Enemy;
-import model.entity.Entity;
-import model.entity.Character;
 import model.fight.BattleCommand;
-import model.level.Level;
+import model.livingEntity.LivingEntity;
+import model.livingEntity.character.Character;
+import model.livingEntity.enemy.Enemy;
+import model.stage.Stage;
 
 @NoArgsConstructor
 @Getter
@@ -33,7 +33,7 @@ public class BattleGameState extends Gui {
 
 	private int stateId;
 
-	private Level currentLevel;
+	private Stage currentLevel;
 	private boolean initiliazeVariable = false;
 	private GuiBattle hud;
 	private BattleController battleController;
@@ -41,7 +41,7 @@ public class BattleGameState extends Gui {
 	private List<Rectangle> lifeBars;
 	private List<Character> listOfCharacter;
 	private List<Enemy> listOfEnemy;
-	private List<Entity> orderedBattleTurn;
+	private List<LivingEntity> orderedBattleTurn;
 	private List<Integer> missingDeadEnnemies;
 
 	public int currentTurn;
@@ -59,7 +59,7 @@ public class BattleGameState extends Gui {
 
 		this.hud = new GuiBattle();
 		this.hud.init(gc);
-		this.orderedBattleTurn = new ArrayList<Entity>();
+		this.orderedBattleTurn = new ArrayList<LivingEntity>();
 		this.lifeBars = new ArrayList<Rectangle>();
 		this.missingDeadEnnemies = new ArrayList<Integer>();
 		this.currentTurn = 0;
@@ -163,7 +163,7 @@ public class BattleGameState extends Gui {
 		}
 	}
 
-	private int calculateLifeBarWidth(Entity c) {
+	private int calculateLifeBarWidth(LivingEntity c) {
 		float result = c.getHealth() / (float) c.getMaxHealth();
 		int result1 = Math.round(result * 145);
 		if (result1 <= 0) {
@@ -387,7 +387,7 @@ public class BattleGameState extends Gui {
 		if (Game.getInstance() != null && !initiliazeVariable) {
 			int i = 1;
 			int chapter = Game.getInstance().getCurrentChapter();
-			for (Level level : Game.getInstance().getListOfChapters().get(chapter - 1)) {
+			for (Stage level : Game.getInstance().getListOfChapters().get(chapter - 1)) {
 				if (i == Game.getInstance().getCurrentLevel()) {
 					this.currentLevel = level;
 					break;

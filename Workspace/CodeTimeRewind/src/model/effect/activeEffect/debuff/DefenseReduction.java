@@ -2,7 +2,7 @@ package model.effect.activeEffect.debuff;
 
 import lombok.Getter;
 import lombok.Setter;
-import model.entity.Entity;
+import model.livingEntity.LivingEntity;
 
 @Getter
 @Setter
@@ -18,7 +18,7 @@ public class DefenseReduction extends DebuffEffect{
 	}
 	
 	@Override
-	public void applyEffect(Entity target) {
+	public void applyEffect(LivingEntity target) {
 		target.setDefense(Math.round(target.getDefense() - (target.getDefense() * DEFENSEREDUCTION)));
 	}
 }

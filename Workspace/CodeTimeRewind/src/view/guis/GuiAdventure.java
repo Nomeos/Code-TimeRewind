@@ -19,7 +19,7 @@ import lombok.Setter;
 import main.Game;
 import model.button.Button;
 import model.button.LevelButton;
-import model.level.Level;
+import model.stage.Stage;
 
 @NoArgsConstructor
 @Getter
@@ -28,7 +28,7 @@ public class GuiAdventure extends Gui {
 	private int stateId;
 	private Image background;
 
-	private List<Level> listOfLevels;
+	private List<Stage> listOfLevels;
 	private boolean initializeButtons = false;
 	private List<Button> listOfCurrentButton;
 	private AdventureController controller;
@@ -42,7 +42,7 @@ public class GuiAdventure extends Gui {
 		this.controller = new AdventureController(this);
 		this.buttonNeeded = new int[] { 8, 15 };
 		this.background = this.getListOfBackgrounds().get(2);
-		this.listOfLevels = new ArrayList<Level>();
+		this.listOfLevels = new ArrayList<Stage>();
 		this.listOfCurrentButton = new ArrayList<Button>();
 		for (int i : this.buttonNeeded) {
 			this.listOfCurrentButton.add(this.getListOfButtons().get(i));
@@ -61,7 +61,7 @@ public class GuiAdventure extends Gui {
 			int i = 1;
 			int chapterId = Game.getInstance().getCurrentChapter();
 			if (!initializeButtons) {
-				for (Level l : this.listOfLevels) {
+				for (Stage l : this.listOfLevels) {
 					LevelButton button = new LevelButton(new Image("/res/buttons/Button_13.png"),
 							new Image("/res/buttons/Button_13_Hit.png"), l.getXPosition(), l.getYPosition());
 					button.setLevelId(i);
@@ -93,7 +93,7 @@ public class GuiAdventure extends Gui {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (Game.getInstance() != null) {
-			this.listOfLevels = new ArrayList<Level>(
+			this.listOfLevels = new ArrayList<Stage>(
 					Game.getInstance().getListOfChapters().get(Game.getInstance().getCurrentChapter() - 1));
 		}
 	}

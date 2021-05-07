@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import main.Game;
 import model.animation.AnimationListener;
-import model.entity.Enemy;
 import model.fight.BattleCommand;
-import model.entity.Character;
+import model.livingEntity.character.Character;
+import model.livingEntity.enemy.Enemy;
 import view.guis.BattleGameState;
 
 @Getter

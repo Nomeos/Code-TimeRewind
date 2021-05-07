@@ -14,8 +14,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import controller.EndFightController;
 import main.Game;
 import model.button.Button;
-import model.entity.Character;
 import model.button.SmallButton;
+import model.livingEntity.character.Character;
 
 public class GuiEndFight extends Gui {
 

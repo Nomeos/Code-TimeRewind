@@ -12,7 +12,7 @@ import model.effect.activeEffect.buff.BuffEffect;
 import model.effect.activeEffect.debuff.DebuffEffect;
 import model.effect.passiveEffect.LifeAbsorption;
 import model.effect.passiveEffect.PassiveEffect;
-import model.entity.Entity;
+import model.livingEntity.LivingEntity;
 
 @Getter
 @Setter
@@ -33,7 +33,7 @@ public class Spell {
 		this.cooldown = cooldown;
 	}
 
-	public void startDebutActiveEffects(Entity c, Entity e) {
+	public void startDebutActiveEffects(LivingEntity c, LivingEntity e) {
 		if (debuffs != null) {
 			for (DebuffEffect d : debuffs) {
 				if (d.isAppliedBeginning()) {
@@ -65,7 +65,7 @@ public class Spell {
 
 	}
 
-	public void startEndPassiveEffects(Entity c, Entity e, int damageInflicated) {
+	public void startEndPassiveEffects(LivingEntity c, LivingEntity e, int damageInflicated) {
 		if (debuffs != null) {
 			for (DebuffEffect d : debuffs) {
 				if (!d.isAppliedBeginning()) {
