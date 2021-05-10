@@ -10,8 +10,6 @@
 
 		<!-- JDBC Database connection settings -->
 		<property name="hibernate.connection.url">jdbc:derby:codetimerewinddb;create=true</property>
-		<property name="connection.username">test</property>
-		<property name="connection.password">test</property>
 
 		<!-- JDBC connection pool settings ... using built-in test pool -->
 		<property name="connection.pool_size">1</property>
@@ -22,11 +20,19 @@
 		<!-- Select our Derby dialect -->
 		<property name="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</property>
 
+		<property name="hbm2ddl.auto">create</property>
+		
+
 		<!-- Names the annotated entity class -->
 		<mapping class="model.chapter.Chapter" />
 		<mapping class="model.account.Account" />
-		<mapping class="model.enemy_Per_Level.Enemy_Per_Level" />
+		<mapping
+			class="model.account_Own_Character.Account_Own_Character" />
+		<mapping class="model.enemy_Per_Stage.Enemy_Per_Stage" />
 		<mapping class="model.stage.Stage" />
-		<mapping class="model.livingEntity.Enemy" />
+		<mapping class="model.livingEntity.LivingEntity" />
+		<mapping class="model.livingEntity.enemy.Enemy" />
+		<mapping class="model.livingEntity.character.Character" />
+		<mapping class="model.stage_By_Account.Stage_By_Account" />
 	</session-factory>
 </hibernate-configuration>

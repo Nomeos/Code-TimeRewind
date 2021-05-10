@@ -22,6 +22,7 @@ import lombok.Setter;
 import model.chapter.Chapter;
 import model.enemy_Per_Stage.Enemy_Per_Stage;
 import model.livingEntity.enemy.Enemy;
+import model.stage_By_Account.Stage_By_Account;
 
 /**
  * This class contains the stage that the user can clear for continue the game
@@ -33,7 +34,7 @@ import model.livingEntity.enemy.Enemy;
 @Setter
 @Getter
 @Entity
-@Table(name = "Levels")
+@Table(name = "Stages")
 public class Stage {
 
 	@Id
@@ -52,13 +53,13 @@ public class Stage {
 
 	@OneToMany(mappedBy = "stage")
 	private Set<Enemy_Per_Stage> enemy_Per_Stage = new HashSet<>();
+	
+	@OneToMany(mappedBy = "stage")
+	private Set<Stage_By_Account> stage_By_Account = new HashSet<>();
 
 	@ManyToOne
 	@JoinColumn(name = "chapter_Id")
 	private Chapter chapter;
-
-	@Transient
-	private List<Enemy> listOfEnemy = new ArrayList<Enemy>();
 
 	/**
 	 * This is the constructor of this class

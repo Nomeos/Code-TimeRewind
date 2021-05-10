@@ -2,13 +2,16 @@ package model.account;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -19,6 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.livingEntity.character.Character;
+import model.stage_By_Account.Stage_By_Account;
 
 @Getter
 @Setter
@@ -40,6 +44,9 @@ public class Account {
 	
 	@Column(name = "Password_Hash")
 	private String passwordHash;
+	
+	@OneToMany(mappedBy = "account")
+	private Set<Stage_By_Account> stage_By_Account = new HashSet<>();
 	
 	@Transient
 	private List<Character> listOfOwnedCharacter = new ArrayList<Character>();

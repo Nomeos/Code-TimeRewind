@@ -396,7 +396,7 @@ public class BattleGameState extends Gui {
 				}
 			}
 			setListOfCharacter(Game.getInstance().getPlayerAccount().getListOfOwnedCharacter());
-			setListOfEnemy(this.currentLevel.getListOfEnemy());
+			//setListOfEnemy(this.currentLevel.getListOfEnemy());
 			this.listOfEnemy.forEach(f -> {
 				f.setAnimation(enemyAnimation);
 				f.setSpells(DatabaseCharacterManager.getInstance().getAllCharacterSpells(f.getName()));
