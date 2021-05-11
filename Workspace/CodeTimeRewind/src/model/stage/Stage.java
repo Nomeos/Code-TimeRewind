@@ -1,10 +1,9 @@
 package model.stage;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,14 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.chapter.Chapter;
 import model.enemy_Per_Stage.Enemy_Per_Stage;
-import model.livingEntity.enemy.Enemy;
 import model.stage_By_Account.Stage_By_Account;
 
 /**
@@ -51,10 +48,10 @@ public class Stage {
 	@Column(name = "yPosition")
 	private int yPosition;
 
-	@OneToMany(mappedBy = "stage")
+	@OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
 	private Set<Enemy_Per_Stage> enemy_Per_Stage = new HashSet<>();
 	
-	@OneToMany(mappedBy = "stage")
+	@OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
 	private Set<Stage_By_Account> stage_By_Account = new HashSet<>();
 
 	@ManyToOne

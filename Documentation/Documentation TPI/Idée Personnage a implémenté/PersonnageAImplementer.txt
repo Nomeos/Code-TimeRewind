@@ -1,0 +1,19 @@
+- Kilura
+- Melora
+- Bondo
+- Golwy
+- Heither
+- Nalo
+- Guiwi
+	- S3 - Hypernova -> Attaque Tous les ennemies avec 50% de chance de Stun
+	- S2 - Assassinat -> Assassin une personne avec 1% de chance de One shot
+	- S1 - Berserk -> Donne un Anti Débuff
+	- att 500 vie 200 deff 10 vit 90
+- Prométhéus
+- Valkyrie
+- Holrys
+-Xtreme
+    	-S3 - Inferno Trigger -> (AoE) Xtreme tourne sur lui-meme et fait des dégâts à tous les enemies et regen 5% des dégâts faits
+    	-S2 - Gfuel -> Augmente l'attaque de sois même ou d'un allié et se donne un tour supplémentaire
+    	-S1 - Katarina roleplay -> (single target) Xtreme lance un couteau, le couteau peut soit tomber sur la poignée et faire un peu de dégâts ou sur la lame et mettre un crit
+

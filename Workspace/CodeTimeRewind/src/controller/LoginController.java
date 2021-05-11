@@ -50,7 +50,7 @@ public class LoginController extends Controller {
 						this.getAccount().setPasswordHash(
 								this.getAccount().hashPassword(this.guiLogin.getCurrentPassword()));
 						if (this.getJm().LoginAccount(this.getAccount())) {
-							Game.getInstance().enterState(3, new FadeOutTransition(), new FadeInTransition());
+							this.changeView(3);
 						} else {
 							this.guiLogin.resetTextFieldContent();
 							this.guiLogin.setErrorText(this.guiLogin.getUsernameTextField().errorManagement(6));

@@ -20,7 +20,7 @@
 		<!-- Select our Derby dialect -->
 		<property name="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</property>
 
-		<property name="hbm2ddl.auto">create</property>
+		<property name="hbm2ddl.auto">update</property>
 		
 
 		<!-- Names the annotated entity class -->
@@ -34,5 +34,9 @@
 		<mapping class="model.livingEntity.enemy.Enemy" />
 		<mapping class="model.livingEntity.character.Character" />
 		<mapping class="model.stage_By_Account.Stage_By_Account" />
+		<mapping class="model.rarity.Rarity" />
+		<mapping class="model.rarity.Legendary" />
+		<mapping class="model.rarity.Epic" />
+		<mapping class="model.rarity.Rare" />
 	</session-factory>
 </hibernate-configuration>

@@ -1,11 +1,10 @@
 package model.account;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import model.livingEntity.character.Character;
+import model.account_Own_Character.Account_Own_Character;
 import model.stage_By_Account.Stage_By_Account;
 
 @Getter
@@ -45,11 +44,11 @@ public class Account {
 	@Column(name = "Password_Hash")
 	private String passwordHash;
 	
-	@OneToMany(mappedBy = "account")
+	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
 	private Set<Stage_By_Account> stage_By_Account = new HashSet<>();
 	
-	@Transient
-	private List<Character> listOfOwnedCharacter = new ArrayList<Character>();
+	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+	private Set<Account_Own_Character> account_Own_Character = new HashSet<>();
 	
 	@Transient
 	private String password = "";

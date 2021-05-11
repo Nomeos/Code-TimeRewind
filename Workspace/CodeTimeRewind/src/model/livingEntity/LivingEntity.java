@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -23,6 +25,7 @@ import model.animation.PathAnimation;
 import model.effect.activeEffect.buff.BuffEffect;
 import model.effect.activeEffect.debuff.DebuffEffect;
 import model.image.LifeBars;
+import model.rarity.Rarity;
 import model.spell.SingleTargetSpell;
 import model.spell.Spell;
 
@@ -40,6 +43,7 @@ public class LivingEntity implements Comparable<Object> {
 	@Column(name = "Name")
 	protected String name;
 
+	@Column(name = "Level")
 	protected int level;
 
 	@Column(name = "Health")
@@ -54,6 +58,13 @@ public class LivingEntity implements Comparable<Object> {
 	@Column(name = "Speed")
 	protected int speed;
 
+	@Column(name = "Description")
+	protected String description;
+	
+	@ManyToOne
+	@JoinColumn(name = "rarity_Id")
+	private Rarity rarity;
+	
 	@Transient
 	protected int maxDefense;
 	@Transient
@@ -94,8 +105,7 @@ public class LivingEntity implements Comparable<Object> {
 	protected boolean isFadingOut;
 	@Transient
 	protected boolean isInBattle = true;
-	@Transient
-	protected String description;
+
 
 	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, int width, int height,
 			Image image) throws SlickException {
@@ -117,17 +127,8 @@ public class LivingEntity implements Comparable<Object> {
 
 	}
 
-	public LivingEntity(String name, int level, int health, int defense, int attack, int speed) {
-		super();
-		this.name = name;
-		this.level = level;
-		this.health = health;
-		this.defense = defense;
-		this.attack = attack;
-		this.speed = speed;
-	}
-	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, String description) {
-		super();
+	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, String description, Rarity rarity) {
+		
 		this.name = name;
 		this.level = level;
 		this.health = health;
@@ -135,6 +136,7 @@ public class LivingEntity implements Comparable<Object> {
 		this.attack = attack;
 		this.speed = speed;
 		this.description = description;
+		this.rarity = rarity;
 	}
 
 	public LivingEntity(List<Spell> spells) {

@@ -58,7 +58,6 @@ public class GuiCharacter extends Gui {
 	private String backgroundSortPath = "/res/zones/ZoneSort.png";
 	private String centuryFont = "Century Gothic";
 	private String character_description;
-	private Button lobbyButton;
 	private List<Button> listOfCurrentButton;
 	private CharacterController controller;
 
@@ -114,9 +113,9 @@ public class GuiCharacter extends Gui {
 		if (this.player != null) {
 			g.setFont(characterNameTTF);
 
-			g.drawString(this.player.getListOfOwnedCharacter().get(0).getName(), 75, 50);
+			//g.drawString(this.player.getListOfOwnedCharacter().get(0).getName(), 75, 50);
 			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.BOLD, 40), true));
-			g.drawString("Level : " + this.player.getListOfOwnedCharacter().get(0).getLevel() + "/40", 75, 120);
+			//g.drawString("Level : " + this.player.getListOfOwnedCharacter().get(0).getLevel() + "/40", 75, 120);
 			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.BOLD, 20), true));
 			g.drawString("Attack : " + this.character_attack, zoneLibreStatsXPosition + 20,
 					zoneLibreStatsYPosition + 20);
@@ -144,8 +143,8 @@ public class GuiCharacter extends Gui {
 			this.backgroundProgressBar.draw(75, 175);
 			g.resetFont();
 
-			g.drawString(this.player.getListOfOwnedCharacter().get(0).getOldExperience() + " / "
-					+ this.player.getListOfOwnedCharacter().get(0).getMaxExperience(), 195, 192);
+			//g.drawString(this.player.getListOfOwnedCharacter().get(0).getOldExperience() + " / "
+			//		+ this.player.getListOfOwnedCharacter().get(0).getMaxExperience(), 195, 192);
 
 			this.character_image.draw(850, 700, 200, 250);
 
@@ -173,7 +172,7 @@ public class GuiCharacter extends Gui {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (this.player == null) {
 			this.player = Game.getInstance().getPlayerAccount();
-			this.character_health = this.player.getListOfOwnedCharacter().get(0).getHealth();
+			/*this.character_health = this.player.getListOfOwnedCharacter().get(0).getHealth();
 			this.character_attack = this.player.getListOfOwnedCharacter().get(0).getAttack();
 			this.character_defense = this.player.getListOfOwnedCharacter().get(0).getDefense();
 			this.character_level = this.player.getListOfOwnedCharacter().get(0).getLevel();
@@ -181,7 +180,7 @@ public class GuiCharacter extends Gui {
 			this.character_experience_point = this.player.getListOfOwnedCharacter().get(0).getOldExperience();
 			this.character_max_experience_point = this.player.getListOfOwnedCharacter().get(0).getMaxExperience();
 			this.character_description = this.player.getListOfOwnedCharacter().get(0).getDescription();
-			this.character_image = this.player.getListOfOwnedCharacter().get(0).getImage();
+			this.character_image = this.player.getListOfOwnedCharacter().get(0).getImage();*/
 		}
 
 	}

@@ -142,7 +142,7 @@ public class GuiEndFight extends Gui {
 
 	private void initializeVariables() {
 		if (Game.getInstance() != null) {
-			this.currentCharacter = Game.getInstance().getPlayerAccount().getListOfOwnedCharacter().get(0);
+			//this.currentCharacter = Game.getInstance().getPlayerAccount().getListOfOwnedCharacter().get(0);
 		}
 	}
 

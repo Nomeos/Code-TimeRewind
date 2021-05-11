@@ -74,7 +74,7 @@ public class Gui extends BasicGameState {
 
 	private void init() throws SlickException {
 		this.listOfBackgrounds = new ArrayList<Image>();
-		for (int i = 1; i <= 8; i++) {
+		for (int i = 1; i <= 9; i++) {
 			this.listOfBackgrounds.add(new Image("/res/backgrounds/Background_0" + i + ".png"));
 		}
 		this.listOfButtons = new ArrayList<Button>();
@@ -88,7 +88,7 @@ public class Gui extends BasicGameState {
 	 *                        with the image
 	 */
 	private void initListOfButtons() throws SlickException {
-		for (int i = 1; i <= 16; i++) {
+		for (int i = 1; i <= 18; i++) {
 			switch (i) {
 			case 1:
 				this.listOfButtons.add(new MediumPlayButton(new Image("/res/buttons/Button_" + i + ".png"),
@@ -108,11 +108,13 @@ public class Gui extends BasicGameState {
 			case 4:
 			case 5:
 			case 15:
+			case 17:
 				this.listOfButtons.add(new SmallButton(new Image("/res/buttons/Button_" + i + ".png"),
 						new Image("/res/buttons/Button_" + i + "_Hit.png"), 1520, 970));
 				break;
 
 			case 6:
+			case 18:
 				this.listOfButtons.add(new BigButton(new Image("/res/buttons/Button_" + i + ".png"),
 						new Image("/res/buttons/Button_" + i + "_Hit.png"), 785, 365));
 				break;

@@ -11,6 +11,7 @@ import lombok.Setter;
 import model.databaseManager.DatabaseCharacterManager;
 import model.image.LifeBars;
 import model.livingEntity.LivingEntity;
+import model.rarity.Rarity;
 
 @Getter
 @Setter
@@ -18,7 +19,6 @@ import model.livingEntity.LivingEntity;
 @Entity
 public class Character extends LivingEntity {
 
-	private String description;
 	@Transient
 	private int oldExperience;
 	@Transient
@@ -46,8 +46,9 @@ public class Character extends LivingEntity {
 		takePlayerSpells();
 	}
 
-	public Character(String name, int level, int health, int defense, int attack, int speed, String description) {
-		super(name, level, health, defense, attack, speed, description);
+	public Character(String name, int level, int health, int defense, int attack, int speed, String description , Rarity rarity) {
+		super(name, level, health, defense, attack, speed, description, rarity);
+		
 	}
 	
 	public void calculateMaxExperience() {

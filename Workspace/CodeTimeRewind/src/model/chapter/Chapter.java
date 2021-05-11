@@ -1,7 +1,9 @@
 package model.chapter;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,8 +35,8 @@ public class Chapter {
 	@Column(name = "chapter_Id")
 	private int id;
 	
-	@OneToMany(mappedBy = "chapter")
-	private Set<Stage> stages;
+	@OneToMany(mappedBy = "chapter" , cascade = CascadeType.ALL)
+	private Set<Stage> stages = new HashSet<>();
 
 	private String name;
 

@@ -9,12 +9,16 @@ import org.hibernate.query.Query;
 import org.newdawn.slick.SlickException;
 
 import lombok.NoArgsConstructor;
+import main.Game;
 import model.account.Account;
 import model.account_Own_Character.Account_Own_Character;
 import model.chapter.Chapter;
 import model.enemy_Per_Stage.Enemy_Per_Stage;
 import model.livingEntity.character.Character;
 import model.livingEntity.enemy.Enemy;
+import model.rarity.Epic;
+import model.rarity.Legendary;
+import model.rarity.Rare;
 import model.stage.Stage;
 import model.stage_By_Account.Stage_By_Account;
 
@@ -32,77 +36,39 @@ public class DatabaseAccountManager {
 			System.err.println("Initial SessionFactory creation failed." + ex);
 			throw new ExceptionInInitializerError(ex);
 		}
-		
-		InsertAllCharacters();
-		InsertTheFirstLevel();
 		this.session = sessionFactory.getCurrentSession();
-		sessionFactory.close();
+		this.session.close();
 
+		if (VerifyDatabaseCreated()) {
+			InsertAllCharacters();
+			InsertTheFirstLevel();
+		}
 	}
 
-	/*
-	 * public void DeleteDatabase() { OpenDatabaseConnection(); this.sqlQuery =
-	 * "Drop table Enemy_Per_Levels"; try {
-	 * this.statement.executeUpdate(this.sqlQuery); } catch (SQLException e) { if
-	 * (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") ||
-	 * e.getSQLState().equals("X0Y32")) {
-	 * 
-	 * } else { e.printStackTrace(); } } this.sqlQuery = "Drop table Enemies"; try {
-	 * this.statement.executeUpdate(this.sqlQuery); } catch (SQLException e) { if
-	 * (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") ||
-	 * e.getSQLState().equals("X0Y32")) {
-	 * 
-	 * } else { e.printStackTrace(); } } this.sqlQuery =
-	 * "Drop table Level_By_Accounts"; try {
-	 * this.statement.executeUpdate(this.sqlQuery); } catch (SQLException e) { if
-	 * (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") ||
-	 * e.getSQLState().equals("X0Y32")) {
-	 * 
-	 * } else { e.printStackTrace(); } } this.sqlQuery = "Drop table Levels"; try {
-	 * this.statement.executeUpdate(this.sqlQuery); } catch (SQLException e) { if
-	 * (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") ||
-	 * e.getSQLState().equals("X0Y32")) {
-	 * 
-	 * } else { e.printStackTrace(); } } this.sqlQuery = "Drop table Chapters"; try
-	 * { this.statement.executeUpdate(this.sqlQuery); } catch (SQLException e) { if
-	 * (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") ||
-	 * e.getSQLState().equals("X0Y32")) {
-	 * 
-	 * } else { e.printStackTrace(); } } this.sqlQuery =
-	 * "Drop table Character_Sprites"; try {
-	 * this.statement.executeUpdate(this.sqlQuery); } catch (SQLException e) { if
-	 * (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") ||
-	 * e.getSQLState().equals("X0Y32")) {
-	 * 
-	 * } else { e.printStackTrace(); } } this.sqlQuery =
-	 * "Drop table Type_Of_Sprites"; try {
-	 * this.statement.executeUpdate(this.sqlQuery); } catch (SQLException e) { if
-	 * (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") ||
-	 * e.getSQLState().equals("X0Y32")) {
-	 * 
-	 * } else { e.printStackTrace(); } } this.sqlQuery =
-	 * "Drop table Account_Own_Characters"; try {
-	 * this.statement.executeUpdate(this.sqlQuery); } catch (SQLException e) { if
-	 * (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") ||
-	 * e.getSQLState().equals("X0Y32")) {
-	 * 
-	 * } else { e.printStackTrace(); } } this.sqlQuery = "Drop table Characters";
-	 * try { this.statement.executeUpdate(this.sqlQuery); } catch (SQLException e) {
-	 * if (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") ||
-	 * e.getSQLState().equals("X0Y32")) {
-	 * 
-	 * } else { e.printStackTrace(); } } this.sqlQuery = "Drop table Accounts"; try
-	 * { this.statement.executeUpdate(this.sqlQuery); } catch (SQLException e) { if
-	 * (e.getSQLState().equals("42Y55") || e.getSQLState().equals("42X05") ||
-	 * e.getSQLState().equals("X0Y32")) {
-	 * 
-	 * } else { e.printStackTrace(); } } }
-	 */
+	private boolean VerifyDatabaseCreated() {
+		OpenDatabaseConnection();
+		this.session.beginTransaction();
+		boolean result;
+		Query query;
+		String sqlQuery;
+		List<Character> characters;
+
+		sqlQuery = "FROM Character LE WHERE LE.name = 'Nom-eos'";
+		query = session.createQuery(sqlQuery);
+		characters = query.list();
+
+		if (characters.isEmpty()) {
+			result = true;
+		} else {
+			result = false;
+		}
+		return result;
+	}
 
 	private void InsertTheFirstLevel() {
-		
+
 		try {
-			
+			OpenDatabaseConnection();
 			this.session.beginTransaction();
 			Enemy tempEnemyS;
 			Enemy tempEnemyZ;
@@ -110,14 +76,20 @@ public class DatabaseAccountManager {
 			Stage tempStage;
 			Chapter tempChapter;
 			Enemy_Per_Stage tempEpl;
-
-			tempEnemyS = new Enemy("Skeleton", 1, 100, 10, 150, 0);
+			Rare tempRare;
+			Epic tempEpic;
+			tempEpic = new Epic();
+			this.session.save(tempEpic);
+			tempRare = new Rare();
+			this.session.save(tempRare);
+			tempEnemyS = new Enemy("Skeleton", 1, 100, 10, 150, 0, "Petit squelette argneux", tempRare);
 			this.session.save(tempEnemyS);
-			tempEnemyZ = new Enemy("Zombie", 1, 150, 20, 100, 0);
+			tempEnemyZ = new Enemy("Zombie", 1, 150, 20, 100, 0, "Petit zombie espiegle", tempRare);
 			this.session.save(tempEnemyZ);
-			tempEnemyB = new Enemy("Boar", 1, 300, 50, 10, 20);
+			tempEnemyB = new Enemy("Boar", 1, 300, 50, 10, 20, "Gros cochon violent", tempRare);
 			this.session.save(tempEnemyB);
 			// Chapter One
+			
 			tempChapter = new Chapter("Chapter One");
 			this.session.save(tempChapter);
 			tempStage = new Stage("Facile", 125, 125, tempChapter);
@@ -144,14 +116,18 @@ public class DatabaseAccountManager {
 			this.session.save(tempEpl);
 			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyS, 2);
 			this.session.save(tempEpl);
+
 			// Chapter Two
+
 			tempChapter = new Chapter("Chapter Two");
 			this.session.save(tempChapter);
 			tempStage = new Stage("Ultra Difficile", 150, 70, tempChapter);
 			this.session.save(tempStage);
 			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyB, 3);
 			this.session.save(tempEpl);
+
 			// Chapter Three
+
 			tempChapter = new Chapter("Chapter Three");
 			this.session.save(tempChapter);
 			tempStage = new Stage("Hardcore", 500, 70, tempChapter);
@@ -166,17 +142,22 @@ public class DatabaseAccountManager {
 			throw new ExceptionInInitializerError(ex);
 		}
 		this.session.getTransaction().commit();
+		CloseDatabaseConnection();
 	}
 
 	private void InsertAllCharacters() {
-		
 
 		try {
+			OpenDatabaseConnection();
 			this.session.beginTransaction();
 			Character tempCharacter;
-
+			Legendary tempLegendary;
+			
+			tempLegendary = new Legendary();
+			this.session.save(tempLegendary);
 			tempCharacter = new Character("Nom-eos", 1, 400, 30, 100, 0,
-					"Ce personnage est très détendu ,&n a trouvé son épée dans un champ de fleur&n et pense qu '' il a une grande destinée.");
+					"Ce personnage est très détendu ,&n a trouvé son épée dans un champ de fleur&n et pense qu '' il a une grande destinée.",
+					tempLegendary);
 			this.session.save(tempCharacter);
 
 		} catch (Throwable ex) {
@@ -184,6 +165,7 @@ public class DatabaseAccountManager {
 			throw new ExceptionInInitializerError(ex);
 		}
 		this.session.getTransaction().commit();
+		CloseDatabaseConnection();
 
 	}
 
@@ -229,8 +211,7 @@ public class DatabaseAccountManager {
 	public boolean LoginAccount(Account userAccount) throws SlickException {
 		this.isRegister = false;
 		if (IsTheUserAlreadyExist(userAccount)) {
-			// GetPlayerCharacters(userAccount);
-			// TakePlayerProgression(userAccount);
+			GetPlayerProgression(userAccount);
 			return true;
 		} else {
 			return false;
@@ -240,7 +221,7 @@ public class DatabaseAccountManager {
 
 	public void InsertLevelsInAccount(Account userAccount) {
 		Query query;
-		String sqlQuery = "FROM Stages";
+		String sqlQuery = "FROM Stage";
 		Stage_By_Account sba;
 		try {
 			OpenDatabaseConnection();
@@ -258,19 +239,6 @@ public class DatabaseAccountManager {
 		}
 		this.session.getTransaction().commit();
 		CloseDatabaseConnection();
-
-		/*
-		 * this.sqlQuery = "SELECT Level_Id FROM Levels"; try { ResultSet resultQuery;
-		 * Session session = OpenDatabaseConnection(); resultQuery =
-		 * statement.executeQuery(sqlQuery); List<Integer> i = new ArrayList<Integer>();
-		 * while (resultQuery.next()) { i.add(resultQuery.getInt("Level_Id")); } for
-		 * (int j : i) { this.sqlQuery =
-		 * "INSERT INTO Level_By_Accounts(Account_Id, Level_Id, Is_Level_Clear)values((SELECT ACCOUNT_ID from ACCOUNTS WHERE Username = '"
-		 * + userAccount.getUsername() + "')," + j + ",0)";
-		 * this.statement.executeUpdate(sqlQuery); } } catch (SQLException e) {
-		 * e.printStackTrace(); }
-		 */
-
 	}
 
 	public void InsertAccountInDatabase(Account userAccount) {
@@ -284,7 +252,7 @@ public class DatabaseAccountManager {
 			userAccount.setAccount_Level(1);
 			this.session.save(userAccount);
 
-			sqlQuery = "FROM Characters c WHERE c.character_id = 0";
+			sqlQuery = "FROM Character c WHERE c.name = 'Nom-eos'";
 			query = session.createQuery(sqlQuery);
 			character = query.list();
 			for (Character currentCharacter : character) {
@@ -310,80 +278,8 @@ public class DatabaseAccountManager {
 
 	}
 
-	/*
-	 * public void TakePlayerProgression(Account userAccount) { Session session =
-	 * OpenDatabaseConnection(); ResultSet resultQuery; int levelId = 0; int
-	 * chapterId = 1; List<Stage> listOfLevel = new ArrayList<>(); List<List<Stage>>
-	 * listOfChapter = new ArrayList<>(); BufferedImage bimg;
-	 * 
-	 * try {
-	 * 
-	 * this.t =
-	 * "SELECT C.CHAPTER_ID,L.LEVEL_ID,L.NAME,LBA.IS_LEVEL_CLEAR,E.NAME,EPL.LEVEL,E.ATTACK,E.DEFENSE,E.HEALTH,E.SPEED, L.XPOSITION,L.YPOSITION FROM ACCOUNTS A\r\n"
-	 * + "INNER JOIN LEVEL_BY_ACCOUNTS LBA on A.ACCOUNT_ID = LBA.ACCOUNT_ID\r\n" +
-	 * "INNER JOIN LEVELS L on L.LEVEL_ID = LBA.LEVEL_ID\r\n" +
-	 * "INNER JOIN ENEMY_PER_LEVELS EPL on L.LEVEL_ID = EPL.LEVEL_ID\r\n" +
-	 * "INNER JOIN CHAPTERS C on C.CHAPTER_ID = L.CHAPTER_ID\r\n" +
-	 * "INNER JOIN ENEMIES E on EPL.ENEMY_ID = E.ENEMY_ID WHERE A.USERNAME = '" +
-	 * userAccount.getUsername() + "'"; resultQuery =
-	 * statement.executeQuery(sqlQuery); while (resultQuery.next()) { if
-	 * (resultQuery.getInt(1) == chapterId) { if (resultQuery.getInt(2) == levelId)
-	 * { bimg = ImageIO.read(new File( "./res/entity/" + resultQuery.getString(5) +
-	 * "/" + resultQuery.getString(5) + ".png")); listOfLevel.get(levelId -
-	 * 1).getListOfEnemy() .add(new Enemy(resultQuery.getString(5),
-	 * resultQuery.getInt("LEVEL"), resultQuery.getInt("HEALTH"),
-	 * resultQuery.getInt("DEFENSE"), resultQuery.getInt("ATTACK"),
-	 * resultQuery.getInt("SPEED"), bimg.getWidth(), bimg.getHeight(), new
-	 * Image("/res/entity/" + resultQuery.getString(5) + "/" +
-	 * resultQuery.getString(5) + ".png"))); bimg = null; } else { levelId =
-	 * resultQuery.getInt("LEVEL_ID"); listOfLevel.add(new
-	 * Stage(resultQuery.getString(3), resultQuery.getBoolean(4),
-	 * resultQuery.getInt(11), resultQuery.getInt(12))); bimg = ImageIO.read(new
-	 * File( "./res/entity/" + resultQuery.getString(5) + "/" +
-	 * resultQuery.getString(5) + ".png")); listOfLevel.get(levelId -
-	 * 1).getListOfEnemy() .add(new Enemy(resultQuery.getString(5),
-	 * resultQuery.getInt("LEVEL"), resultQuery.getInt("HEALTH"),
-	 * resultQuery.getInt("DEFENSE"), resultQuery.getInt("ATTACK"),
-	 * resultQuery.getInt("SPEED"), bimg.getWidth(), bimg.getHeight(), new
-	 * Image("/res/entity/" + resultQuery.getString(5) + "/" +
-	 * resultQuery.getString(5) + ".png")));
-	 * 
-	 * } } else { chapterId++; listOfChapter.add(new ArrayList<>(listOfLevel));
-	 * listOfLevel.clear(); if (resultQuery.getInt(2) == levelId) { bimg =
-	 * ImageIO.read(new File( "./res/entity/" + resultQuery.getString(5) + "/" +
-	 * resultQuery.getString(5) + ".png")); listOfLevel.get(levelId -
-	 * 1).getListOfEnemy() .add(new Enemy(resultQuery.getString(5),
-	 * resultQuery.getInt("LEVEL"), resultQuery.getInt("HEALTH"),
-	 * resultQuery.getInt("DEFENSE"), resultQuery.getInt("ATTACK"),
-	 * resultQuery.getInt("SPEED"), bimg.getWidth(), bimg.getHeight(), new
-	 * Image("/res/entity/" + resultQuery.getString(5) + "/" +
-	 * resultQuery.getString(5) + ".png"))); } else { levelId =
-	 * resultQuery.getInt("LEVEL_ID"); listOfLevel.add(new
-	 * Stage(resultQuery.getString(3), resultQuery.getBoolean(4),
-	 * resultQuery.getInt(11), resultQuery.getInt(12))); bimg = ImageIO.read(new
-	 * File( "./res/entity/" + resultQuery.getString(5) + "/" +
-	 * resultQuery.getString(5) + ".png")); listOfLevel.get(0).getListOfEnemy()
-	 * .add(new Enemy(resultQuery.getString(5), resultQuery.getInt("LEVEL"),
-	 * resultQuery.getInt("HEALTH"), resultQuery.getInt("DEFENSE"),
-	 * resultQuery.getInt("ATTACK"), resultQuery.getInt("SPEED"), bimg.getWidth(),
-	 * bimg.getHeight(), new Image("/res/entity/" + resultQuery.getString(5) + "/" +
-	 * resultQuery.getString(5) + ".png"))); if (resultQuery.isLast()) {
-	 * listOfChapter.add(new ArrayList<>(listOfLevel)); } }
-	 * 
-	 * }
-	 * 
-	 * }
-	 * 
-	 * } catch (Throwable ex) {
-	 * System.err.println("Initial SessionFactory creation failed." + ex); throw new
-	 * ExceptionInInitializerError(ex); } this.session.getTransaction().commit();
-	 * CloseDatabaseConnection(); if (Game.getInstance() != null) {
-	 * Game.getInstance().setListOfChapters(listOfChapter); }
-	 * 
-	 * }
-	 * 
-	 */// Check if the user already exist in the json, it returns a boolean (works with
-		// login and register).
+	// Check if the user already exist in the json, it returns a boolean (works with
+	// login and register).
 	public boolean IsTheUserAlreadyExist(Account userAccount) {
 		boolean result = false;
 		String sqlQuery;
@@ -417,7 +313,7 @@ public class DatabaseAccountManager {
 				OpenDatabaseConnection();
 				this.session.beginTransaction();
 
-				sqlQuery = "FROM Accounts A WHERE A.username ='" + userAccount.getUsername() + "'";
+				sqlQuery = "FROM Account A WHERE A.username ='" + userAccount.getUsername() + "'";
 				query = session.createQuery(sqlQuery);
 				account = query.list();
 				for (Account currentAccount : account) {
@@ -426,17 +322,6 @@ public class DatabaseAccountManager {
 					}
 				}
 
-				/*
-				 * this.sqlQuery = "SELECT * FROM Accounts WHERE Username = '" +
-				 * userAccount.getUsername() + "' "; Session session = OpenDatabaseConnection();
-				 * ResultSet resultQuery; resultQuery = statement.executeQuery(sqlQuery); while
-				 * (resultQuery.next()) { if
-				 * (userAccount.areThePasswordEquals(resultQuery.getString("Password_hash"))) {
-				 * resultQuery.getString("Username");
-				 * userAccount.setAccount_Level(resultQuery.getInt("Account_Level"));
-				 * 
-				 * result = true; } }
-				 */
 			} catch (Throwable ex) {
 				System.err.println("Initial SessionFactory creation failed." + ex);
 				throw new ExceptionInInitializerError(ex);
@@ -447,38 +332,36 @@ public class DatabaseAccountManager {
 		}
 		return result;
 
-	}/*
-		 * 
-		 * private void GetPlayerCharacters(Account userAccount) { ResultSet
-		 * resultQueryOwnCharacters; try { resultQueryOwnCharacters =
-		 * statement.executeQuery(sqlQuery);
-		 * 
-		 * BufferedImage bimg; this.sqlQuery = "select" + "  c.Name," + "  ac.level," +
-		 * "  c.health," + "  c.defense," + "  c.attack," + "  c.speed, " +
-		 * "ac.experience_point," + " c.description" + " from" + "  characters c" +
-		 * "  INNER JOIN Account_own_characters ac ON c.character_id = ac.character_id"
-		 * + "  INNER JOIN Accounts a ON ac.account_id = a.account_id" +
-		 * "  where a.username = '" + userAccount.getUsername() + "'";
-		 * resultQueryOwnCharacters = statement.executeQuery(sqlQuery); while
-		 * (resultQueryOwnCharacters.next()) { bimg = ImageIO.read(new
-		 * File("./res/entity/" + resultQueryOwnCharacters.getString("Name") + "/" +
-		 * resultQueryOwnCharacters.getString("Name") + ".png"));
-		 * userAccount.getListOfOwnedCharacter() .add(new
-		 * Character(resultQueryOwnCharacters.getString("Name"),
-		 * resultQueryOwnCharacters.getInt("Level"),
-		 * resultQueryOwnCharacters.getInt("health"),
-		 * resultQueryOwnCharacters.getInt("defense"),
-		 * resultQueryOwnCharacters.getInt("attack"),
-		 * resultQueryOwnCharacters.getInt("speed"), bimg.getWidth(), bimg.getHeight(),
-		 * resultQueryOwnCharacters.getInt("experience_point"),
-		 * resultQueryOwnCharacters.getString("description"))); } } catch (SQLException
-		 * | SlickException | IOException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 * 
-		 * this.CloseDatabaseConnection(); if (Game.getInstance() != null) {
-		 * Game.getInstance().setPlayerAccount(userAccount); }
-		 * 
-		 * }
-		 */
+	}
+
+	private void GetPlayerProgression(Account userAccount) {
+
+		String sqlQuery;
+		Query query;
+		List<Account> account;
+		List<Account_Own_Character> accountOwnCharacter;
+		try {
+			OpenDatabaseConnection();
+			this.session.beginTransaction();
+
+			sqlQuery = "FROM Account A WHERE A.username ='" + userAccount.getUsername() + "'";
+			query = session.createQuery(sqlQuery);
+			account = query.list();
+			for (Account currentAccount : account) {
+				userAccount = currentAccount;
+			}
+
+		} catch (Throwable ex) {
+			System.err.println("Initial SessionFactory creation failed." + ex);
+			throw new ExceptionInInitializerError(ex);
+		}
+		this.session.getTransaction().commit();
+		CloseDatabaseConnection();
+
+		if (Game.getInstance() != null) {
+			Game.getInstance().setPlayerAccount(userAccount);
+		}
+
+	}
 
 }
