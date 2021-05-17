@@ -48,5 +48,6 @@ public class Enemy extends LivingEntity {
 	public Enemy(String name, int level, int health, int defense, int attack, int speed, String description , Rarity rarity) {
 		super(name, level, health, defense, attack, speed, description, rarity);
 	}
+	
 
 }

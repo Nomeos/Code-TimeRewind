@@ -14,8 +14,14 @@ import model.account.Account;
 import model.account_Own_Character.Account_Own_Character;
 import model.chapter.Chapter;
 import model.enemy_Per_Stage.Enemy_Per_Stage;
+import model.livingEntity.LivingEntity;
 import model.livingEntity.character.Character;
-import model.livingEntity.enemy.Enemy;
+import model.livingEntity.character.Guiwi;
+import model.livingEntity.character.Nomeos;
+import model.livingEntity.character.Xtreme;
+import model.livingEntity.enemy.Boar;
+import model.livingEntity.enemy.Skeleton;
+import model.livingEntity.enemy.Zombie;
 import model.rarity.Epic;
 import model.rarity.Legendary;
 import model.rarity.Rare;
@@ -41,7 +47,7 @@ public class DatabaseAccountManager {
 
 		if (VerifyDatabaseCreated()) {
 			InsertAllCharacters();
-			InsertTheFirstLevel();
+
 		}
 	}
 
@@ -53,7 +59,7 @@ public class DatabaseAccountManager {
 		String sqlQuery;
 		List<Character> characters;
 
-		sqlQuery = "FROM Character LE WHERE LE.name = 'Nom-eos'";
+		sqlQuery = "FROM Character LE WHERE LE.name = 'Nomos'";
 		query = session.createQuery(sqlQuery);
 		characters = query.list();
 
@@ -65,56 +71,81 @@ public class DatabaseAccountManager {
 		return result;
 	}
 
-	private void InsertTheFirstLevel() {
+	private void InsertAllCharacters() {
 
 		try {
 			OpenDatabaseConnection();
 			this.session.beginTransaction();
-			Enemy tempEnemyS;
-			Enemy tempEnemyZ;
-			Enemy tempEnemyB;
+			Epic tempEpic;
+			Legendary tempLegendary;
+			Rare tempRare;
+
+			Guiwi tempGuiwi;
+			Xtreme tempXtreme;
+			Nomeos tempNomeos;
+
+			Skeleton tempSkeleton;
+			Boar tempBoar;
+			Zombie tempZombie;
+
 			Stage tempStage;
 			Chapter tempChapter;
 			Enemy_Per_Stage tempEpl;
-			Rare tempRare;
-			Epic tempEpic;
+
+			tempLegendary = new Legendary();
+			this.session.save(tempLegendary);
+
 			tempEpic = new Epic();
 			this.session.save(tempEpic);
+
 			tempRare = new Rare();
 			this.session.save(tempRare);
-			tempEnemyS = new Enemy("Skeleton", 1, 100, 10, 150, 0, "Petit squelette argneux", tempRare);
-			this.session.save(tempEnemyS);
-			tempEnemyZ = new Enemy("Zombie", 1, 150, 20, 100, 0, "Petit zombie espiegle", tempRare);
-			this.session.save(tempEnemyZ);
-			tempEnemyB = new Enemy("Boar", 1, 300, 50, 10, 20, "Gros cochon violent", tempRare);
-			this.session.save(tempEnemyB);
+
+			tempNomeos = new Nomeos(tempEpic);
+			this.session.save(tempNomeos);
+
+			tempGuiwi = new Guiwi(tempLegendary);
+			this.session.save(tempGuiwi);
+
+			tempXtreme = new Xtreme(tempLegendary);
+			this.session.save(tempXtreme);
+
+			tempSkeleton = new Skeleton(tempRare);
+			this.session.save(tempSkeleton);
+
+			tempZombie = new Zombie(tempRare);
+			this.session.save(tempZombie);
+
+			tempBoar = new Boar(tempRare);
+			this.session.save(tempBoar);
+
 			// Chapter One
-			
+
 			tempChapter = new Chapter("Chapter One");
 			this.session.save(tempChapter);
 			tempStage = new Stage("Facile", 125, 125, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyS, 1);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempSkeleton, 1);
 			this.session.save(tempEpl);
 			tempStage = new Stage("Moyen", 400, 400, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyZ, 1);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempZombie, 1);
 			this.session.save(tempEpl);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyS, 1);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempSkeleton, 1);
 			this.session.save(tempEpl);
 			tempStage = new Stage("Difficile", 70, 800, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyB, 2);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempBoar, 2);
 			this.session.save(tempEpl);
 			tempStage = new Stage("Difficile+", 600, 850, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyZ, 2);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempZombie, 2);
 			this.session.save(tempEpl);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyZ, 1);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempZombie, 1);
 			this.session.save(tempEpl);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyS, 2);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempSkeleton, 2);
 			this.session.save(tempEpl);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyS, 2);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempSkeleton, 2);
 			this.session.save(tempEpl);
 
 			// Chapter Two
@@ -123,7 +154,7 @@ public class DatabaseAccountManager {
 			this.session.save(tempChapter);
 			tempStage = new Stage("Ultra Difficile", 150, 70, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyB, 3);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempBoar, 3);
 			this.session.save(tempEpl);
 
 			// Chapter Three
@@ -132,33 +163,10 @@ public class DatabaseAccountManager {
 			this.session.save(tempChapter);
 			tempStage = new Stage("Hardcore", 500, 70, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyB, 5);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempBoar, 5);
 			this.session.save(tempEpl);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempEnemyB, 5);
+			tempEpl = new Enemy_Per_Stage(tempStage, tempBoar, 5);
 			this.session.save(tempEpl);
-
-		} catch (Throwable ex) {
-			System.err.println("Initial SessionFactory creation failed." + ex);
-			throw new ExceptionInInitializerError(ex);
-		}
-		this.session.getTransaction().commit();
-		CloseDatabaseConnection();
-	}
-
-	private void InsertAllCharacters() {
-
-		try {
-			OpenDatabaseConnection();
-			this.session.beginTransaction();
-			Character tempCharacter;
-			Legendary tempLegendary;
-			
-			tempLegendary = new Legendary();
-			this.session.save(tempLegendary);
-			tempCharacter = new Character("Nom-eos", 1, 400, 30, 100, 0,
-					"Ce personnage est très détendu ,&n a trouvé son épée dans un champ de fleur&n et pense qu '' il a une grande destinée.",
-					tempLegendary);
-			this.session.save(tempCharacter);
 
 		} catch (Throwable ex) {
 			System.err.println("Initial SessionFactory creation failed." + ex);
@@ -174,6 +182,7 @@ public class DatabaseAccountManager {
 		try {
 			this.sessionFactory = new Configuration().configure().buildSessionFactory();
 			this.session = sessionFactory.getCurrentSession();
+			System.out.println("\n");
 			return this.session;
 		} catch (Throwable ex) {
 			System.err.println("Initial SessionFactory creation failed." + ex);
@@ -245,30 +254,21 @@ public class DatabaseAccountManager {
 		Account_Own_Character aoc;
 		String sqlQuery;
 		Query query;
-		List<Character> character;
+		List<LivingEntity> character;
 		try {
 			OpenDatabaseConnection();
 			this.session.beginTransaction();
 			userAccount.setAccount_Level(1);
 			this.session.save(userAccount);
 
-			sqlQuery = "FROM Character c WHERE c.name = 'Nom-eos'";
+			sqlQuery = "FROM LivingEntity c WHERE c.name = 'Nomeos'";
 			query = session.createQuery(sqlQuery);
 			character = query.list();
-			for (Character currentCharacter : character) {
+			for (LivingEntity currentCharacter : character) {
 				aoc = new Account_Own_Character(currentCharacter, userAccount, 1, 0);
 				this.session.save(aoc);
 			}
 
-			/*
-			 * this.sqlQuery =
-			 * "INSERT INTO Accounts (Username,Password_Hash,Account_Level) values('" +
-			 * userAccount.getUsername() + "','" + userAccount.getPasswordHash() + "',1)";
-			 * Session session = OpenDatabaseConnection();
-			 * statement.executeUpdate(sqlQuery); this.sqlQuery =
-			 * "INSERT INTO Account_Own_Characters (Character_Id, Account_Id, Level,Experience_point)values (1,(SELECT Account_Id from Accounts where Username ='"
-			 * + userAccount.getUsername() + "'),1,0)"; statement.executeUpdate(sqlQuery);
-			 */
 		} catch (Throwable ex) {
 			System.err.println("Initial SessionFactory creation failed." + ex);
 			throw new ExceptionInInitializerError(ex);
@@ -339,7 +339,6 @@ public class DatabaseAccountManager {
 		String sqlQuery;
 		Query query;
 		List<Account> account;
-		List<Account_Own_Character> accountOwnCharacter;
 		try {
 			OpenDatabaseConnection();
 			this.session.beginTransaction();
@@ -364,4 +363,50 @@ public class DatabaseAccountManager {
 
 	}
 
+	public List<LivingEntity> GetAllLivingEntities() {
+		String sqlQuery;
+		Query query;
+		List<LivingEntity> le;
+
+		try {
+			OpenDatabaseConnection();
+			this.session.beginTransaction();
+			sqlQuery = "FROM LivingEntity";
+			query = session.createQuery(sqlQuery);
+			le = query.list();
+		} catch (Throwable ex) {
+			System.err.println("Initial SessionFactory creation failed." + ex);
+			throw new ExceptionInInitializerError(ex);
+		}
+		this.session.getTransaction().commit();
+		CloseDatabaseConnection();
+		return le;
+	}
+
+	public void insertCharacterOwnedInAccount(Account userAccount, LivingEntity le) {
+		Account_Own_Character aoc;
+		Query query;
+		String sqlQuery;
+		List<Account> accounts;
+		try {
+			OpenDatabaseConnection();
+			this.session.beginTransaction();
+			
+			sqlQuery = "FROM Account A WHERE A.username ='" + userAccount.getUsername() + "'";
+			query = session.createQuery(sqlQuery);
+			accounts = query.list();
+			for (Account currentAccount : accounts) {
+				aoc = new Account_Own_Character(le, currentAccount, 1, 0);
+				this.session.save(aoc);
+			}
+			
+			
+		} catch (Throwable ex) {
+			System.err.println("Initial SessionFactory creation failed." + ex);
+			throw new ExceptionInInitializerError(ex);
+		}
+		this.session.getTransaction().commit();
+		CloseDatabaseConnection();
+
+	}
 }

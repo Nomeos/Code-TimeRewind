@@ -36,7 +36,7 @@ public class GuiLobby extends Gui {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 
 		this.controller = new LobbyController(this);
-		this.buttonNeeded = new int[] { 5, 6, 7 };
+		this.buttonNeeded = new int[] { 5, 6, 7 , 16 };
 this.backgroundImage = this.getListOfBackgrounds().get(1);
 		this.listOfCurrentButton = new ArrayList<Button>();
 		for (int i : this.buttonNeeded) {

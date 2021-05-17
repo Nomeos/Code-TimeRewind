@@ -58,12 +58,12 @@ public class GuiMenu extends Gui {
 		this.backgroundImage = this.getListOfBackgrounds().get(0);
 		this.secondBackgroundImage = this.getListOfBackgrounds().get(0);
 
-		Image[] knightWalking = { new Image("/res/entity/Nom-eos/Walk/Knight_walk_01_uninterlace.png"),
-				new Image("/res/entity/Nom-eos/Walk/Knight_walk_02_uninterlace.png"),
-				new Image("/res/entity/Nom-eos/Walk/Knight_walk_03_uninterlace.png"),
-				new Image("/res/entity/Nom-eos/Walk/Knight_walk_04_uninterlace.png"),
-				new Image("/res/entity/Nom-eos/Walk/Knight_walk_05_uninterlace.png"),
-				new Image("/res/entity/Nom-eos/Walk/Knight_walk_06_uninterlace.png") };
+		Image[] knightWalking = { new Image("/res/entity/Nomeos/Walk/Knight_walk_01_uninterlace.png"),
+				new Image("/res/entity/Nomeos/Walk/Knight_walk_02_uninterlace.png"),
+				new Image("/res/entity/Nomeos/Walk/Knight_walk_03_uninterlace.png"),
+				new Image("/res/entity/Nomeos/Walk/Knight_walk_04_uninterlace.png"),
+				new Image("/res/entity/Nomeos/Walk/Knight_walk_05_uninterlace.png"),
+				new Image("/res/entity/Nomeos/Walk/Knight_walk_06_uninterlace.png") };
 		knightWalkingAnimation = new Animation(knightWalking, durationBetweenCharacterFrame);
 	}
 

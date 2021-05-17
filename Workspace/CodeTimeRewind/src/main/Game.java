@@ -17,6 +17,7 @@ import view.guis.GuiLobby;
 import view.guis.GuiLogin;
 import view.guis.GuiMenu;
 import view.guis.GuiSignup;
+import view.guis.GuiSummon;
 
 
 public class Game extends StateBasedGame {
@@ -29,6 +30,7 @@ public class Game extends StateBasedGame {
 	public final int adventure = 6;
 	public final int fight = 7;
 	public final int endFight = 8;
+	public final int summon = 9;
 	private int currentChapter;
 	private int currentLevel;
 	private static Game instance;
@@ -60,6 +62,7 @@ public class Game extends StateBasedGame {
 		this.addState(new GuiAdventure(adventure));
 		this.addState(new BattleGameState(fight));
 		this.addState(new GuiEndFight(endFight));
+		this.addState(new GuiSummon(summon));
 	}
 
 

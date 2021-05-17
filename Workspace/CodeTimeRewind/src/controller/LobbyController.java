@@ -38,6 +38,8 @@ public class LobbyController extends Controller {
 			this.changeView(4);
 		} else if (currentButton instanceof SmallButton && currentButton.getX() == 450) {
 
+		} else if (currentButton instanceof SmallButton && currentButton.getX() == 1520) {
+			this.changeView(9);
 		}
 	}
 

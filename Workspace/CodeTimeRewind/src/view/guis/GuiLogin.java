@@ -85,7 +85,7 @@ public class GuiLogin extends Gui {
 
 		Image[] knightIdle = new Image[6];
 		for (int i = 1; i < 7; i++)
-			knightIdle[i - 1] = new Image("/res/entity/Nom-eos/Idle/Knight_idle_0" + i + "_uninterlace.png");
+			knightIdle[i - 1] = new Image("/res/entity/Nomeos/Idle/Knight_idle_0" + i + "_uninterlace.png");
 		this.knightIdleAnimation = new Animation(knightIdle, duration);
 
 	}

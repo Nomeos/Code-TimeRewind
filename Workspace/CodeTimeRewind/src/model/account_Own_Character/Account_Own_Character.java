@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.account.Account;
+import model.livingEntity.LivingEntity;
+import model.livingEntity.LivingEntity;
 import model.livingEntity.character.Character;
 
 /**
@@ -36,8 +38,8 @@ public class Account_Own_Character {
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name = "character_Id")
-	private Character character;
+	@JoinColumn(name = "livingEntity_Id")
+	private LivingEntity livingEntity;
 
 	@ManyToOne
 	@JoinColumn(name = "account_Id")
@@ -52,13 +54,13 @@ public class Account_Own_Character {
 	/**
 	 * This is the constructor of this class
 	 * 
-	 * @param character
+	 * @param livingEntity
 	 * @param account
 	 * @param level
 	 * @param experience_Point
 	 */
-	public Account_Own_Character(Character character, Account account, Integer level, Integer experience_Point) {
-		this.character = character;
+	public Account_Own_Character(LivingEntity livingEntity, Account account, Integer level, Integer experience_Point) {
+		this.livingEntity = livingEntity;
 		this.account = account;
 		this.level = level;
 		this.experience_Point = experience_Point;

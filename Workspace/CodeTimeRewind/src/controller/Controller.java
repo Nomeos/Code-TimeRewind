@@ -17,8 +17,8 @@ import model.databaseManager.DatabaseAccountManager;
 @Getter
 @Setter
 public class Controller {
-	private DatabaseAccountManager jm = new DatabaseAccountManager(); 
-	private Account account = new Account();
+	protected DatabaseAccountManager jm = new DatabaseAccountManager(); 
+	protected Account account = new Account();
 
 	/**
 	 * This method change the current view to the new one

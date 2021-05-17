@@ -31,4 +31,7 @@
   1. In "MAIN CLASS", put main.Main in the field.
 ![Image](Pictures/SetMainClassPicture.png)
   1. After that, you can directly create a Jar in the "CREATE FAT JAR" section.
-  1. But if we launch the game, it's still not working, that's why we need to take the "res" folder from the project. And copy it directly next to the Jar that we just created. At the end, we will only keep the "FAT JAR" that we created at last and the "res" folder.
+  1. But if we launch the game, it's still not working, that's why we need to take the "res" 
+folder from the project. 
+And copy it directly next to the Jar that we just created. 
+At the end, we will only keep the "FAT JAR" that we created at last and the "res" folder.

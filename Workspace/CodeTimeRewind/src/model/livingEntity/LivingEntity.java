@@ -37,34 +37,34 @@ import model.spell.Spell;
 public class LivingEntity implements Comparable<Object> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "LivingEntity_Id")
+	@Column(name = "livingEntity_Id")
 	protected int id;
 
-	@Column(name = "Name")
+	@Column(name = "name")
 	protected String name;
 
-	@Column(name = "Level")
+	@Column(name = "level")
 	protected int level;
 
-	@Column(name = "Health")
+	@Column(name = "health")
 	protected int health;
 
-	@Column(name = "Defense")
+	@Column(name = "defense")
 	protected int defense;
 
-	@Column(name = "Attack")
+	@Column(name = "attack")
 	protected int attack;
 
-	@Column(name = "Speed")
+	@Column(name = "speed")
 	protected int speed;
 
-	@Column(name = "Description")
+	@Column(name = "description")
 	protected String description;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "rarity_Id")
 	private Rarity rarity;
-	
+
 	@Transient
 	protected int maxDefense;
 	@Transient
@@ -106,7 +106,6 @@ public class LivingEntity implements Comparable<Object> {
 	@Transient
 	protected boolean isInBattle = true;
 
-
 	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, int width, int height,
 			Image image) throws SlickException {
 		this.name = name;
@@ -127,8 +126,9 @@ public class LivingEntity implements Comparable<Object> {
 
 	}
 
-	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, String description, Rarity rarity) {
-		
+	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, String description,
+			Rarity rarity) {
+
 		this.name = name;
 		this.level = level;
 		this.health = health;
@@ -159,6 +159,10 @@ public class LivingEntity implements Comparable<Object> {
 
 	public boolean isHovering(float x, float y) {
 		return this.x < x && (this.x + this.width) > x && this.y < y && (this.y + this.height) > y;
+	}
+
+	public void init() {
+		this.image = this.getCharacterSprite(name);
 	}
 
 	public void setHealth(int health) {
@@ -281,6 +285,17 @@ public class LivingEntity implements Comparable<Object> {
 			}
 			i++;
 		}
+
+	}
+
+	public Image getCharacterSprite(String nameOfTheCharacter) {
+		Image image;
+		try {
+			image = new Image("/res/entity/" + nameOfTheCharacter + "/" + nameOfTheCharacter + ".png");
+		} catch (SlickException e) {
+			return null;
+		}
+		return image;
 
 	}
 
