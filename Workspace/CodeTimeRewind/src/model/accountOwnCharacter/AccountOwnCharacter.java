@@ -1,4 +1,4 @@
-package model.account_Own_Character;
+package model.accountOwnCharacter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,12 +29,12 @@ import model.livingEntity.character.Character;
 @Setter
 @Getter
 @Entity
-@Table(name = "Account_Own_Characters")
-public class Account_Own_Character {
+@Table(name = "AccountOwnCharacters")
+public class AccountOwnCharacter {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "account_Own_Character_Id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name = "accountOwnCharacter_Id")
 	private Integer id;
 
 	@ManyToOne
@@ -48,8 +48,8 @@ public class Account_Own_Character {
 	@Column(name = "level")
 	private Integer level;
 
-	@Column(name = "experience_Point")
-	private Integer experience_Point;
+	@Column(name = "experiencePoint")
+	private Integer experiencePoint;
 
 	/**
 	 * This is the constructor of this class
@@ -59,11 +59,11 @@ public class Account_Own_Character {
 	 * @param level
 	 * @param experience_Point
 	 */
-	public Account_Own_Character(LivingEntity livingEntity, Account account, Integer level, Integer experience_Point) {
+	public AccountOwnCharacter(LivingEntity livingEntity, Account account, Integer level, Integer experiencePoint) {
 		this.livingEntity = livingEntity;
 		this.account = account;
 		this.level = level;
-		this.experience_Point = experience_Point;
+		this.experiencePoint = experiencePoint;
 	}
 
 }

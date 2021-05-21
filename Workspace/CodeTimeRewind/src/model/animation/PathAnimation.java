@@ -49,6 +49,10 @@ public class PathAnimation {
 		this.duration = duration;
 	}
 
+	public PathAnimation() {
+		
+	}
+
 	public Vector2f currentLocation() {
 		return path.pointAt((float) time / duration);
 	}

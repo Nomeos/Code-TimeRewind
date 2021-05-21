@@ -27,8 +27,8 @@
 		<!-- Names the annotated entity class -->
 		<mapping class="model.chapter.Chapter" />
 		<mapping class="model.account.Account" />
-		<mapping class="model.account_Own_Character.Account_Own_Character" />
-		<mapping class="model.enemy_Per_Stage.Enemy_Per_Stage" />
+		<mapping class="model.accountOwnCharacter.AccountOwnCharacter" />
+		<mapping class="model.enemyPerStage.EnemyPerStage" />
 		<mapping class="model.stage.Stage" />
 		<mapping class="model.rarity.Rarity" />
 		<mapping class="model.rarity.Legendary" />
@@ -43,6 +43,6 @@
 		<mapping class="model.livingEntity.character.Nomeos" />
 		<mapping class="model.livingEntity.character.Guiwi" />
 		<mapping class="model.livingEntity.character.Xtreme" />
-		<mapping class="model.stage_By_Account.Stage_By_Account" />
+		<mapping class="model.stageByAccount.StageByAccount" />
 	</session-factory>
 </hibernate-configuration>

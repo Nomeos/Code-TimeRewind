@@ -18,71 +18,9 @@ import model.rarity.Rarity;
 @NoArgsConstructor
 @Entity
 public class Character extends LivingEntity {
-
-	@Transient
-	private int oldExperience;
-	@Transient
-	private int maxExperience;
-	@Transient
-	private int firstLevelMaxExperience;
-	@Transient
-	private int xpObtained;
-	@Transient
-	private int defaultXpObtained;
-
-	public Character(String name, int level, int health, int defense, int attack, int speed, int width, int height,
-			int experience, String Description) throws SlickException {
-		super(name, level, health, defense, attack, speed, width, height);
-
-		this.maxHealth = health;
-		this.oldExperience = experience;
-		this.xpObtained = 0;
-		this.defaultXpObtained = 20;
-		this.description = Description;
-		this.firstLevelMaxExperience = 150;
-		this.lifeBars = new LifeBars();
-		calculateMaxExperience();
-		this.image = DatabaseCharacterManager.getInstance().getCharacterPicture(this.name);
-		takePlayerSpells();
-	}
-
-	public Character(String name, int level, int health, int defense, int attack, int speed, String description , Rarity rarity) {
-		super(name, level, health, defense, attack, speed, description, rarity);
-		
-	}
-	
-	public void calculateMaxExperience() {
-		for (int i = 1; i <= level; i++) {
-			if (i == 1)
-				maxExperience = 150;
-			else
-				maxExperience *= 1.5;
-		}
-	}
-
-	public void calculateExperienceEarned(int levelOfTheEnemy) {
-
-		for (int i = 1; i <= levelOfTheEnemy; i++) {
-			xpObtained *= 1.5;
-		}
-	}
-
-	public void allocateEarnedExperience() {
-
-		if (oldExperience + xpObtained >= this.maxExperience) {
-			this.level += 1;
-			this.oldExperience = (oldExperience + xpObtained) - maxExperience;
-			calculateMaxExperience();
-		} else {
-			this.oldExperience += xpObtained;
-		}
+	public Character(String name, int level, int health, int defense, int attack, int speed, String description,
+			Rarity rarity, int width, int height) {
+		super(name, level, health, defense, attack, speed, description, rarity, width, height);
 
 	}
-
-	private void takePlayerSpells() {
-		this.setSpells(DatabaseCharacterManager.getInstance().getAllCharacterSpells(this.name));
-	}
-
-
-
 }

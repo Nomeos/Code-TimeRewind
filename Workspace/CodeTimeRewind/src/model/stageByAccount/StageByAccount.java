@@ -1,4 +1,4 @@
-package model.enemy_Per_Stage;
+package model.stageByAccount;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,33 +12,34 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import model.livingEntity.enemy.Enemy;
+import model.account.Account;
 import model.stage.Stage;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "Enemy_Per_Levels")
-public class Enemy_Per_Stage {
+@Table(name = "StageByAccount")
+public class StageByAccount {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "enemy_Per_Level_Id")
+	@Column(name = "stageByAccount_Id")
 	private int id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "stage_Id")
 	private Stage stage;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "enemy_Id")
-	private Enemy enemy;
-	
-	private int level;
-	
-	public Enemy_Per_Stage(Stage levelTable, Enemy enemyTable, int level) {
+	@JoinColumn(name = "account_Id")
+	private Account account;
+
+	@Column(name = "is_Level_Clear")
+	boolean isLevelClear;
+
+	public StageByAccount(Stage levelTable, Account account, boolean isLevelClear) {
 		this.stage = levelTable;
-		this.enemy = enemyTable;
-		this.level = level;
+		this.account = account;
+		this.isLevelClear = isLevelClear;
 	}
 }

@@ -64,29 +64,28 @@ public class LivingEntity implements Comparable<Object> {
 	@ManyToOne
 	@JoinColumn(name = "rarity_Id")
 	private Rarity rarity;
+	
+	@JoinColumn(name = "width")
+	protected int width;
+	
+	@JoinColumn(name = "height")
+	protected int height;
 
 	@Transient
-	protected int maxDefense;
+	protected int defaultHealth;
 	@Transient
-	protected int maxAttack;
+	protected int defaultDefense;
 	@Transient
-	protected int maxSpeed;
+	protected int defaultAttack;
+	@Transient
+	protected int defaultSpeed;
+
 	@Transient
 	protected List<Spell> spells;
 	@Transient
 	protected List<DebuffEffect> activeDebuffs;
 	@Transient
 	protected List<BuffEffect> activeBuffs;
-	@Transient
-	protected int x;
-	@Transient
-	protected int y;
-	@Transient
-	protected int width;
-	@Transient
-	protected int height;
-	@Transient
-	protected int maxHealth;
 	@Transient
 	protected LifeBars lifeBars;
 	@Transient
@@ -105,29 +104,26 @@ public class LivingEntity implements Comparable<Object> {
 	protected boolean isFadingOut;
 	@Transient
 	protected boolean isInBattle = true;
+	@Transient
+	private int Experience;
+	@Transient
+	private int maxExperience;
+	@Transient
+	private int firstLevelMaxExperience;
+	@Transient
+	private int xpObtained;
+	@Transient
+	private int defaultXpObtained;
+	@Transient
+	private boolean isAnEnemy = false;
 
-	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, int width, int height,
-			Image image) throws SlickException {
-		this.name = name;
-		this.level = level;
-		this.health = health;
-		this.defense = defense;
-		this.attack = attack;
-		this.speed = speed;
-		this.width = width;
-		this.height = height;
-		this.maxHealth = health;
-		this.maxDefense = defense;
-		this.maxAttack = attack;
-		this.maxSpeed = speed;
-		this.image = image;
-		this.activeBuffs = new ArrayList<BuffEffect>();
-		this.activeDebuffs = new ArrayList<DebuffEffect>();
-
-	}
+	@Transient
+	protected int x;
+	@Transient
+	protected int y;
 
 	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, String description,
-			Rarity rarity) {
+			Rarity rarity, int width, int height) {
 
 		this.name = name;
 		this.level = level;
@@ -137,24 +133,9 @@ public class LivingEntity implements Comparable<Object> {
 		this.speed = speed;
 		this.description = description;
 		this.rarity = rarity;
-	}
-
-	public LivingEntity(List<Spell> spells) {
-		this.spells = spells;
-	}
-
-	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, int width, int height) {
-		super();
-		this.name = name;
-		this.level = level;
-		this.health = health;
-		this.defense = defense;
-		this.attack = attack;
-		this.speed = speed;
 		this.width = width;
 		this.height = height;
-		this.activeBuffs = new ArrayList<BuffEffect>();
-		this.activeDebuffs = new ArrayList<DebuffEffect>();
+
 	}
 
 	public boolean isHovering(float x, float y) {
@@ -163,6 +144,13 @@ public class LivingEntity implements Comparable<Object> {
 
 	public void init() {
 		this.image = this.getCharacterSprite(name);
+		this.defaultHealth = health;
+		this.animation = new PathAnimation();
+		try {
+			this.lifeBars = new LifeBars();
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setHealth(int health) {
@@ -181,15 +169,15 @@ public class LivingEntity implements Comparable<Object> {
 	}
 
 	public void dealDamage(LivingEntity c, LivingEntity e) {
-		activateCurrentSpell(c, e);
-		effectThatApplyBeforeDamage(c, e);
+		//activateCurrentSpell(c, e);
+		//effectThatApplyBeforeDamage(c, e);
 		int result = c.getAttack();
 		float result1 = 100 / (100 + (float) e.getDefense());
 		int result2 = Math.round(result * result1);
 		e.setHealth(e.getHealth() - result2);
-		activateCurrentSpell(c, e, result2);
-		effectThatApplyAfterDamage(c, e);
-		minusEffectCooldown(c);
+		//activateCurrentSpell(c, e, result2);
+		//effectThatApplyAfterDamage(c, e);
+		//minusEffectCooldown(c);
 		System.out.println(result2);
 	}
 
@@ -341,10 +329,36 @@ public class LivingEntity implements Comparable<Object> {
 		this.alpha = this.image.getAlpha() - 0.01f;
 		this.image.setAlpha(alpha);
 		this.lifeBars.setAlpha(alpha);
-		this.activeBuffs.clear();
-		this.activeDebuffs.clear();
+		//this.activeBuffs.clear();
+		//this.activeDebuffs.clear();
 
 	}
+
+	public void calculateMaxExperience() {
+		for (int i = 1; i <= level; i++) {
+			if (i == 1)
+				maxExperience = 150;
+			else
+				maxExperience *= 1.5;
+		}
+	}
+
+	public void calculateExperienceEarned(int levelOfTheEnemy) {
+
+		for (int i = 1; i <= levelOfTheEnemy; i++) {
+			xpObtained *= 1.5;
+		}
+	}
+
+	/*
+	 * public void allocateEarnedExperience() {
+	 * 
+	 * if (oldExperience + xpObtained >= this.maxExperience) { this.level += 1;
+	 * this.oldExperience = (oldExperience + xpObtained) - maxExperience;
+	 * calculateMaxExperience(); } else { this.oldExperience += xpObtained; }
+	 * 
+	 * }
+	 */
 
 	@Override
 	public int compareTo(Object o) {

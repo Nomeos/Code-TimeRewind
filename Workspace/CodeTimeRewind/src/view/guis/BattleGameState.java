@@ -19,28 +19,25 @@ import lombok.Setter;
 import main.Game;
 import model.animation.BezierPath;
 import model.animation.PathAnimation;
-import model.databaseManager.DatabaseCharacterManager;
+import model.enemyPerStage.EnemyPerStage;
 import model.fight.BattleCommand;
 import model.livingEntity.LivingEntity;
-import model.livingEntity.character.Character;
 import model.livingEntity.enemy.Enemy;
-import model.stage.Stage;
+import model.stageByAccount.StageByAccount;
 
 @NoArgsConstructor
 @Getter
 @Setter
 public class BattleGameState extends Gui {
 
-	private int stateId;
-
-	private Stage currentLevel;
+	private StageByAccount currentLevel;
 	private boolean initiliazeVariable = false;
 	private GuiBattle hud;
 	private BattleController battleController;
 
 	private List<Rectangle> lifeBars;
-	private List<Character> listOfCharacter;
-	private List<Enemy> listOfEnemy;
+	private List<LivingEntity> listOfCharacter;
+	private List<LivingEntity> listOfEnemy;
 	private List<LivingEntity> orderedBattleTurn;
 	private List<Integer> missingDeadEnnemies;
 
@@ -51,7 +48,7 @@ public class BattleGameState extends Gui {
 	private PathAnimation enemyAnimation;
 
 	public BattleGameState(int stateId) {
-		this.stateId = stateId;
+		super(stateId);
 	}
 
 	@Override
@@ -76,7 +73,7 @@ public class BattleGameState extends Gui {
 		this.characterAnimation.update(delta);
 		this.enemyAnimation.update(delta);
 		int i = 1;
-		for (Enemy e : this.listOfEnemy) {
+		for (LivingEntity e : this.listOfEnemy) {
 			if (e.isFadingOut()) {
 				if (!this.missingDeadEnnemies.contains(i)) {
 					this.missingDeadEnnemies.add(i);
@@ -90,7 +87,7 @@ public class BattleGameState extends Gui {
 			this.currentTurn = 0;
 		}
 
-		if (this.orderedBattleTurn.get(currentTurn) instanceof Enemy) {
+		if (this.orderedBattleTurn.get(currentTurn).isAnEnemy()) {
 			if (this.orderedBattleTurn.get(currentTurn).getHealth() <= 0) {
 				this.orderedBattleTurn.remove(currentTurn);
 				this.currentEnemyAnimation++;
@@ -117,8 +114,13 @@ public class BattleGameState extends Gui {
 		}
 		this.hud.render(gc, g);
 		if (getListOfCharacter() != null && getListOfEnemy() != null) {
+			this.lifeBars.clear();
 			drawEntities(gc, g);
-			createLifeBars(gc, g);
+			g.setColor(Color.red);
+			for (Rectangle o : this.lifeBars) {
+				g.draw(o);
+				g.fill(o);
+			}
 			g.drawString("current turn : " + this.currentTurn, 50, 50);
 
 		}
@@ -142,29 +144,17 @@ public class BattleGameState extends Gui {
 
 	}
 
-	private void createLifeBars(GameContainer gc, Graphics g) {
-		this.lifeBars.clear();
+	private void createLifeBar(LivingEntity le, Graphics g) {
 
-		for (Character c : this.listOfCharacter) {
-			if (c.getHealth() > 0) {
-				this.lifeBars.add(new Rectangle(c.getX() + 2, c.getY() - 18, calculateLifeBarWidth(c), 11));
-			}
-		}
-		for (Enemy e : this.listOfEnemy) {
-			if (e.getHealth() > 0) {
-				this.lifeBars.add(new Rectangle(e.getX() + 2, e.getY() - 18, calculateLifeBarWidth(e), 11));
-			}
-
-		}
-		g.setColor(Color.red);
-		for (Rectangle o : this.lifeBars) {
-			g.draw(o);
-			g.fill(o);
+		if (this.lifeBars.size() == 8) {
+			this.lifeBars.clear();
+		} else {
+			this.lifeBars.add(new Rectangle(le.getX() + 2, le.getY() - 18, calculateLifeBarWidth(le), 11));
 		}
 	}
 
 	private int calculateLifeBarWidth(LivingEntity c) {
-		float result = c.getHealth() / (float) c.getMaxHealth();
+		float result = c.getHealth() / (float) c.getDefaultHealth();
 		int result1 = Math.round(result * 145);
 		if (result1 <= 0) {
 			result1 = 0;
@@ -178,32 +168,36 @@ public class BattleGameState extends Gui {
 		switch (numberOfEnnemy) {
 		case 1:
 
-			for (Enemy e : getListOfEnemy()) {
-				e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3) - e.getWidth()),
+			for (LivingEntity e : this.listOfEnemy) {
+				e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)),
 						Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
-
+				createLifeBar(e, g);
 			}
 
 			break;
 		case 2:
 			i = 1;
-			for (Enemy e : getListOfEnemy()) {
+			for (LivingEntity e : this.listOfEnemy) {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
-						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3) - e.getWidth()),
+						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)),
 								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
+						createLifeBar(e, g);
 					} else {
-						e.render((gc.getWidth() / 4) * 3 - e.getWidth(), gc.getHeight() - gc.getHeight() / 2, g);
+						e.render((gc.getWidth() / 4) * 3, gc.getHeight() - gc.getHeight() / 2, g);
+						createLifeBar(e, g);
 					}
 
 					i++;
 				} else if (i == 2) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
-						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350)),
+						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - +350)),
 								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)), g);
+						createLifeBar(e, g);
 					} else {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
+						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - +350,
 								gc.getHeight() - gc.getHeight() / 2 - 30, g);
+						createLifeBar(e, g);
 					}
 
 				}
@@ -213,31 +207,37 @@ public class BattleGameState extends Gui {
 			break;
 		case 3:
 			i = 1;
-			for (Enemy e : getListOfEnemy()) {
+			for (LivingEntity e : this.listOfEnemy) {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
-						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3) - e.getWidth()),
+						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)),
 								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
+						createLifeBar(e, g);
 					} else {
-						e.render((gc.getWidth() / 4) * 3 - e.getWidth(), gc.getHeight() - gc.getHeight() / 2, g);
+						e.render((gc.getWidth() / 4) * 3, gc.getHeight() - gc.getHeight() / 2, g);
+						createLifeBar(e, g);
 					}
 					i++;
 				} else if (i == 2) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
-						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350)),
+						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - +350)),
 								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)), g);
+						createLifeBar(e, g);
 					} else {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
+						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - +350,
 								gc.getHeight() - gc.getHeight() / 2 - 30, g);
+						createLifeBar(e, g);
 					}
 					i++;
 				} else {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
-						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200)),
+						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - +200)),
 								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 155)), g);
+						createLifeBar(e, g);
 					} else {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200,
+						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - +200,
 								gc.getHeight() - gc.getHeight() / 2 - 155, g);
+						createLifeBar(e, g);
 					}
 
 				}
@@ -246,40 +246,46 @@ public class BattleGameState extends Gui {
 			break;
 		case 4:
 			i = 1;
-			for (Enemy e : getListOfEnemy()) {
+			for (LivingEntity e : this.listOfEnemy) {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
-						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3) - e.getWidth()),
+						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)) - 150,
 								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
+						createLifeBar(e, g);
+
 					} else {
-						e.render((gc.getWidth() / 4) * 3 - e.getWidth(), gc.getHeight() - gc.getHeight() / 2, g);
+						e.render((gc.getWidth() / 4 * 3) - -150, gc.getHeight() - gc.getHeight() / 2, g);
+						createLifeBar(e, g);
 					}
 					i++;
 				} else if (i == 2) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
-						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350)),
+						e.render(Math.round(p.x + (gc.getWidth() / 4 + 350)) - 150,
 								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)), g);
+						createLifeBar(e, g);
 					} else {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 350,
-								gc.getHeight() - gc.getHeight() / 2 - 30, g);
+						e.render((gc.getWidth() / 4 * 3) + 350 - 150, gc.getHeight() - gc.getHeight() / 2 - 30, g);
+						createLifeBar(e, g);
 					}
 					i++;
 				} else if (i == 3) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
-						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200)),
+						e.render(Math.round(p.x + (gc.getWidth() / 4 + 200)) - 150,
 								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 155)), g);
+						createLifeBar(e, g);
 					} else {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 200,
-								gc.getHeight() - gc.getHeight() / 2 - 155, g);
+						e.render((gc.getWidth() / 4 * 3) + 200 - 150, gc.getHeight() - gc.getHeight() / 2 - 155, g);
+						createLifeBar(e, g);
 					}
 					i++;
 				} else {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
-						e.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 175)),
+						e.render(Math.round(p.x + (gc.getWidth() / 4 * 3 + 175)) - 150,
 								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 + 125)), g);
+						createLifeBar(e, g);
 					} else {
-						e.render(gc.getScreenWidth() - gc.getWidth() / 4 - e.getWidth() + 175,
-								gc.getHeight() - gc.getHeight() / 2 + 125, g);
+						e.render((gc.getWidth() / 4 * 3) + 175 - 150, gc.getHeight() - gc.getHeight() / 2 + 125, g);
+						createLifeBar(e, g);
 					}
 
 				}
@@ -288,6 +294,7 @@ public class BattleGameState extends Gui {
 			break;
 
 		}
+
 	}
 
 	private void drawCharacters(int numberOfCharacter, GameContainer gc, Graphics g) {
@@ -295,59 +302,135 @@ public class BattleGameState extends Gui {
 		Vector2f p = this.characterAnimation.currentLocation();
 		switch (numberOfCharacter) {
 		case 1:
-			for (Character c : getListOfCharacter()) {
-				c.render(Math.round(p.x + (gc.getWidth() / 4)), Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)),
-						g);
+			i = 1;
+			for (LivingEntity c : this.listOfCharacter) {
+				if (i == 1) {
+					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
+						c.render(Math.round(p.x + (gc.getWidth() / 4)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
+						createLifeBar(c, g);
+					} else {
+						c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
+						createLifeBar(c, g);
+					}
+				}
 			}
 			break;
 		case 2:
-			for (Character c : getListOfCharacter()) {
+			i = 1;
+			for (LivingEntity c : this.listOfCharacter) {
 				if (i == 1) {
-					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
+					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
+						c.render(Math.round(p.x + (gc.getWidth() / 4)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
+						createLifeBar(c, g);
+					} else {
+						c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
+						createLifeBar(c, g);
+					}
+
 					i++;
-				} else {
-					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 350,
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30, g);
+				} else if (i == 2) {
+					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
+						c.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - 350)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)), g);
+						createLifeBar(c, g);
+					} else {
+						c.render(gc.getScreenWidth() - gc.getWidth() / 4 + 350,
+								gc.getHeight() - gc.getHeight() / 2 - 30, g);
+						createLifeBar(c, g);
+					}
 				}
 
 			}
 			break;
 		case 3:
-			for (Character c : getListOfCharacter()) {
+			i = 1;
+			for (LivingEntity c : this.listOfCharacter) {
 				if (i == 1) {
-					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
+					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
+						c.render(Math.round(p.x + (gc.getWidth() / 4)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
+						createLifeBar(c, g);
+					} else {
+						c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
+						createLifeBar(c, g);
+					}
+
 					i++;
 				} else if (i == 2) {
-					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 350,
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30, g);
+					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
+						c.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - 350)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)), g);
+						createLifeBar(c, g);
+					} else {
+						c.render(gc.getWidth() / 4 - 350, gc.getHeight() - gc.getHeight() / 2 - 30, g);
+						createLifeBar(c, g);
+					}
 					i++;
-				} else {
-					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
+				} else if (i == 3) {
+					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
+						c.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - 200)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 155)), g);
+						createLifeBar(c, g);
+					} else {
+						c.render(gc.getWidth() / 4 - 200, gc.getHeight() - gc.getHeight() / 2 - 155, g);
+						createLifeBar(c, g);
+					}
+
 				}
 
 			}
 			break;
 		case 4:
-			for (Character c : getListOfCharacter()) {
+			i = 1;
+			for (LivingEntity c : this.listOfCharacter) {
+
 				if (i == 1) {
-					c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2 - 100, g);
+					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
+						c.render(Math.round(p.x + (gc.getWidth() / 4)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
+						createLifeBar(c, g);
+					} else {
+						c.render(gc.getWidth() / 4, gc.getHeight() - gc.getHeight() / 2, g);
+						createLifeBar(c, g);
+					}
+
 					i++;
 				} else if (i == 2) {
-					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 350,
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 30, g);
+					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
+						c.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - 350)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 30)), g);
+						createLifeBar(c, g);
+					} else {
+						c.render(gc.getWidth() / 4 - 350, gc.getHeight() - gc.getHeight() / 2 - 30, g);
+						createLifeBar(c, g);
+					}
 					i++;
 				} else if (i == 3) {
-					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 200,
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) - 155, g);
+					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
+						c.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - 200)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 - 155)), g);
+						createLifeBar(c, g);
+					} else {
+						c.render(gc.getWidth() / 4 - 200, gc.getHeight() - gc.getHeight() / 2 - 155, g);
+						createLifeBar(c, g);
+					}
 					i++;
-				} else {
-					c.render(gc.getScreenWidth() - gc.getWidth() / 4 - c.getWidth() - 175,
-							gc.getHeight() - gc.getHeight() / 4 - (c.getHeight() / 2) + 125, g);
+				} else if (i == 4) {
+					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
+						c.render(Math.round(p.x + (gc.getScreenWidth() - gc.getWidth() / 4 - 175)),
+								Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2 + 125)), g);
+						createLifeBar(c, g);
+					} else {
+						c.render(gc.getWidth() / 4 - 175, gc.getHeight() - gc.getHeight() / 2 + 125, g);
+						createLifeBar(c, g);
+
+					}
 				}
 
 			}
 			break;
-
 		}
 	}
 
@@ -360,9 +443,8 @@ public class BattleGameState extends Gui {
 	public void mouseReleased(int button, int x, int y) {
 		this.hud.updateButton(button, x, y, false);
 		int i = 0;
-		for (Enemy e : this.listOfEnemy) {
+		for (LivingEntity e : this.listOfEnemy) {
 			if (e.isHovering(x, y)) {
-				this.listOfCharacter.get(0).setAnimation(characterAnimation);
 				this.battleController.setCurrentEnemy(this.listOfEnemy.get(i));
 				this.battleController.setCurrentCharacter(this.listOfCharacter.get(0));
 				if (!this.battleController.isInitDone()) {
@@ -387,21 +469,50 @@ public class BattleGameState extends Gui {
 		if (Game.getInstance() != null && !initiliazeVariable) {
 			int i = 1;
 			int chapter = Game.getInstance().getCurrentChapter();
-			for (Stage level : Game.getInstance().getListOfChapters().get(chapter - 1)) {
+
+			List<StageByAccount> listSba = Game.getInstance().getPlayerAccount().getStageByAccount();
+			for (StageByAccount sba : listSba) {
 				if (i == Game.getInstance().getCurrentLevel()) {
-					this.currentLevel = level;
+					this.currentLevel = sba;
 					break;
 				} else {
 					i++;
 				}
 			}
-			//setListOfCharacter(Game.getInstance().getPlayerAccount().getAccount_Own_Character());
-			//setListOfEnemy(this.currentLevel.getListOfEnemy());
-			this.listOfEnemy.forEach(f -> {
-				f.setAnimation(enemyAnimation);
-				f.setSpells(DatabaseCharacterManager.getInstance().getAllCharacterSpells(f.getName()));
 
-			});
+			List<LivingEntity> tempListOfEnemy = new ArrayList<LivingEntity>();
+
+			for (EnemyPerStage eps : this.currentLevel.getStage().getEnemy_Per_Stage()) {
+				eps.getEnemy().setLevel(eps.getLevel());
+				eps.getEnemy().setAnEnemy(true);
+				eps.getEnemy().setAnimation(enemyAnimation);
+				tempListOfEnemy.add(eps.getEnemy());
+
+			}
+			this.listOfEnemy = tempListOfEnemy;
+
+			List<LivingEntity> tempListOfCharacter = new ArrayList<LivingEntity>();
+			int numberCharacterAccountHas = Game.getInstance().getPlayerAccount().getAccountOwnCharacter().size();
+			if (numberCharacterAccountHas < 4) {
+				for (int j = 0; j <= (numberCharacterAccountHas - 1); j++) {
+					Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
+							.setAnEnemy(false);
+					Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
+					.setAnimation(characterAnimation);
+					tempListOfCharacter.add(
+							Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity());
+				}
+			} else if (numberCharacterAccountHas >= 4) {
+				for (int j = 0; j <= 3; j++) {
+					Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
+							.setAnEnemy(false);
+					Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
+					.setAnimation(characterAnimation);
+					tempListOfCharacter.add(
+							Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity());
+				}
+			}
+			this.listOfCharacter = tempListOfCharacter;
 			this.battleController = new BattleController(listOfCharacter, listOfEnemy, this);
 			this.initiliazeVariable = true;
 			calculateTurnOrder();
@@ -415,12 +526,6 @@ public class BattleGameState extends Gui {
 		Collections.sort(this.orderedBattleTurn);
 		Collections.reverse(this.orderedBattleTurn);
 		Collections.reverse(listOfEnemy);
-	}
-
-	@Override
-	public int getID() {
-
-		return stateId;
 	}
 
 }

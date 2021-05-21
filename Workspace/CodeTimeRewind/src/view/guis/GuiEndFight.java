@@ -22,21 +22,20 @@ public class GuiEndFight extends Gui {
 	private Image backgroundImage;
 	private Image title;
 	private Character currentCharacter;
-	private SmallButton leaveLevel;
 	private List<Button> listOfCurrentButton;
 	private EndFightController controller;
 	private List<Rectangle> experienceBars;
 
 	public GuiEndFight(int endFight) {
-
+		super(endFight);
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 
 		this.controller = new EndFightController(this);
-		this.buttonNeeded = new int[] {};
-		this.backgroundImage = new Image("/res/Night.png");
+		this.buttonNeeded = new int[] {14};
+		this.backgroundImage = this.getListOfBackgrounds().get(6);
 		this.title = new Image("/res/zones/StageClear.png");
 		this.listOfCurrentButton = new ArrayList<Button>();
 		for (int i : this.buttonNeeded) {
@@ -52,7 +51,9 @@ public class GuiEndFight extends Gui {
 
 		this.backgroundImage.draw(0, 0);
 		this.title.draw((gc.getWidth() / 2) - (840 / 2), 50);
-		this.leaveLevel.draw();
+		for (Button currentButton : this.listOfCurrentButton) {
+			currentButton.draw();
+		}
 		if (this.currentCharacter != null) {
 			this.currentCharacter.setInBattle(false);
 			createLifeBars(gc, g);
@@ -70,12 +71,14 @@ public class GuiEndFight extends Gui {
 
 	private void createLifeBars(GameContainer gc, Graphics g) {
 		this.experienceBars.clear();
-		this.experienceBars.add(new Rectangle(202 + this.currentCharacter.getWidth(),
-				722 + (this.currentCharacter.getHeight() / 2) + 20,
-				calculateNewExperienceBarWidth(this.currentCharacter), 11));
-		this.experienceBars.add(new Rectangle(202 + this.currentCharacter.getWidth(),
-				722 + (this.currentCharacter.getHeight() / 2) + 20,
-				calculateOldExperienceBarWidth(this.currentCharacter), 11));
+		/*
+		 * this.experienceBars.add(new Rectangle(202 + this.currentCharacter.getWidth(),
+		 * 722 + (this.currentCharacter.getHeight() / 2) + 20,
+		 * calculateNewExperienceBarWidth(this.currentCharacter), 11));
+		 * this.experienceBars.add(new Rectangle(202 + this.currentCharacter.getWidth(),
+		 * 722 + (this.currentCharacter.getHeight() / 2) + 20,
+		 * calculateOldExperienceBarWidth(this.currentCharacter), 11));
+		 */
 
 		int i = 0;
 		for (Rectangle o : this.experienceBars) {
@@ -92,23 +95,19 @@ public class GuiEndFight extends Gui {
 		}
 	}
 
-	private int calculateOldExperienceBarWidth(Character c) {
-		float result = c.getOldExperience() / (float) c.getMaxExperience();
-		int result1 = Math.round(result * 145);
-		if (result1 <= 0) {
-			result1 = 0;
-		}
-		return result1;
-	}
+	/*
+	 * private int calculateOldExperienceBarWidth(Character c) { float result =
+	 * c.getOldExperience() / (float) c.getMaxExperience(); int result1 =
+	 * Math.round(result * 145); if (result1 <= 0) { result1 = 0; } return result1;
+	 * }
+	 */
 
-	private int calculateNewExperienceBarWidth(Character c) {
-		float result = (c.getXpObtained() + c.getOldExperience()) / (float) c.getMaxExperience();
-		int result1 = Math.round(result * 145);
-		if (result1 <= 0) {
-			result1 = 0;
-		}
-		return result1;
-	}
+	/*
+	 * private int calculateNewExperienceBarWidth(Character c) { float result =
+	 * (c.getXpObtained() + c.getOldExperience()) / (float) c.getMaxExperience();
+	 * int result1 = Math.round(result * 145); if (result1 <= 0) { result1 = 0; }
+	 * return result1; }
+	 */
 
 	@Override
 	public int getID() {
@@ -142,7 +141,8 @@ public class GuiEndFight extends Gui {
 
 	private void initializeVariables() {
 		if (Game.getInstance() != null) {
-			//this.currentCharacter = Game.getInstance().getPlayerAccount().getListOfOwnedCharacter().get(0);
+			// this.currentCharacter =
+			// Game.getInstance().getPlayerAccount().getListOfOwnedCharacter().get(0);
 		}
 	}
 

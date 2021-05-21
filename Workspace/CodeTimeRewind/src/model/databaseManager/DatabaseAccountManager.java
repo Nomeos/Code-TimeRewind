@@ -11,9 +11,9 @@ import org.newdawn.slick.SlickException;
 import lombok.NoArgsConstructor;
 import main.Game;
 import model.account.Account;
-import model.account_Own_Character.Account_Own_Character;
+import model.accountOwnCharacter.AccountOwnCharacter;
 import model.chapter.Chapter;
-import model.enemy_Per_Stage.Enemy_Per_Stage;
+import model.enemyPerStage.EnemyPerStage;
 import model.livingEntity.LivingEntity;
 import model.livingEntity.character.Character;
 import model.livingEntity.character.Guiwi;
@@ -26,7 +26,7 @@ import model.rarity.Epic;
 import model.rarity.Legendary;
 import model.rarity.Rare;
 import model.stage.Stage;
-import model.stage_By_Account.Stage_By_Account;
+import model.stageByAccount.StageByAccount;
 
 @NoArgsConstructor
 public class DatabaseAccountManager {
@@ -59,7 +59,7 @@ public class DatabaseAccountManager {
 		String sqlQuery;
 		List<Character> characters;
 
-		sqlQuery = "FROM Character LE WHERE LE.name = 'Nomos'";
+		sqlQuery = "FROM Character LE WHERE LE.name = 'Nomeos'";
 		query = session.createQuery(sqlQuery);
 		characters = query.list();
 
@@ -90,7 +90,7 @@ public class DatabaseAccountManager {
 
 			Stage tempStage;
 			Chapter tempChapter;
-			Enemy_Per_Stage tempEpl;
+			EnemyPerStage tempEpl;
 
 			tempLegendary = new Legendary();
 			this.session.save(tempLegendary);
@@ -125,27 +125,27 @@ public class DatabaseAccountManager {
 			this.session.save(tempChapter);
 			tempStage = new Stage("Facile", 125, 125, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempSkeleton, 1);
+			tempEpl = new EnemyPerStage(tempStage, tempSkeleton, 1);
 			this.session.save(tempEpl);
 			tempStage = new Stage("Moyen", 400, 400, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempZombie, 1);
+			tempEpl = new EnemyPerStage(tempStage, tempZombie, 1);
 			this.session.save(tempEpl);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempSkeleton, 1);
+			tempEpl = new EnemyPerStage(tempStage, tempSkeleton, 1);
 			this.session.save(tempEpl);
 			tempStage = new Stage("Difficile", 70, 800, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempBoar, 2);
+			tempEpl = new EnemyPerStage(tempStage, tempBoar, 2);
 			this.session.save(tempEpl);
-			tempStage = new Stage("Difficile+", 600, 850, tempChapter);
+			tempStage = new Stage("Difficile+", 600, 600, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempZombie, 2);
+			tempEpl = new EnemyPerStage(tempStage, tempZombie, 2);
 			this.session.save(tempEpl);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempZombie, 1);
+			tempEpl = new EnemyPerStage(tempStage, tempZombie, 1);
 			this.session.save(tempEpl);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempSkeleton, 2);
+			tempEpl = new EnemyPerStage(tempStage, tempSkeleton, 2);
 			this.session.save(tempEpl);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempSkeleton, 2);
+			tempEpl = new EnemyPerStage(tempStage, tempSkeleton, 2);
 			this.session.save(tempEpl);
 
 			// Chapter Two
@@ -154,7 +154,7 @@ public class DatabaseAccountManager {
 			this.session.save(tempChapter);
 			tempStage = new Stage("Ultra Difficile", 150, 70, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempBoar, 3);
+			tempEpl = new EnemyPerStage(tempStage, tempBoar, 3);
 			this.session.save(tempEpl);
 
 			// Chapter Three
@@ -163,9 +163,9 @@ public class DatabaseAccountManager {
 			this.session.save(tempChapter);
 			tempStage = new Stage("Hardcore", 500, 70, tempChapter);
 			this.session.save(tempStage);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempBoar, 5);
+			tempEpl = new EnemyPerStage(tempStage, tempBoar, 5);
 			this.session.save(tempEpl);
-			tempEpl = new Enemy_Per_Stage(tempStage, tempBoar, 5);
+			tempEpl = new EnemyPerStage(tempStage, tempBoar, 5);
 			this.session.save(tempEpl);
 
 		} catch (Throwable ex) {
@@ -231,14 +231,14 @@ public class DatabaseAccountManager {
 	public void InsertLevelsInAccount(Account userAccount) {
 		Query query;
 		String sqlQuery = "FROM Stage";
-		Stage_By_Account sba;
+		StageByAccount sba;
 		try {
 			OpenDatabaseConnection();
 			this.session.beginTransaction();
 			query = session.createQuery(sqlQuery, Stage.class);
 			List<Stage> stages = query.list();
 			for (Stage currentStage : stages) {
-				sba = new Stage_By_Account(currentStage, userAccount, false);
+				sba = new StageByAccount(currentStage, userAccount, false);
 				this.session.save(sba);
 			}
 
@@ -251,21 +251,21 @@ public class DatabaseAccountManager {
 	}
 
 	public void InsertAccountInDatabase(Account userAccount) {
-		Account_Own_Character aoc;
+		AccountOwnCharacter aoc;
 		String sqlQuery;
 		Query query;
 		List<LivingEntity> character;
 		try {
 			OpenDatabaseConnection();
 			this.session.beginTransaction();
-			userAccount.setAccount_Level(1);
+			userAccount.setAccountLevel(1);
 			this.session.save(userAccount);
 
 			sqlQuery = "FROM LivingEntity c WHERE c.name = 'Nomeos'";
 			query = session.createQuery(sqlQuery);
 			character = query.list();
 			for (LivingEntity currentCharacter : character) {
-				aoc = new Account_Own_Character(currentCharacter, userAccount, 1, 0);
+				aoc = new AccountOwnCharacter(currentCharacter, userAccount, 1, 0);
 				this.session.save(aoc);
 			}
 
@@ -347,6 +347,18 @@ public class DatabaseAccountManager {
 			query = session.createQuery(sqlQuery);
 			account = query.list();
 			for (Account currentAccount : account) {
+				for (AccountOwnCharacter aoc : currentAccount.getAccountOwnCharacter()) {
+					aoc.getLivingEntity().setLevel(aoc.getLevel());
+					aoc.getLivingEntity().setExperience(aoc.getExperiencePoint());
+					aoc.getLivingEntity().init();
+				}
+				for (StageByAccount sba : currentAccount.getStageByAccount()) {
+					sba.getStage().setLevelClear(sba.isLevelClear());
+					for (EnemyPerStage eps : sba.getStage().getEnemy_Per_Stage()) {
+						eps.getEnemy().setLevel(eps.getLevel());
+						eps.getEnemy().init();
+					}
+				}
 				userAccount = currentAccount;
 			}
 
@@ -384,23 +396,22 @@ public class DatabaseAccountManager {
 	}
 
 	public void insertCharacterOwnedInAccount(Account userAccount, LivingEntity le) {
-		Account_Own_Character aoc;
+		AccountOwnCharacter aoc;
 		Query query;
 		String sqlQuery;
 		List<Account> accounts;
 		try {
 			OpenDatabaseConnection();
 			this.session.beginTransaction();
-			
+
 			sqlQuery = "FROM Account A WHERE A.username ='" + userAccount.getUsername() + "'";
 			query = session.createQuery(sqlQuery);
 			accounts = query.list();
 			for (Account currentAccount : accounts) {
-				aoc = new Account_Own_Character(le, currentAccount, 1, 0);
+				aoc = new AccountOwnCharacter(le, currentAccount, 1, 0);
 				this.session.save(aoc);
 			}
-			
-			
+
 		} catch (Throwable ex) {
 			System.err.println("Initial SessionFactory creation failed." + ex);
 			throw new ExceptionInInitializerError(ex);

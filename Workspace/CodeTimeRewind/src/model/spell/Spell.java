@@ -92,8 +92,8 @@ public class Spell {
 		for (PassiveEffect p : this.passives) {
 			if(p instanceof LifeAbsorption) {
 				int result = ((LifeAbsorption) p).start(damageInflicated);
-				if(c.getMaxHealth() < c.getHealth() + result) {
-					c.setHealth(c.getMaxHealth());
+				if(c.getDefaultHealth() < c.getHealth() + result) {
+					c.setHealth(c.getDefaultHealth());
 				}else {
 					c.setHealth(c.getHealth() + result);
 				}

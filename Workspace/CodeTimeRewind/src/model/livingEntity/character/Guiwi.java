@@ -29,11 +29,13 @@ public class Guiwi extends Character {
 	private final static int ATTACK = 500;
 	@Transient
 	private final static int SPEED = 90;
+	@Transient
+	private final static int WIDTH = 195;
+	@Transient
+	private final static int HEIGHT = 222;
 
 	public Guiwi(Rarity rarity) {
-		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity);
+		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity, WIDTH, HEIGHT);
 	}
-	
-	
 
 }

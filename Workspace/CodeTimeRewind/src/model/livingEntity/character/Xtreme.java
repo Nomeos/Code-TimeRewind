@@ -29,9 +29,13 @@ public class Xtreme extends Character {
 	private final static int ATTACK = 200;
 	@Transient
 	private final static int SPEED = 40;
+	@Transient
+	private final static int WIDTH = 134;
+	@Transient
+	private final static int HEIGHT = 195;
 
 	public Xtreme(Rarity rarity) {
-		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity);
+		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity, WIDTH, HEIGHT);
 	}
 
 

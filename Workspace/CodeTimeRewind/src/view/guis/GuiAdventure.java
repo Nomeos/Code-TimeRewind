@@ -20,6 +20,7 @@ import main.Game;
 import model.button.Button;
 import model.button.LevelButton;
 import model.stage.Stage;
+import model.stageByAccount.StageByAccount;
 
 @NoArgsConstructor
 @Getter
@@ -28,7 +29,7 @@ public class GuiAdventure extends Gui {
 	private int stateId;
 	private Image background;
 
-	private List<Stage> listOfLevels;
+	private List<StageByAccount> listOfLevels;
 	private boolean initializeButtons = false;
 	private List<Button> listOfCurrentButton;
 	private AdventureController controller;
@@ -42,7 +43,7 @@ public class GuiAdventure extends Gui {
 		this.controller = new AdventureController(this);
 		this.buttonNeeded = new int[] { 8, 15 };
 		this.background = this.getListOfBackgrounds().get(2);
-		this.listOfLevels = new ArrayList<Stage>();
+		this.listOfLevels = new ArrayList<StageByAccount>();
 		this.listOfCurrentButton = new ArrayList<Button>();
 		for (int i : this.buttonNeeded) {
 			this.listOfCurrentButton.add(this.getListOfButtons().get(i));
@@ -61,15 +62,16 @@ public class GuiAdventure extends Gui {
 			int i = 1;
 			int chapterId = Game.getInstance().getCurrentChapter();
 			if (!initializeButtons) {
-				for (Stage l : this.listOfLevels) {
+				for (StageByAccount l : this.listOfLevels) {
 					LevelButton button = new LevelButton(new Image("/res/buttons/Button_13.png"),
-							new Image("/res/buttons/Button_13_Hit.png"), l.getXPosition(), l.getYPosition());
+							new Image("/res/buttons/Button_13_Hit.png"), l.getStage().getXPosition(),
+							l.getStage().getYPosition());
 					button.setLevelId(i);
 					this.listOfCurrentButton.add(button);
 					button.draw();
 					String s = chapterId + " - " + i;
-					g.drawString(s, l.getXPosition() + button.getWidth() - 100,
-							l.getYPosition() + button.getHeight() - 100);
+					g.drawString(s, l.getStage().getXPosition() + button.getWidth() - 100,
+							l.getStage().getYPosition() + button.getHeight() - 100);
 					i++;
 				}
 				this.initializeButtons = true;
@@ -77,12 +79,13 @@ public class GuiAdventure extends Gui {
 			} else {
 				for (Button button : this.listOfCurrentButton) {
 					button.draw();
-					if(button instanceof LevelButton) {
+					if (button instanceof LevelButton) {
 						String s = chapterId + " - " + i;
-						g.drawString(s, button.getX() + button.getWidth() - 100, button.getY() + button.getHeight() - 100);
+						g.drawString(s, button.getX() + button.getWidth() - 100,
+								button.getY() + button.getHeight() - 100);
 						i++;
 					}
-					
+
 				}
 
 			}
@@ -93,8 +96,12 @@ public class GuiAdventure extends Gui {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (Game.getInstance() != null) {
-			this.listOfLevels = new ArrayList<Stage>(
-					Game.getInstance().getListOfChapters().get(Game.getInstance().getCurrentChapter() - 1));
+			List<StageByAccount> listSba = Game.getInstance().getPlayerAccount().getStageByAccount();
+			for (StageByAccount sba : listSba) {
+				if (sba.getStage().getChapter().getId() == Game.getInstance().getCurrentChapter()) {
+					this.listOfLevels.add(sba);
+				}
+			}
 		}
 	}
 

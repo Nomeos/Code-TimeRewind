@@ -53,8 +53,10 @@ public class GuiSummon extends Gui {
 		for (Button b : this.listOfCurrentButton) {
 			b.draw();
 		}
-		if(this.currentCharacterOwned != null) {
-			this.currentCharacterOwned.getImage().draw(1200,750);
+		if (this.currentCharacterOwned != null) {
+			this.currentCharacterOwned.getImage().draw(1200, 750);
+			g.drawString(this.currentCharacterOwned.getRarity().getName() + " character !", 1250, 950);
+			g.drawString(this.currentCharacterOwned.getName(), 1250, 960);
 		}
 	}
 

@@ -1,7 +1,7 @@
 package model.rarity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,7 +35,7 @@ public class Rarity {
 	private double chanceOfSummoning;
 	
 	@OneToMany(mappedBy = "rarity", cascade = CascadeType.ALL)
-	private Set<LivingEntity> livingEntity = new HashSet<>();
+	private List<LivingEntity> livingEntity = new ArrayList<LivingEntity>();
 
 	public Rarity(String name, double chanceOfSummoning) {
 		this.name = name;

@@ -13,18 +13,17 @@ import lombok.Setter;
 import main.Game;
 import model.animation.AnimationListener;
 import model.fight.BattleCommand;
-import model.livingEntity.character.Character;
-import model.livingEntity.enemy.Enemy;
+import model.livingEntity.LivingEntity;
 import view.guis.BattleGameState;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class BattleController implements InputProviderListener {
-	private List<Character> listOfCharacter;
-	private List<Enemy> listOfEnemy;
-	private Character currentCharacter;
-	private Enemy currentEnemy;
+	private List<LivingEntity> listOfCharacter;
+	private List<LivingEntity> listOfEnemy;
+	private LivingEntity currentCharacter;
+	private LivingEntity currentEnemy;
 	private int currentSpell;
 	private boolean isEnemiesTurn;
 	private boolean isInitDone = false;
@@ -33,9 +32,9 @@ public class BattleController implements InputProviderListener {
 	private BattleCommand mode;
 	private BattleGameState game;
 
-	public BattleController(List<Character> c, List<Enemy> e, BattleGameState game) {
-		this.listOfEnemy = e;
-		this.listOfCharacter = c;
+	public BattleController(List<LivingEntity> listOfCharacter, List<LivingEntity> listOfEnemy, BattleGameState game) {
+		this.listOfEnemy = listOfEnemy;
+		this.listOfCharacter = listOfCharacter;
 		this.isEnemiesTurn = false;
 		this.game = game;
 
@@ -79,41 +78,40 @@ public class BattleController implements InputProviderListener {
 
 	private void playerAssignDamage() {
 		this.currentCharacter.setCurrentSpell(currentSpell);
-		if (this.currentCharacter.isSingleAttack()) {
+		//if (this.currentCharacter.isSingleAttack()) {
 			this.currentCharacter.dealDamage(this.currentCharacter, this.currentEnemy);
-		} else {
-			for (Enemy e : this.listOfEnemy) {
-				this.currentCharacter.dealDamage(this.currentCharacter, e);
-			}
-		}
+		//} else {
+		//	for (LivingEntity e : this.listOfEnemy) {
+				//this.currentCharacter.dealDamage(this.currentCharacter, e);
+		//	}
+		//}
 
 	}
 
 	private void endPlayerAttack() {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
-		for (Enemy e : this.listOfEnemy) {
+		for (LivingEntity e : this.listOfEnemy) {
 			if (e.getHealth() <= 0) {
 				e.setFadingOut(true);
 			}
 		}
 		boolean end = false;
-		for (Enemy e : this.listOfEnemy) {
+		for (LivingEntity e : this.listOfEnemy) {
 			if (e.isFadingOut()) {
 				end = true;
-			}else {
+			} else {
 				end = false;
 				break;
 			}
 		}
 		this.currentCharacter.setDone(false);
 		if (end) {
-			for(Enemy e : this.listOfEnemy) {
+			for (LivingEntity e : this.listOfEnemy) {
 				this.currentCharacter.calculateExperienceEarned(e.getLevel());
 			}
 			Game.getInstance().enterState(8, new FadeOutTransition(), new FadeInTransition());
 		}
-		
-	
+
 	}
 
 	private void ennemyAssignDamage() {

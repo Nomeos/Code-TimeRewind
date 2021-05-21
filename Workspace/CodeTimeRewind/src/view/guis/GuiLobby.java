@@ -69,7 +69,7 @@ this.backgroundImage = this.getListOfBackgrounds().get(1);
 		if (Game.getInstance().getPlayerAccount() != null) {
 			this.playerAccount = Game.getInstance().getPlayerAccount();
 			this.username = this.playerAccount.getUsername();
-			this.level = this.playerAccount.getAccount_Level();
+			this.level = this.playerAccount.getAccountLevel();
 		}
 
 	}

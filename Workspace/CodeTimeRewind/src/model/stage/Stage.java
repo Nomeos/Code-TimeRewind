@@ -1,7 +1,7 @@
 package model.stage;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,13 +13,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.chapter.Chapter;
-import model.enemy_Per_Stage.Enemy_Per_Stage;
-import model.stage_By_Account.Stage_By_Account;
+import model.enemyPerStage.EnemyPerStage;
+import model.stageByAccount.StageByAccount;
 
 /**
  * This class contains the stage that the user can clear for continue the game
@@ -49,14 +50,17 @@ public class Stage {
 	private int yPosition;
 
 	@OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
-	private Set<Enemy_Per_Stage> enemy_Per_Stage = new HashSet<>();
+	private List<EnemyPerStage> enemy_Per_Stage = new ArrayList<EnemyPerStage>();
 	
 	@OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
-	private Set<Stage_By_Account> stage_By_Account = new HashSet<>();
+	private List<StageByAccount> stage_By_Account = new ArrayList<StageByAccount>();
 
 	@ManyToOne
 	@JoinColumn(name = "chapter_Id")
 	private Chapter chapter;
+	
+	@Transient
+	boolean isLevelClear;
 
 	/**
 	 * This is the constructor of this class

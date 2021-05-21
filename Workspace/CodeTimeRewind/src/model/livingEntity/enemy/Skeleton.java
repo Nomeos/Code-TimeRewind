@@ -29,9 +29,13 @@ public class Skeleton extends Enemy {
 	private final static int ATTACK = 150;
 	@Transient
 	private final static int SPEED = 0;
+	@Transient
+	private final static int WIDTH = 124;
+	@Transient
+	private final static int HEIGHT = 200;
 
 	public Skeleton(Rarity rarity) {
-		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity);
+		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity, WIDTH, HEIGHT);
 
 	}
 	

@@ -18,7 +18,7 @@ import org.newdawn.slick.SlickException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import model.enemy_Per_Stage.Enemy_Per_Stage;
+import model.enemyPerStage.EnemyPerStage;
 import model.image.LifeBars;
 import model.livingEntity.LivingEntity;
 import model.rarity.Rarity;
@@ -34,20 +34,12 @@ public class Enemy extends LivingEntity {
 	@Column(name = "enemy_Id")
 	private int id;
 
-	@OneToMany(mappedBy = "enemy" , cascade = CascadeType.ALL)
-	private Set<Enemy_Per_Stage> enemy_Per_Level = new HashSet<>();
+	@OneToMany(mappedBy = "enemy", cascade = CascadeType.ALL)
+	private Set<EnemyPerStage> enemy_Per_Level = new HashSet<>();
 
-	public Enemy(String name, int level, int health, int defense, int attack, int speed, int width, int height,
-			Image enemy) throws SlickException {
-		super(name, level, health, defense, attack, speed, width, height, enemy);
-		this.maxHealth = health;
-		this.lifeBars = new LifeBars();
-
+	public Enemy(String name, int level, int health, int defense, int attack, int speed, String description,
+			Rarity rarity, int width, int height) {
+		super(name, level, health, defense, attack, speed, description, rarity, width, height);
 	}
-
-	public Enemy(String name, int level, int health, int defense, int attack, int speed, String description , Rarity rarity) {
-		super(name, level, health, defense, attack, speed, description, rarity);
-	}
-	
 
 }

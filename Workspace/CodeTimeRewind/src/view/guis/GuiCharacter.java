@@ -3,6 +3,7 @@ package view.guis;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -20,7 +21,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import main.Game;
 import model.account.Account;
+import model.accountOwnCharacter.AccountOwnCharacter;
 import model.button.Button;
+import model.livingEntity.LivingEntity;
 
 @Getter
 @Setter
@@ -28,6 +31,7 @@ import model.button.Button;
 public class GuiCharacter extends Gui {
 
 	private Account player;
+	private AccountOwnCharacter currentCharacter;
 	private int smallButtonHeight;
 	private int smallButtonWidth;
 	private int lobbyButtonXPosition;
@@ -35,16 +39,6 @@ public class GuiCharacter extends Gui {
 	private int zoneLibreStatsXPosition;
 	private int zoneLibreStatsYPosition;
 	private int zoneLibreStatsHeight;
-	private int character_experience_point;
-	private int character_health;
-	private int character_defense;
-	private int character_attack;
-	private int character_speed;
-	private Image character_image;
-	private int stateId;
-	private float character_max_experience_point;
-	private int character_level;
-	private float backgroundProgressBarWidth;
 	private Image backgroundImage;
 	private Image zoneLibreStats;
 	private Image backgroundProgressBar;
@@ -52,12 +46,14 @@ public class GuiCharacter extends Gui {
 	private Image backgroundSort2;
 	private Image backgroundSort3;
 	private Shape progressBar;
+	private float backgroundProgressBarWidth;
+
 	private Font characterNameFont;
 	private TrueTypeFont characterNameTTF;
 
 	private String backgroundSortPath = "/res/zones/ZoneSort.png";
 	private String centuryFont = "Century Gothic";
-	private String character_description;
+
 	private List<Button> listOfCurrentButton;
 	private CharacterController controller;
 
@@ -69,14 +65,13 @@ public class GuiCharacter extends Gui {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		this.controller = new CharacterController(this);
 		this.buttonNeeded = new int[] { 8 };
+		this.backgroundImage = this.getListOfBackgrounds().get(2);
 
 		this.lobbyButtonXPosition = 50;
 		this.lobbyButtonYPosition = (gc.getHeight() - 110);
 		this.zoneLibreStatsXPosition = 50;
 		this.zoneLibreStatsYPosition = 240;
 		this.zoneLibreStatsHeight = 350;
-
-		this.backgroundImage = new Image("/res/Half_Sunset.png");
 
 		this.backgroundProgressBarWidth = 276;
 
@@ -113,25 +108,28 @@ public class GuiCharacter extends Gui {
 		if (this.player != null) {
 			g.setFont(characterNameTTF);
 
-			//g.drawString(this.player.getListOfOwnedCharacter().get(0).getName(), 75, 50);
-			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.BOLD, 40), true));
-			//g.drawString("Level : " + this.player.getListOfOwnedCharacter().get(0).getLevel() + "/40", 75, 120);
-			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.BOLD, 20), true));
-			g.drawString("Attack : " + this.character_attack, zoneLibreStatsXPosition + 20,
-					zoneLibreStatsYPosition + 20);
-			g.drawString("Health : " + this.character_health, zoneLibreStatsXPosition + 20,
-					zoneLibreStatsYPosition + 60);
-			g.drawString("Defense : " + this.character_defense, zoneLibreStatsXPosition + 20,
-					zoneLibreStatsYPosition + 100);
-			g.drawString("Speed : " + this.character_speed, zoneLibreStatsXPosition + 20,
-					zoneLibreStatsYPosition + 140);
-			g.drawString("Description :", zoneLibreStatsXPosition + 10,
-					this.zoneLibreStatsYPosition + this.zoneLibreStatsHeight + 10);
-			g.setFont(new TrueTypeFont(new Font(centuryFont, Font.ITALIC, 16), true));
-			drawString(g, this.character_description, zoneLibreStatsXPosition + 10,
-					this.zoneLibreStatsYPosition + this.zoneLibreStatsHeight + 20);
+			/*
+			 * // g.drawString(this.player.getListOfOwnedCharacter().get(0).getName(),
+			 * 7550); g.setFont(new TrueTypeFont(new Font(centuryFont, Font.BOLD, 40),
+			 * true)); // g.drawString("Level : //
+			 * "this.player.getListOfOwnedCharacter().get(0).getLevel() + "/40", 75, 120);
+			 * g.setFont(new TrueTypeFont(new Font(centuryFont, Font.BOLD, 20), true));
+			 * g.drawString("Attack : " + this.character_attack, zoneLibreStatsXPosition +
+			 * 20, zoneLibreStatsYPosition + 20); g.drawString("Health : " +
+			 * this.character_health, zoneLibreStatsXPosition + 20, zoneLibreStatsYPosition
+			 * + 60); g.drawString("Defense : " + this.character_defense,
+			 * zoneLibreStatsXPosition + 20, zoneLibreStatsYPosition + 100);
+			 * g.drawString("Speed : " + this.character_speed, zoneLibreStatsXPosition + 20,
+			 * zoneLibreStatsYPosition + 140); g.drawString("Description :",
+			 * zoneLibreStatsXPosition + 10, this.zoneLibreStatsYPosition +
+			 * this.zoneLibreStatsHeight + 10); g.setFont(new TrueTypeFont(new
+			 * Font(centuryFont, Font.ITALIC, 16), true)); drawString(g,
+			 * this.character_description, zoneLibreStatsXPosition + 10,
+			 * this.zoneLibreStatsYPosition + this.zoneLibreStatsHeight + 20);
+			 */
 
-			this.progressBar = new Rectangle(80, 180, calculateProgressBarSize(), 45);
+			/*this.progressBar = new Rectangle(80, 180, calculateProgressBarSize(), 45);*/
+
 			g.setColor(Color.black);
 
 			g.draw(progressBar);
@@ -143,22 +141,22 @@ public class GuiCharacter extends Gui {
 			this.backgroundProgressBar.draw(75, 175);
 			g.resetFont();
 
-			//g.drawString(this.player.getListOfOwnedCharacter().get(0).getOldExperience() + " / "
-			//		+ this.player.getListOfOwnedCharacter().get(0).getMaxExperience(), 195, 192);
+			// g.drawString(this.player.getListOfOwnedCharacter().get(0).getOldExperience()
+			// + " / "
+			// + this.player.getListOfOwnedCharacter().get(0).getMaxExperience(), 195, 192);
 
-			this.character_image.draw(850, 700, 200, 250);
+			// this.character_image.draw(850, 700, 200, 250);
 
 		}
 
 	}
 
-	public float calculateProgressBarSize() {
+	/*public float calculateProgressBarSize() { 
 		float result = 0;
-
-		result = (float) this.character_experience_point / (float) this.character_max_experience_point
-				* this.backgroundProgressBarWidth;
-		return result;
-	}
+	  this.currentCharacter.getExperiencePoint()
+	  result = (float) this.character_experience_point / (float)
+	 this.character_max_experience_point this.backgroundProgressBarWidth; return
+	  result; }*/
 
 	public void drawString(Graphics g, String text, int x, int y) {
 
@@ -172,15 +170,12 @@ public class GuiCharacter extends Gui {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (this.player == null) {
 			this.player = Game.getInstance().getPlayerAccount();
-			/*this.character_health = this.player.getListOfOwnedCharacter().get(0).getHealth();
-			this.character_attack = this.player.getListOfOwnedCharacter().get(0).getAttack();
-			this.character_defense = this.player.getListOfOwnedCharacter().get(0).getDefense();
-			this.character_level = this.player.getListOfOwnedCharacter().get(0).getLevel();
-			this.character_speed = this.player.getListOfOwnedCharacter().get(0).getSpeed();
-			this.character_experience_point = this.player.getListOfOwnedCharacter().get(0).getOldExperience();
-			this.character_max_experience_point = this.player.getListOfOwnedCharacter().get(0).getMaxExperience();
-			this.character_description = this.player.getListOfOwnedCharacter().get(0).getDescription();
-			this.character_image = this.player.getListOfOwnedCharacter().get(0).getImage();*/
+			List<LivingEntity> tempLivingEntity = new ArrayList<LivingEntity>();
+			List<AccountOwnCharacter> accountOwnCharacters = this.player.getAccountOwnCharacter();
+			for (AccountOwnCharacter aoc : accountOwnCharacters) {
+				tempLivingEntity.add(aoc.getLivingEntity());
+			}
+			this.controller.createListLivingEntity(tempLivingEntity);
 		}
 
 	}
@@ -222,10 +217,4 @@ public class GuiCharacter extends Gui {
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		// Do nothing because no action while use the mouse mouvement feature.
 	}
-
-	@Override
-	public int getID() {
-		return 4;
-	}
-
 }

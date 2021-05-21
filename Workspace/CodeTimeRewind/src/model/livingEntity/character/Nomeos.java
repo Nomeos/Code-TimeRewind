@@ -33,10 +33,15 @@ public class Nomeos extends Character {
 	private final static int ATTACK = 100;
 	@Transient
 	private final static int SPEED = 0;
+	@Transient
+	private final static int WIDTH = 138;
+	@Transient
+	private final static int HEIGHT = 200;
 	
 
 	public Nomeos(Rarity rarity) {
-		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity);
+		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity, WIDTH, HEIGHT);
+		this.spells = new ArrayList<Spell>();
 	}
 
 
