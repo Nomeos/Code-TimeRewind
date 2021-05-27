@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.newdawn.slick.GameContainer;
@@ -7,6 +8,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import model.account.Account;
+import model.accountOwnCharacter.AccountOwnCharacter;
 import model.stage.Stage;
 import view.guis.BattleGameState;
 import view.guis.GuiAdventure;
@@ -37,6 +39,7 @@ public class Game extends StateBasedGame {
 	private Account playerAccount;
 	private List<List<Stage>> ListOfChapters;
 	private boolean isTheRegisterSucessfull = false;
+	private List<AccountOwnCharacter> CurrentCharacterInFight = new ArrayList<AccountOwnCharacter>();
 	
 
 	public Game(String gameName) {
@@ -129,5 +132,13 @@ public class Game extends StateBasedGame {
 
 	public void setCurrentLevel(int currentLevel) {
 		this.currentLevel = currentLevel;
+	}
+
+	public List<AccountOwnCharacter> getCurrentCharacterInFight() {
+		return CurrentCharacterInFight;
+	}
+
+	public void setCurrentCharacterInFight(List<AccountOwnCharacter> currentCharacterInFight) {
+		CurrentCharacterInFight = currentCharacterInFight;
 	}
 }

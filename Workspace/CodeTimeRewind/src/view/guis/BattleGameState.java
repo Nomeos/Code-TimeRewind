@@ -501,6 +501,8 @@ public class BattleGameState extends Gui {
 					.setAnimation(characterAnimation);
 					tempListOfCharacter.add(
 							Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity());
+					Game.getInstance().getCurrentCharacterInFight().add(Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j));
+					
 				}
 			} else if (numberCharacterAccountHas >= 4) {
 				for (int j = 0; j <= 3; j++) {
@@ -510,6 +512,7 @@ public class BattleGameState extends Gui {
 					.setAnimation(characterAnimation);
 					tempListOfCharacter.add(
 							Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity());
+					Game.getInstance().getCurrentCharacterInFight().add(Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j));
 				}
 			}
 			this.listOfCharacter = tempListOfCharacter;

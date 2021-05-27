@@ -64,10 +64,10 @@ public class LivingEntity implements Comparable<Object> {
 	@ManyToOne
 	@JoinColumn(name = "rarity_Id")
 	private Rarity rarity;
-	
+
 	@JoinColumn(name = "width")
 	protected int width;
-	
+
 	@JoinColumn(name = "height")
 	protected int height;
 
@@ -169,15 +169,15 @@ public class LivingEntity implements Comparable<Object> {
 	}
 
 	public void dealDamage(LivingEntity c, LivingEntity e) {
-		//activateCurrentSpell(c, e);
-		//effectThatApplyBeforeDamage(c, e);
+		// activateCurrentSpell(c, e);
+		// effectThatApplyBeforeDamage(c, e);
 		int result = c.getAttack();
 		float result1 = 100 / (100 + (float) e.getDefense());
 		int result2 = Math.round(result * result1);
 		e.setHealth(e.getHealth() - result2);
-		//activateCurrentSpell(c, e, result2);
-		//effectThatApplyAfterDamage(c, e);
-		//minusEffectCooldown(c);
+		// activateCurrentSpell(c, e, result2);
+		// effectThatApplyAfterDamage(c, e);
+		// minusEffectCooldown(c);
 		System.out.println(result2);
 	}
 
@@ -329,8 +329,8 @@ public class LivingEntity implements Comparable<Object> {
 		this.alpha = this.image.getAlpha() - 0.01f;
 		this.image.setAlpha(alpha);
 		this.lifeBars.setAlpha(alpha);
-		//this.activeBuffs.clear();
-		//this.activeDebuffs.clear();
+		// this.activeBuffs.clear();
+		// this.activeDebuffs.clear();
 
 	}
 
@@ -346,19 +346,24 @@ public class LivingEntity implements Comparable<Object> {
 	public void calculateExperienceEarned(int levelOfTheEnemy) {
 
 		for (int i = 1; i <= levelOfTheEnemy; i++) {
+			if (xpObtained == 0) {
+				xpObtained = 10;
+			}
 			xpObtained *= 1.5;
 		}
 	}
 
-	/*
-	 * public void allocateEarnedExperience() {
-	 * 
-	 * if (oldExperience + xpObtained >= this.maxExperience) { this.level += 1;
-	 * this.oldExperience = (oldExperience + xpObtained) - maxExperience;
-	 * calculateMaxExperience(); } else { this.oldExperience += xpObtained; }
-	 * 
-	 * }
-	 */
+	public void allocateEarnedExperience() {
+
+		if (Experience + xpObtained >= this.maxExperience) {
+			this.level += 1;
+			this.Experience = (Experience + xpObtained) - maxExperience;
+			calculateMaxExperience();
+		} else {
+			this.Experience += xpObtained;
+		}
+
+	}
 
 	@Override
 	public int compareTo(Object o) {

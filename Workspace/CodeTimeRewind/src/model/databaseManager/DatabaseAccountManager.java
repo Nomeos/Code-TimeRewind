@@ -420,4 +420,25 @@ public class DatabaseAccountManager {
 		CloseDatabaseConnection();
 
 	}
+
+	public void saveCharacterOwnedAfterFight(Account userAccount, List<LivingEntity> listOfCharacter) {
+		List<AccountOwnCharacter> aoc = Game.getInstance().getCurrentCharacterInFight();
+		try {
+			OpenDatabaseConnection();
+			this.session.beginTransaction();
+			int i = 0;
+			for (AccountOwnCharacter currentAoc : aoc) {
+				currentAoc.setExperiencePoint(listOfCharacter.get(i).getExperience());
+				currentAoc.setLevel(listOfCharacter.get(i).getLevel());
+				this.session.update(currentAoc);
+				i++;
+			}
+
+		} catch (Throwable ex) {
+			System.err.println("Initial SessionFactory creation failed." + ex);
+			throw new ExceptionInInitializerError(ex);
+		}
+		this.session.getTransaction().commit();
+		CloseDatabaseConnection();
+	}
 }

@@ -19,7 +19,7 @@ import view.guis.BattleGameState;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BattleController implements InputProviderListener {
+public class BattleController extends Controller implements InputProviderListener {
 	private List<LivingEntity> listOfCharacter;
 	private List<LivingEntity> listOfEnemy;
 	private LivingEntity currentCharacter;
@@ -78,13 +78,13 @@ public class BattleController implements InputProviderListener {
 
 	private void playerAssignDamage() {
 		this.currentCharacter.setCurrentSpell(currentSpell);
-		//if (this.currentCharacter.isSingleAttack()) {
-			this.currentCharacter.dealDamage(this.currentCharacter, this.currentEnemy);
-		//} else {
-		//	for (LivingEntity e : this.listOfEnemy) {
-				//this.currentCharacter.dealDamage(this.currentCharacter, e);
-		//	}
-		//}
+		// if (this.currentCharacter.isSingleAttack()) {
+		this.currentCharacter.dealDamage(this.currentCharacter, this.currentEnemy);
+		// } else {
+		// for (LivingEntity e : this.listOfEnemy) {
+		// this.currentCharacter.dealDamage(this.currentCharacter, e);
+		// }
+		// }
 
 	}
 
@@ -107,9 +107,14 @@ public class BattleController implements InputProviderListener {
 		this.currentCharacter.setDone(false);
 		if (end) {
 			for (LivingEntity e : this.listOfEnemy) {
-				this.currentCharacter.calculateExperienceEarned(e.getLevel());
+				for (LivingEntity c : this.listOfCharacter) {
+					c.calculateExperienceEarned(e.getLevel());
+					c.allocateEarnedExperience();
+					
+				}
 			}
-			Game.getInstance().enterState(8, new FadeOutTransition(), new FadeInTransition());
+			this.jm.saveCharacterOwnedAfterFight(account, this.listOfCharacter);
+			this.changeView(8);
 		}
 
 	}
