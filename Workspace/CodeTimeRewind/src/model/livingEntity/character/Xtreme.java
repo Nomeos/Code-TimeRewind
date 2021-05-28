@@ -12,6 +12,12 @@ import model.spell.Spell;
 
 @Entity
 @NoArgsConstructor
+/**
+ * This is a subclass of character that contains the character Xtreme
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class Xtreme extends Character {
 	@Transient
 	private List<Spell> spells = new ArrayList<Spell>();
@@ -34,9 +40,13 @@ public class Xtreme extends Character {
 	@Transient
 	private final static int HEIGHT = 195;
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param rarity This is the rarity of this character
+	 */
 	public Xtreme(Rarity rarity) {
 		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity, WIDTH, HEIGHT);
 	}
-
 
 }

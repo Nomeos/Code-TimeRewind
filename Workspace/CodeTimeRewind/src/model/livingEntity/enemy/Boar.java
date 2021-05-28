@@ -12,6 +12,12 @@ import model.spell.Spell;
 
 @Entity
 @NoArgsConstructor
+/**
+ * This is a subclass of enemy that contains the enemy boar
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class Boar extends Enemy {
 	@Transient
 	private List<Spell> spells = new ArrayList<Spell>();
@@ -33,11 +39,14 @@ public class Boar extends Enemy {
 	private final static int WIDTH = 198;
 	@Transient
 	private final static int HEIGHT = 150;
-	
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param rarity This is the rarity of this enemy
+	 */
 	public Boar(Rarity rarity) {
 		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity, WIDTH, HEIGHT);
 	}
-
 
 }

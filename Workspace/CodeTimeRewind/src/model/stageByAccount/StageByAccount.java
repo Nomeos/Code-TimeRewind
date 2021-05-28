@@ -20,6 +20,14 @@ import model.stage.Stage;
 @Getter
 @Setter
 @Table(name = "StageByAccount")
+/**
+ * 
+ * This class create the link between Stage and Account that define all the
+ * stages that the account own
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class StageByAccount {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +45,13 @@ public class StageByAccount {
 	@Column(name = "is_Level_Clear")
 	boolean isLevelClear;
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param levelTable This is the current stage
+	 * @param account This is current player account
+	 * @param isLevelClear This is a boolean that say if the stage is clear
+	 */
 	public StageByAccount(Stage levelTable, Account account, boolean isLevelClear) {
 		this.stage = levelTable;
 		this.account = account;

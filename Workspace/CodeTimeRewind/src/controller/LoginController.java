@@ -26,8 +26,8 @@ public class LoginController extends Controller {
 	/**
 	 * This is the constructor of this class
 	 * 
-	 * @param guiLogin this is the current Login view and allows me to interact
-	 *                  with it
+	 * @param guiLogin this is the current Login view and allows me to interact with
+	 *                 it
 	 */
 	public LoginController(GuiLogin guiLogin) {
 		this.guiLogin = guiLogin;
@@ -47,15 +47,15 @@ public class LoginController extends Controller {
 					this.getAccount().setUsername(username);
 					try {
 						this.getAccount().setPassword(this.guiLogin.getCurrentPassword());
-						this.getAccount().setPasswordHash(
-								this.getAccount().hashPassword(this.guiLogin.getCurrentPassword()));
+						this.getAccount()
+								.setPasswordHash(this.getAccount().hashPassword(this.guiLogin.getCurrentPassword()));
 						if (this.getJm().LoginAccount(this.getAccount())) {
 							this.changeView(3);
 						} else {
 							this.guiLogin.resetTextFieldContent();
 							this.guiLogin.setErrorText(this.guiLogin.getUsernameTextField().errorManagement(6));
 						}
-					} catch (NoSuchAlgorithmException | SlickException e) {
+					} catch (NoSuchAlgorithmException e) {
 
 						e.printStackTrace();
 					}

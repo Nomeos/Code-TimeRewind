@@ -7,6 +7,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import lombok.Getter;
+import lombok.Setter;
 import model.account.Account;
 import model.accountOwnCharacter.AccountOwnCharacter;
 import model.stage.Stage;
@@ -21,7 +23,16 @@ import view.guis.GuiMenu;
 import view.guis.GuiSignup;
 import view.guis.GuiSummon;
 
-
+/**
+ * This is the principal class that my game use, it manages all the views and
+ * makes the transition between them, it also contains every global variable
+ * that my game user in different views
+ * 
+ * @author Mathieu Rabot
+ *
+ */
+@Getter
+@Setter
 public class Game extends StateBasedGame {
 	public final int menu = 0;
 	public final int login = 1;
@@ -40,8 +51,12 @@ public class Game extends StateBasedGame {
 	private List<List<Stage>> ListOfChapters;
 	private boolean isTheRegisterSucessfull = false;
 	private List<AccountOwnCharacter> CurrentCharacterInFight = new ArrayList<AccountOwnCharacter>();
-	
 
+	/**
+	 * This is the constructor for this class
+	 * 
+	 * @param gameName This is the name of the game
+	 */
 	public Game(String gameName) {
 		// Title windows name
 		super(gameName);
@@ -49,13 +64,22 @@ public class Game extends StateBasedGame {
 
 	}
 
+	/**
+	 * This is the instance for this class, you can access it from every views for
+	 * interact with the variables
+	 * 
+	 * @return It returns this current object
+	 */
 	public static Game getInstance() {
 		return instance;
 	}
 
+	/**
+	 * This method initialize all the views and add them to a list
+	 */
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
-		
+
 		this.addState(new GuiMenu(menu));
 		this.addState(new GuiLogin(login));
 		this.addState(new GuiSignup(signup));
@@ -68,77 +92,46 @@ public class Game extends StateBasedGame {
 		this.addState(new GuiSummon(summon));
 	}
 
-
+	/**
+	 * This method is call when a key is release
+	 */
 	@Override
 	public void keyReleased(int key, char c) {
 		this.getCurrentState().keyReleased(key, c);
-		
+
 	}
 
+	/**
+	 * This method is call when a key is press
+	 */
 	@Override
 	public void keyPressed(int key, char c) {
 		this.getCurrentState().keyPressed(key, c);
 	}
 
+	/**
+	 * This method is call when a mouse button is press
+	 */
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		this.getCurrentState().mousePressed(button, x, y);
 	}
 
+	/**
+	 * This method is call when a mouse button is release
+	 */
 	@Override
 	public void mouseReleased(int button, int x, int y) {
 		this.getCurrentState().mouseReleased(button, x, y);
 	}
 
+	/**
+	 * This method is call when the mouse is moving
+	 */
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		this.getCurrentState().mouseMoved(oldx, oldy, newx, newy);
 
 	}
 
-	public boolean getTheRegisterSucessfull() {
-		return isTheRegisterSucessfull;
-	}
-
-	public void setTheRegisterSucessfull(boolean isTheRegisterSucessfull) {
-		this.isTheRegisterSucessfull = isTheRegisterSucessfull;
-	}
-
-	public Account getPlayerAccount() {
-		return playerAccount;
-	}
-	public void setPlayerAccount(Account user) {
-		this.playerAccount = user;
-	}
-	public List<List<Stage>> getListOfChapters() {
-		return ListOfChapters;
-	}
-
-	public void setListOfChapters(List<List<Stage>> listOfChapters) {
-		ListOfChapters = listOfChapters;
-	}
-
-	public int getCurrentChapter() {
-		return currentChapter;
-	}
-
-	public void setCurrentChapter(int currentChapter) {
-		this.currentChapter = currentChapter;
-	}
-
-	public int getCurrentLevel() {
-		return currentLevel;
-	}
-
-	public void setCurrentLevel(int currentLevel) {
-		this.currentLevel = currentLevel;
-	}
-
-	public List<AccountOwnCharacter> getCurrentCharacterInFight() {
-		return CurrentCharacterInFight;
-	}
-
-	public void setCurrentCharacterInFight(List<AccountOwnCharacter> currentCharacterInFight) {
-		CurrentCharacterInFight = currentCharacterInFight;
-	}
 }

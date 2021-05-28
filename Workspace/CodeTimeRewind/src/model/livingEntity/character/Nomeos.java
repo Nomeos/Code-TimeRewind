@@ -16,6 +16,13 @@ import model.spell.Spell;
 
 @Entity
 @NoArgsConstructor
+/**
+ * 
+ * This is a subclass of character that contains the character Nomeos
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class Nomeos extends Character {
 	@Transient
 	private List<Spell> spells = new ArrayList<Spell>();
@@ -37,12 +44,15 @@ public class Nomeos extends Character {
 	private final static int WIDTH = 138;
 	@Transient
 	private final static int HEIGHT = 200;
-	
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param rarity This is the rarity of this character
+	 */
 	public Nomeos(Rarity rarity) {
 		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity, WIDTH, HEIGHT);
 		this.spells = new ArrayList<Spell>();
 	}
-
 
 }

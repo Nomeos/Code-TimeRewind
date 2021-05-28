@@ -12,6 +12,12 @@ import model.spell.Spell;
 
 @Entity
 @NoArgsConstructor
+/**
+ * This is a subclass of character that contains the character Guiwi
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class Guiwi extends Character {
 	@Transient
 	private List<Spell> spells = new ArrayList<Spell>();
@@ -34,6 +40,11 @@ public class Guiwi extends Character {
 	@Transient
 	private final static int HEIGHT = 222;
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param rarity This is the rarity of this character
+	 */
 	public Guiwi(Rarity rarity) {
 		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity, WIDTH, HEIGHT);
 	}

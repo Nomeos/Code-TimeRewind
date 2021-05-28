@@ -9,6 +9,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+/**
+ * This is a subclass of rarity that contains the rare rarity
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class Rare extends Rarity {
 	
 	@Transient
@@ -16,6 +22,9 @@ public class Rare extends Rarity {
 	@Transient
 	private static final double CHANCEOFSUMMONING = 0.6;
 
+	/**
+	 * This is the constructor of this class
+	 */
 	public Rare() {
 		super(NAME, CHANCEOFSUMMONING);
 	}

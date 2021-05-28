@@ -9,6 +9,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
+/**
+ * This is the class that manage all buttons in the game
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class Button {
 	private int width;
 	private int height;
@@ -18,7 +24,18 @@ public class Button {
 	private Image imageHit;
 	private boolean isPressed = false;
 
-	public Button(Image image, Image imageHit, float x, float y,int WIDTH,int HEIGHT) {
+	/**
+	 * This is the first constructor for this class that takes all the parameters
+	 * that the button needs
+	 * 
+	 * @param image    this is the principal image of this button
+	 * @param imageHit this is the image if the the button is press
+	 * @param x        this is the X position of the button
+	 * @param y        this is the Y position of the button
+	 * @param WIDTH    This is the width of the button
+	 * @param HEIGHT   This is the height of the button
+	 */
+	public Button(Image image, Image imageHit, float x, float y, int WIDTH, int HEIGHT) {
 		this.image = image;
 		this.imageHit = imageHit;
 		this.x = x;
@@ -26,14 +43,17 @@ public class Button {
 		this.height = HEIGHT;
 		this.width = WIDTH;
 	}
-	public Button(Image image, Image imageHit, float x, float y) {
-		this.image = image;
-		this.imageHit = imageHit;
-		this.x = x;
-		this.y = y;
 
-	}
-	public Button(Image image, Image imageHit,int WIDTH,int HEIGHT) {
+	/**
+	 * This is the first constructor for this class that takes all the parameters
+	 * that the button needs without it's position
+	 * 
+	 * @param image    this is the principal image of this button
+	 * @param imageHit this is the image if the the button is press
+	 * @param WIDTH    This is the width of the button
+	 * @param HEIGHT   This is the height of the button
+	 */
+	public Button(Image image, Image imageHit, int WIDTH, int HEIGHT) {
 		this.image = image;
 		this.imageHit = imageHit;
 		this.height = HEIGHT;
@@ -41,6 +61,9 @@ public class Button {
 
 	}
 
+	/**
+	 * This method draw this button on the player screen
+	 */
 	public void draw() {
 		if (isPressed) {
 			this.imageHit.draw(x, y);
@@ -49,10 +72,18 @@ public class Button {
 		}
 
 	}
+
+	/**
+	 * This method initialize the position of the button and draw it to the player
+	 * screen
+	 * 
+	 * @param x this is the X position of the button
+	 * @param y this is the Y position of the button
+	 */
 	public void draw(int x, int y) {
 		this.x = x;
 		this.y = y;
-		
+
 		if (isPressed) {
 			this.imageHit.draw(x, y);
 		} else {
@@ -60,9 +91,15 @@ public class Button {
 		}
 
 	}
-	
+
+	/**
+	 * This method verify if the button is hover by the mouse
+	 * 
+	 * @param x this is the X position of mouse
+	 * @param y this is the Y position of mouse
+	 * @return it returns a boolean if the button is hovered
+	 */
 	public boolean isHovering(float x, float y) {
-		return this.x < x && (this.x + this.width) > x && this.y < y
-				&& (this.y + this.height) > y;
+		return this.x < x && (this.x + this.width) > x && this.y < y && (this.y + this.height) > y;
 	}
 }

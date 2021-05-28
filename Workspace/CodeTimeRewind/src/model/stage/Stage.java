@@ -51,19 +51,19 @@ public class Stage {
 
 	@OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
 	private List<EnemyPerStage> enemy_Per_Stage = new ArrayList<EnemyPerStage>();
-	
+
 	@OneToMany(mappedBy = "stage", cascade = CascadeType.ALL)
 	private List<StageByAccount> stage_By_Account = new ArrayList<StageByAccount>();
 
 	@ManyToOne
 	@JoinColumn(name = "chapter_Id")
 	private Chapter chapter;
-	
+
 	@Transient
 	boolean isLevelClear;
 
 	/**
-	 * This is the constructor of this class
+	 * This is the first constructor of this class
 	 * 
 	 * @param name         It contains the name of the level
 	 * @param isLevelClear It says if the user has already clear this level
@@ -75,7 +75,14 @@ public class Stage {
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
 	}
-	
+
+	/**
+	 * 
+	 * @param name      It contains the name of the level
+	 * @param xPosition It contains the X position of this level
+	 * @param yPosition It contains the Y position of this level
+	 * @param chapter   This is the chapter where the stage is
+	 */
 	public Stage(String name, int xPosition, int yPosition, Chapter chapter) {
 		this.name = name;
 		this.xPosition = xPosition;

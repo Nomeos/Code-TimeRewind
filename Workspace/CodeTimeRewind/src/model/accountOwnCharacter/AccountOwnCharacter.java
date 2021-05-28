@@ -54,10 +54,10 @@ public class AccountOwnCharacter {
 	/**
 	 * This is the constructor of this class
 	 * 
-	 * @param livingEntity
-	 * @param account
-	 * @param level
-	 * @param experience_Point
+	 * @param livingEntity This is the character that the account own
+	 * @param account This is the account of the player
+	 * @param level This is the levels of the character
+	 * @param experience_Point This is the experience points of the character
 	 */
 	public AccountOwnCharacter(LivingEntity livingEntity, Account account, Integer level, Integer experiencePoint) {
 		this.livingEntity = livingEntity;

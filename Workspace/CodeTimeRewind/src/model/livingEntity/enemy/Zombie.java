@@ -12,6 +12,12 @@ import model.spell.Spell;
 
 @Entity
 @NoArgsConstructor
+/**
+ * This is a subclass of enemy that contains the enemy zombie
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class Zombie extends Enemy {
 	@Transient
 	private List<Spell> spells = new ArrayList<Spell>();
@@ -35,6 +41,11 @@ public class Zombie extends Enemy {
 	@Transient
 	private final static int HEIGHT = 200;
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param rarity This is the rarity of this enemy
+	 */
 	public Zombie(Rarity rarity) {
 		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity, WIDTH, HEIGHT);
 

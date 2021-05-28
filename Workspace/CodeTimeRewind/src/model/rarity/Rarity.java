@@ -22,6 +22,12 @@ import model.livingEntity.LivingEntity;
 @NoArgsConstructor
 @Entity
 @Table(name = "Rarities")
+/**
+ * This class contains all the rarities that the entities use
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class Rarity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +43,12 @@ public class Rarity {
 	@OneToMany(mappedBy = "rarity", cascade = CascadeType.ALL)
 	private List<LivingEntity> livingEntity = new ArrayList<LivingEntity>();
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param name This is the name of the rarity
+	 * @param chanceOfSummoning This is the chance of summoning that the rarity has
+	 */
 	public Rarity(String name, double chanceOfSummoning) {
 		this.name = name;
 		this.chanceOfSummoning = chanceOfSummoning;

@@ -17,6 +17,12 @@ import model.livingEntity.LivingEntity;
 @Getter
 @Setter
 @NoArgsConstructor
+/**
+ * This class contains every spells that the entities use
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class Spell {
 
 	protected List<BuffEffect> buffs;
@@ -26,6 +32,14 @@ public class Spell {
 	protected Image image;
 	protected Random rnd;
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param debuffs  This is the list of debuff that the spell has
+	 * @param passives This is the list of passives that the spell has
+	 * @param buffs    This is the list of buffs that the spell has
+	 * @param cooldown This is the cooldown of this spell
+	 */
 	public Spell(List<DebuffEffect> debuffs, List<PassiveEffect> passives, List<BuffEffect> buffs, int cooldown) {
 		this.debuffs = debuffs;
 		this.buffs = buffs;
@@ -33,18 +47,24 @@ public class Spell {
 		this.cooldown = cooldown;
 	}
 
+	/**
+	 * This method starts all effects at the beginning of the turn
+	 * 
+	 * @param c Current entity that is attacking
+	 * @param e Current entity that is defending
+	 */
 	public void startDebutActiveEffects(LivingEntity c, LivingEntity e) {
 		if (debuffs != null) {
 			for (DebuffEffect d : debuffs) {
 				if (d.isAppliedBeginning()) {
 					if (d.isDebuffApplied()) {
-						if(e.getActiveDebuffs().contains(d)) {
+						if (e.getActiveDebuffs().contains(d)) {
 							e.getActiveDebuffs().remove(d);
 							e.getActiveDebuffs().add(d);
-						}else{
+						} else {
 							e.getActiveDebuffs().add(d);
 						}
-					
+
 					}
 				}
 
@@ -53,10 +73,10 @@ public class Spell {
 		if (buffs != null) {
 			for (BuffEffect b : buffs) {
 				if (b.isAppliedBeginning()) {
-					if(c.getActiveBuffs().contains(b)) {
+					if (c.getActiveBuffs().contains(b)) {
 						c.getActiveBuffs().remove(b);
 						c.getActiveBuffs().add(b);
-					}else{
+					} else {
 						c.getActiveBuffs().add(b);
 					}
 				}
@@ -65,18 +85,25 @@ public class Spell {
 
 	}
 
+	/**
+	 * This method starts all effects at the end of the turn
+	 * 
+	 * @param c                Current entity that is attacking
+	 * @param e                Current entity that is defending
+	 * @param damageInflicated That's the damage the entity dealt
+	 */
 	public void startEndPassiveEffects(LivingEntity c, LivingEntity e, int damageInflicated) {
 		if (debuffs != null) {
 			for (DebuffEffect d : debuffs) {
 				if (!d.isAppliedBeginning()) {
 					if (d.isDebuffApplied()) {
-						if(e.getActiveDebuffs().contains(d)) {
+						if (e.getActiveDebuffs().contains(d)) {
 							e.getActiveDebuffs().remove(d);
 							e.getActiveDebuffs().add(d);
-						}else{
+						} else {
 							e.getActiveDebuffs().add(d);
 						}
-					
+
 					}
 				}
 
@@ -90,16 +117,16 @@ public class Spell {
 			}
 		}
 		for (PassiveEffect p : this.passives) {
-			if(p instanceof LifeAbsorption) {
+			if (p instanceof LifeAbsorption) {
 				int result = ((LifeAbsorption) p).start(damageInflicated);
-				if(c.getDefaultHealth() < c.getHealth() + result) {
+				if (c.getDefaultHealth() < c.getHealth() + result) {
 					c.setHealth(c.getDefaultHealth());
-				}else {
+				} else {
 					c.setHealth(c.getHealth() + result);
 				}
-				
+
 			}
-			
+
 		}
 	}
 

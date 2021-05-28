@@ -12,6 +12,12 @@ import model.spell.Spell;
 
 @Entity
 @NoArgsConstructor
+/**
+ * This is a subclass of enemy that contains the enemy skeleton
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class Skeleton extends Enemy {
 	@Transient
 	private List<Spell> spells = new ArrayList<Spell>();
@@ -34,6 +40,11 @@ public class Skeleton extends Enemy {
 	@Transient
 	private final static int HEIGHT = 200;
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param rarity This is the rarity of this enemy
+	 */
 	public Skeleton(Rarity rarity) {
 		super(NAME, LEVEL, HEALTH, DEFENSE, ATTACK, SPEED, DESCRIPTION, rarity, WIDTH, HEIGHT);
 

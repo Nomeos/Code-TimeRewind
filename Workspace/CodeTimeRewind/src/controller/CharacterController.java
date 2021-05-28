@@ -49,6 +49,11 @@ public class CharacterController extends Controller {
 
 	}
 
+	/**
+	 * This method create the list of entity that the view will display by page
+	 * 
+	 * @param livingEntity The entire list of character that the player own
+	 */
 	public void createListLivingEntity(List<LivingEntity> livingEntity) {
 		int numberOfItem = livingEntity.size();
 		int numberOfPage = Math.round(numberOfItem / 6);

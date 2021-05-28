@@ -61,7 +61,7 @@ public class SignupController extends Controller {
 								this.guiSignup.resetTextFieldContent();
 							}
 
-						} catch (NoSuchAlgorithmException | SlickException e) {
+						} catch (NoSuchAlgorithmException e) {
 
 							e.printStackTrace();
 						}

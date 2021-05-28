@@ -9,10 +9,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
+/**
+ * this is a subclass from the Button class
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class BigButton extends Button {
 	protected static final int WIDTH = 350;
 	protected static final int HEIGHT = 350;
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param image    this is the principal image of this button
+	 * @param imageHit this is the image if the the button is press
+	 * @param x this is the X position of the button
+	 * @param y this is the Y position of the button
+	 */
 	public BigButton(Image image, Image imageHit, float x, float y) {
 		super(image, imageHit, x, y, WIDTH, HEIGHT);
 	}

@@ -1,6 +1,5 @@
 package model.livingEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -34,6 +33,13 @@ import model.spell.Spell;
 @Setter
 @javax.persistence.Entity
 @Table(name = "LivingEntities")
+/**
+ * This is the livingentity class that contains every playable characters and
+ * enemies
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class LivingEntity implements Comparable<Object> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -122,6 +128,20 @@ public class LivingEntity implements Comparable<Object> {
 	@Transient
 	protected int y;
 
+	/**
+	 * This is the constructor of this class
+	 * 
+	 * @param name        This is the name of the character
+	 * @param level       This is the level of the character
+	 * @param health      This is the health of the character
+	 * @param defense     This is the defense of the character
+	 * @param attack      This is the attack of the character
+	 * @param speed       This is the speed of the character
+	 * @param description This is the description of the character
+	 * @param rarity      This is the rarity of the character
+	 * @param width       This is the width of the character sprite
+	 * @param height      This is the height of the character sprite
+	 */
 	public LivingEntity(String name, int level, int health, int defense, int attack, int speed, String description,
 			Rarity rarity, int width, int height) {
 
@@ -138,10 +158,20 @@ public class LivingEntity implements Comparable<Object> {
 
 	}
 
+	/**
+	 * This method check if the current entity is hover by the mouse
+	 * 
+	 * @param x This is the mouse X position
+	 * @param y This is the mouse Y position
+	 * @return
+	 */
 	public boolean isHovering(float x, float y) {
 		return this.x < x && (this.x + this.width) > x && this.y < y && (this.y + this.height) > y;
 	}
 
+	/**
+	 * This method init the needed variable
+	 */
 	public void init() {
 		this.image = this.getCharacterSprite(name);
 		this.defaultHealth = health;
@@ -153,6 +183,11 @@ public class LivingEntity implements Comparable<Object> {
 		}
 	}
 
+	/**
+	 * This is the setter of health
+	 * 
+	 * @param health This is the remaining health
+	 */
 	public void setHealth(int health) {
 		if (health <= 0) {
 			this.health = 0;
@@ -161,6 +196,9 @@ public class LivingEntity implements Comparable<Object> {
 		}
 	}
 
+	/**
+	 * This method start the attack for this entity
+	 */
 	public void startAttack() {
 		if (!done) {
 			this.animation.start();
@@ -168,6 +206,12 @@ public class LivingEntity implements Comparable<Object> {
 		}
 	}
 
+	/**
+	 * This method deal damage to the other entity and active all effects
+	 * 
+	 * @param c Current entity that is attacking
+	 * @param e Current entity that is defending
+	 */
 	public void dealDamage(LivingEntity c, LivingEntity e) {
 		// activateCurrentSpell(c, e);
 		// effectThatApplyBeforeDamage(c, e);
@@ -181,6 +225,12 @@ public class LivingEntity implements Comparable<Object> {
 		System.out.println(result2);
 	}
 
+	/**
+	 * This method apply all effects that is use before dealing the damage
+	 * 
+	 * @param c Current entity that is attacking
+	 * @param e Current entity that is defending
+	 */
 	private void effectThatApplyBeforeDamage(LivingEntity c, LivingEntity e) {
 		if (c.getActiveDebuffs() != null) {
 			for (DebuffEffect d : c.getActiveDebuffs()) {
@@ -198,6 +248,12 @@ public class LivingEntity implements Comparable<Object> {
 		}
 	}
 
+	/**
+	 * This method apply all effects that is use after dealing the damage
+	 * 
+	 * @param c Current entity that is attacking
+	 * @param e Current entity that is defending
+	 */
 	private void effectThatApplyAfterDamage(LivingEntity c, LivingEntity e) {
 		if (this.activeDebuffs != null) {
 			for (DebuffEffect d : this.activeDebuffs) {
@@ -216,6 +272,11 @@ public class LivingEntity implements Comparable<Object> {
 		}
 	}
 
+	/**
+	 * This method minus one the cooldown of all effect on the current entity
+	 * 
+	 * @param currentEntity This is the current Entity
+	 */
 	private void minusEffectCooldown(LivingEntity currentEntity) {
 		if (currentEntity.getActiveDebuffs() != null) {
 			for (DebuffEffect d : currentEntity.getActiveDebuffs()) {
@@ -238,6 +299,13 @@ public class LivingEntity implements Comparable<Object> {
 		}
 	}
 
+	/**
+	 * This method active the spell that the player chose and do the effect before
+	 * dealing the damage
+	 * 
+	 * @param c Current entity that is attacking
+	 * @param e Current entity that is defending
+	 */
 	private void activateCurrentSpell(LivingEntity c, LivingEntity e) {
 		int i = 1;
 		for (Spell s : this.spells) {
@@ -249,6 +317,11 @@ public class LivingEntity implements Comparable<Object> {
 
 	}
 
+	/**
+	 * This method check if the current spell is a single target spell or an AOE
+	 * 
+	 * @return It returns a boolean if the current spell is a single target spell
+	 */
 	public boolean isSingleAttack() {
 		int i = 1;
 		boolean bool = false;
@@ -265,6 +338,14 @@ public class LivingEntity implements Comparable<Object> {
 		return bool;
 	}
 
+	/**
+	 * This method active the spell that the player chose and do the effect after
+	 * dealing the damage
+	 * 
+	 * @param c                Current entity that is attacking
+	 * @param e                Current entity that is defending
+	 * @param damageInflicated That's the damage the entity dealt
+	 */
 	private void activateCurrentSpell(LivingEntity c, LivingEntity e, int damageInflicated) {
 		int i = 1;
 		for (Spell s : this.spells) {
@@ -276,6 +357,12 @@ public class LivingEntity implements Comparable<Object> {
 
 	}
 
+	/**
+	 * This method get the character sprite from the game folder
+	 * 
+	 * @param nameOfTheCharacter This is the name of the entity
+	 * @return It returns the sprite of the entity
+	 */
 	public Image getCharacterSprite(String nameOfTheCharacter) {
 		Image image;
 		try {
@@ -287,6 +374,13 @@ public class LivingEntity implements Comparable<Object> {
 
 	}
 
+	/**
+	 * This method draw the entity on the screen
+	 * 
+	 * @param x This is the X position of the entity
+	 * @param y This is the Y position of the entity
+	 * @param g This is the graphics of the game
+	 */
 	public void render(int x, int y, Graphics g) {
 		if (isInBattle) {
 			this.x = x;
@@ -320,11 +414,22 @@ public class LivingEntity implements Comparable<Object> {
 
 	}
 
+	/**
+	 * This method add the animation to the entity
+	 * 
+	 * @param assignDamage This is the animation that the entity does when he does
+	 *                     damage
+	 * @param endAttack    This is the animation that the entity does after deal
+	 *                     damage
+	 */
 	public void addAnimationListener(AnimationListener assignDamage, AnimationListener endAttack) {
 		this.animation.addListener(1000, assignDamage);
 		this.animation.addListener(2000, endAttack);
 	}
 
+	/**
+	 * This method makes the entity disappear when he dies
+	 */
 	public void fadeOut() {
 		this.alpha = this.image.getAlpha() - 0.01f;
 		this.image.setAlpha(alpha);
@@ -334,6 +439,9 @@ public class LivingEntity implements Comparable<Object> {
 
 	}
 
+	/**
+	 * This method calculate the max experience of the entity by his level
+	 */
 	public void calculateMaxExperience() {
 		for (int i = 1; i <= level; i++) {
 			if (i == 1)
@@ -343,6 +451,11 @@ public class LivingEntity implements Comparable<Object> {
 		}
 	}
 
+	/**
+	 * This method calculate the experience earn by the level of the enemy
+	 * 
+	 * @param levelOfTheEnemy This is the level of the enemy
+	 */
 	public void calculateExperienceEarned(int levelOfTheEnemy) {
 
 		for (int i = 1; i <= levelOfTheEnemy; i++) {
@@ -353,6 +466,9 @@ public class LivingEntity implements Comparable<Object> {
 		}
 	}
 
+	/**
+	 * This method give the experience earned to the entity
+	 */
 	public void allocateEarnedExperience() {
 
 		if (Experience + xpObtained >= this.maxExperience) {
@@ -365,6 +481,10 @@ public class LivingEntity implements Comparable<Object> {
 
 	}
 
+	/**
+	 * This method makes this class comparable by the entity speed (We can sort a
+	 * list of entity by their speed)
+	 */
 	@Override
 	public int compareTo(Object o) {
 		LivingEntity e = (LivingEntity) o;

@@ -16,6 +16,13 @@ import model.fight.BattleCommand;
 import model.livingEntity.LivingEntity;
 import view.guis.BattleGameState;
 
+/**
+ * This class is a subclass of the principal controller, this is the controller
+ * for the Adventure View
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,6 +39,14 @@ public class BattleController extends Controller implements InputProviderListene
 	private BattleCommand mode;
 	private BattleGameState game;
 
+	/**
+	 * This is the principal constructor for this controller, it takes all the
+	 * information he needs for manage the fight
+	 * 
+	 * @param listOfCharacter This is the list of character that the player is using
+	 * @param listOfEnemy     This is the list of enemy that the player is fighting
+	 * @param game            This is the current view that the player see
+	 */
 	public BattleController(List<LivingEntity> listOfCharacter, List<LivingEntity> listOfEnemy, BattleGameState game) {
 		this.listOfEnemy = listOfEnemy;
 		this.listOfCharacter = listOfCharacter;
@@ -40,11 +55,17 @@ public class BattleController extends Controller implements InputProviderListene
 
 	}
 
+	/**
+	 * This method initialize all needed variable
+	 */
 	public void init() {
 		initAnimationListeners();
 
 	}
 
+	/**
+	 * This method initialize all animation needed
+	 */
 	private void initAnimationListeners() {
 		AnimationListener playerAssignDamage = new AnimationListener() {
 			@Override
@@ -76,6 +97,9 @@ public class BattleController extends Controller implements InputProviderListene
 		this.currentEnemy.addAnimationListener(ennemiAssignDamage, endEnnemiAttack);
 	}
 
+	/**
+	 * This method is use when the player assign damage to an enemy
+	 */
 	private void playerAssignDamage() {
 		this.currentCharacter.setCurrentSpell(currentSpell);
 		// if (this.currentCharacter.isSingleAttack()) {
@@ -88,6 +112,9 @@ public class BattleController extends Controller implements InputProviderListene
 
 	}
 
+	/**
+	 * This method is use when the player end his turn
+	 */
 	private void endPlayerAttack() {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
 		for (LivingEntity e : this.listOfEnemy) {
@@ -110,7 +137,7 @@ public class BattleController extends Controller implements InputProviderListene
 				for (LivingEntity c : this.listOfCharacter) {
 					c.calculateExperienceEarned(e.getLevel());
 					c.allocateEarnedExperience();
-					
+
 				}
 			}
 			this.jm.saveCharacterOwnedAfterFight(account, this.listOfCharacter);
@@ -119,6 +146,9 @@ public class BattleController extends Controller implements InputProviderListene
 
 	}
 
+	/**
+	 * This method is use when the enemy assign damage to player character
+	 */
 	private void ennemyAssignDamage() {
 
 		this.currentEnemy.setCurrentSpell(currentSpell);
@@ -126,6 +156,9 @@ public class BattleController extends Controller implements InputProviderListene
 
 	}
 
+	/**
+	 * This method is use when the enemy end his turn
+	 */
 	private void endEnnemyAttack() {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
 		this.game.setCurrentEnemyAnimation(this.game.getCurrentEnemyAnimation() + 1);
@@ -133,6 +166,9 @@ public class BattleController extends Controller implements InputProviderListene
 
 	}
 
+	/**
+	 * This method is call when a command has been used
+	 */
 	@Override
 	public void controlPressed(Command command) {
 
@@ -141,6 +177,9 @@ public class BattleController extends Controller implements InputProviderListene
 
 	}
 
+	/**
+	 * This method start the attack and say which spell has been used
+	 */
 	private void startBattle() {
 		if (this.isEnemiesTurn) {
 			switch (this.mode) {
@@ -184,9 +223,11 @@ public class BattleController extends Controller implements InputProviderListene
 
 	}
 
+	/**
+	 * This method is call when a command has been used
+	 */
 	@Override
 	public void controlReleased(Command arg0) {
-		// TODO Auto-generated method stub
 
 	}
 }

@@ -8,7 +8,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.newdawn.slick.SlickException;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import main.Game;
 import model.account.Account;
 import model.accountOwnCharacter.AccountOwnCharacter;
@@ -29,12 +31,25 @@ import model.stage.Stage;
 import model.stageByAccount.StageByAccount;
 
 @NoArgsConstructor
+@Getter
+@Setter
+/**
+ * This is the database manager class, it contains everything that connect to my
+ * database
+ * 
+ * @author Mathieu Rabot
+ *
+ */
 public class DatabaseAccountManager {
 
 	private boolean isRegister = false;
 	private Session session;
 	private SessionFactory sessionFactory;
+	private boolean isATest = false;
 
+	/**
+	 * This method create the database
+	 */
 	public void DatabaseCreation() {
 		try {
 			sessionFactory = new Configuration().configure().buildSessionFactory();
@@ -47,10 +62,14 @@ public class DatabaseAccountManager {
 
 		if (VerifyDatabaseCreated()) {
 			InsertAllCharacters();
-
 		}
 	}
 
+	/**
+	 * This method verify if the database has been created
+	 * 
+	 * @return It returns a boolean if the database has been created
+	 */
 	private boolean VerifyDatabaseCreated() {
 		OpenDatabaseConnection();
 		this.session.beginTransaction();
@@ -71,6 +90,9 @@ public class DatabaseAccountManager {
 		return result;
 	}
 
+	/**
+	 * This method insert all the default information that the game need for running
+	 */
 	private void InsertAllCharacters() {
 
 		try {
@@ -177,6 +199,11 @@ public class DatabaseAccountManager {
 
 	}
 
+	/**
+	 * This method open the database connection
+	 * 
+	 * @return It returns the current database session
+	 */
 	public Session OpenDatabaseConnection() {
 
 		try {
@@ -190,6 +217,9 @@ public class DatabaseAccountManager {
 		}
 	}
 
+	/**
+	 * This method close the database connection
+	 */
 	public void CloseDatabaseConnection() {
 		try {
 			this.sessionFactory.close();
@@ -202,8 +232,14 @@ public class DatabaseAccountManager {
 		}
 	}
 
-	// Principal method for check if the user can register
-	public boolean RegisterAccount(Account userAccount) throws SlickException {
+	/**
+	 * This method call all the verification and register process for add the player
+	 * to the database
+	 * 
+	 * @param userAccount current user account
+	 * @return It returns a boolean if the user already exist
+	 */
+	public boolean RegisterAccount(Account userAccount) {
 		this.isRegister = true;
 		if (IsTheUserAlreadyExist(userAccount)) {
 			CloseDatabaseConnection();
@@ -216,11 +252,19 @@ public class DatabaseAccountManager {
 		}
 	}
 
-	// Principal method for check if the user can login public boolean
-	public boolean LoginAccount(Account userAccount) throws SlickException {
+	/**
+	 * This method call all the verification and login process for connect the
+	 * player to his account
+	 * 
+	 * @param userAccount current user account
+	 * @return It returns a boolean if the user already exist
+	 */
+	public boolean LoginAccount(Account userAccount) {
 		this.isRegister = false;
 		if (IsTheUserAlreadyExist(userAccount)) {
-			GetPlayerProgression(userAccount);
+			if (!this.isATest) {
+				GetPlayerProgression(userAccount);
+			}
 			return true;
 		} else {
 			return false;
@@ -228,6 +272,11 @@ public class DatabaseAccountManager {
 
 	}
 
+	/**
+	 * This method insert all the stages in the user account after his register
+	 * 
+	 * @param userAccount current user account
+	 */
 	public void InsertLevelsInAccount(Account userAccount) {
 		Query query;
 		String sqlQuery = "FROM Stage";
@@ -250,6 +299,11 @@ public class DatabaseAccountManager {
 		CloseDatabaseConnection();
 	}
 
+	/**
+	 * This method insert the user account in the database
+	 * 
+	 * @param userAccount current user account
+	 */
 	public void InsertAccountInDatabase(Account userAccount) {
 		AccountOwnCharacter aoc;
 		String sqlQuery;
@@ -278,8 +332,12 @@ public class DatabaseAccountManager {
 
 	}
 
-	// Check if the user already exist in the json, it returns a boolean (works with
-	// login and register).
+	/**
+	 * This method verify if the user exist in the database
+	 * 
+	 * @param userAccount Current user account
+	 * @return It returns a boolean if the user exist
+	 */
 	public boolean IsTheUserAlreadyExist(Account userAccount) {
 		boolean result = false;
 		String sqlQuery;
@@ -334,6 +392,11 @@ public class DatabaseAccountManager {
 
 	}
 
+	/**
+	 * This method get all the player's progression 
+	 * 
+	 * @param userAccount current user account
+	 */
 	private void GetPlayerProgression(Account userAccount) {
 
 		String sqlQuery;
@@ -375,6 +438,11 @@ public class DatabaseAccountManager {
 
 	}
 
+	/**
+	 * This method get all entities that exist in the game
+	 * 
+	 * @return It returns the list with all entities
+	 */
 	public List<LivingEntity> GetAllLivingEntities() {
 		String sqlQuery;
 		Query query;
@@ -395,6 +463,12 @@ public class DatabaseAccountManager {
 		return le;
 	}
 
+	/**
+	 * This method add the summoned character in the user account
+	 * 
+	 * @param userAccount current user account
+	 * @param le current entity owned
+	 */
 	public void insertCharacterOwnedInAccount(Account userAccount, LivingEntity le) {
 		AccountOwnCharacter aoc;
 		Query query;
@@ -421,6 +495,12 @@ public class DatabaseAccountManager {
 
 	}
 
+	/**
+	 * This method save the progression of the characters after the user's fight
+	 * 
+	 * @param userAccount current user account
+	 * @param listOfCharacter characters that the user used in his fight
+	 */
 	public void saveCharacterOwnedAfterFight(Account userAccount, List<LivingEntity> listOfCharacter) {
 		List<AccountOwnCharacter> aoc = Game.getInstance().getCurrentCharacterInFight();
 		try {
@@ -441,4 +521,5 @@ public class DatabaseAccountManager {
 		this.session.getTransaction().commit();
 		CloseDatabaseConnection();
 	}
+
 }

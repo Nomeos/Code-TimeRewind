@@ -119,7 +119,7 @@ public class GuiLogin extends Gui {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		if (Game.getInstance().getTheRegisterSucessfull()) {
+		if (Game.getInstance().isTheRegisterSucessfull()) {
 			this.errorText = this.usernameTextField.errorManagement(5);
 		}
 	}

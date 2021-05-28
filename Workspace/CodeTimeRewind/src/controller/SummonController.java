@@ -139,11 +139,21 @@ public class SummonController extends Controller {
 		}
 	}
 
+	/**
+	 * This method give the summoned character to the view and display it
+	 * 
+	 * @param le Current character that has been summoned
+	 */
 	private void displayOwnedCharacter(LivingEntity le) {
 		le.init();
 		this.guiSummon.setCurrentCharacterOwned(le);
 	}
 
+	/**
+	 * This method call the database manager for insert the summoned character in the player account
+	 * 
+	 * @param le Current character that has been summoned
+	 */
 	private void addCharacterUserAccount(LivingEntity le) {
 		this.jm.insertCharacterOwnedInAccount(this.account, le);
 	}
