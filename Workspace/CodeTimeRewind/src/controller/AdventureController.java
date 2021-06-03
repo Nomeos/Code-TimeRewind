@@ -39,13 +39,11 @@ public class AdventureController extends Controller {
 			Game.getInstance().enterState(7, new FadeOutTransition(), new FadeInTransition());
 		} else if (currentButton.getX() == 450) {
 			this.changeView(5);
-			this.guiAdventure.getListOfCurrentButton().removeIf(n -> (n instanceof LevelButton));
 			this.guiAdventure.getListOfLevels().clear();
 			this.guiAdventure.setInitializeButtons(false);
 
 		} else if (currentButton.getX() == 50) {
 			this.changeView(3);
-			this.guiAdventure.getListOfCurrentButton().removeIf(n -> (n instanceof LevelButton));
 			this.guiAdventure.getListOfLevels().clear();
 			this.guiAdventure.setInitializeButtons(false);
 

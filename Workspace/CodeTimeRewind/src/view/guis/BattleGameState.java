@@ -30,22 +30,19 @@ import model.stageByAccount.StageByAccount;
 @Setter
 public class BattleGameState extends Gui {
 
-	private StageByAccount currentLevel;
 	private boolean initiliazeVariable = false;
 	private GuiBattle hud;
 	private BattleController battleController;
+	private PathAnimation characterAnimation;
+	private PathAnimation enemyAnimation;
 
 	private List<Rectangle> lifeBars;
-	private List<LivingEntity> listOfCharacter;
-	private List<LivingEntity> listOfEnemy;
+
 	private List<LivingEntity> orderedBattleTurn;
 	private List<Integer> missingDeadEnnemies;
 
 	public int currentTurn;
 	public int currentEnemyAnimation = 0;
-
-	private PathAnimation characterAnimation;
-	private PathAnimation enemyAnimation;
 
 	public BattleGameState(int stateId) {
 		super(stateId);
@@ -55,14 +52,14 @@ public class BattleGameState extends Gui {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 
 		this.hud = new GuiBattle();
+		this.characterAnimation = new PathAnimation(new BezierPath(0, 0, 400, 1, -50, 20, 0, 0), 2000);
+		this.enemyAnimation = new PathAnimation(new BezierPath(0, 0, -400, -1, -50, 20, 0, 0), 2000);
 		this.hud.init(gc);
 		this.orderedBattleTurn = new ArrayList<LivingEntity>();
 		this.lifeBars = new ArrayList<Rectangle>();
 		this.missingDeadEnnemies = new ArrayList<Integer>();
 		this.currentTurn = 0;
-
-		this.characterAnimation = new PathAnimation(new BezierPath(0, 0, 400, 1, -50, 20, 0, 0), 2000);
-		this.enemyAnimation = new PathAnimation(new BezierPath(0, 0, -400, -1, -50, 20, 0, 0), 2000);
+		this.battleController = new BattleController(this);
 
 	}
 
@@ -73,7 +70,7 @@ public class BattleGameState extends Gui {
 		this.characterAnimation.update(delta);
 		this.enemyAnimation.update(delta);
 		int i = 1;
-		for (LivingEntity e : this.listOfEnemy) {
+		for (LivingEntity e : this.battleController.getListOfCurrentEnemies()) {
 			if (e.isFadingOut()) {
 				if (!this.missingDeadEnnemies.contains(i)) {
 					this.missingDeadEnnemies.add(i);
@@ -94,7 +91,7 @@ public class BattleGameState extends Gui {
 			} else {
 				setCurrentEnemyAnimation();
 				this.battleController.setCurrentEnemy((Enemy) this.orderedBattleTurn.get(currentTurn));
-				this.battleController.setCurrentCharacter(this.listOfCharacter.get(0));
+				this.battleController.setCurrentCharacter(this.battleController.getListOfCharacter().get(0));
 				this.battleController.setEnemiesTurn(true);
 				this.battleController.controlPressed(BattleCommand.SPELLONE);
 			}
@@ -113,7 +110,8 @@ public class BattleGameState extends Gui {
 			}
 		}
 		this.hud.render(gc, g);
-		if (getListOfCharacter() != null && getListOfEnemy() != null) {
+		if (this.battleController.getListOfCurrentEnemies() != null
+				&& this.battleController.getListOfCharacter() != null) {
 			this.lifeBars.clear();
 			drawEntities(gc, g);
 			g.setColor(Color.red);
@@ -137,8 +135,8 @@ public class BattleGameState extends Gui {
 	}
 
 	public void drawEntities(GameContainer gc, Graphics g) {
-		int numberOfCharacter = getListOfCharacter().size();
-		int numberOfEnnemy = getListOfEnemy().size();
+		int numberOfCharacter = this.battleController.getListOfCharacter().size();
+		int numberOfEnnemy = this.battleController.getListOfCurrentEnemies().size();
 		drawCharacters(numberOfCharacter, gc, g);
 		drawEnnemies(numberOfEnnemy, gc, g);
 
@@ -168,7 +166,7 @@ public class BattleGameState extends Gui {
 		switch (numberOfEnnemy) {
 		case 1:
 
-			for (LivingEntity e : this.listOfEnemy) {
+			for (LivingEntity e : this.battleController.getListOfCurrentEnemies()) {
 				e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)),
 						Math.round(p.y + (gc.getHeight() - gc.getHeight() / 2)), g);
 				createLifeBar(e, g);
@@ -177,7 +175,7 @@ public class BattleGameState extends Gui {
 			break;
 		case 2:
 			i = 1;
-			for (LivingEntity e : this.listOfEnemy) {
+			for (LivingEntity e : this.battleController.getListOfCurrentEnemies()) {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)),
@@ -207,7 +205,7 @@ public class BattleGameState extends Gui {
 			break;
 		case 3:
 			i = 1;
-			for (LivingEntity e : this.listOfEnemy) {
+			for (LivingEntity e : this.battleController.getListOfCurrentEnemies()) {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)),
@@ -246,7 +244,7 @@ public class BattleGameState extends Gui {
 			break;
 		case 4:
 			i = 1;
-			for (LivingEntity e : this.listOfEnemy) {
+			for (LivingEntity e : this.battleController.getListOfCurrentEnemies()) {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !e.isFadingOut()) {
 						e.render(Math.round(p.x + ((gc.getWidth() / 4) * 3)) - 150,
@@ -303,7 +301,7 @@ public class BattleGameState extends Gui {
 		switch (numberOfCharacter) {
 		case 1:
 			i = 1;
-			for (LivingEntity c : this.listOfCharacter) {
+			for (LivingEntity c : this.battleController.getListOfCharacter()) {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
 						c.render(Math.round(p.x + (gc.getWidth() / 4)),
@@ -318,7 +316,7 @@ public class BattleGameState extends Gui {
 			break;
 		case 2:
 			i = 1;
-			for (LivingEntity c : this.listOfCharacter) {
+			for (LivingEntity c : this.battleController.getListOfCharacter()) {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
 						c.render(Math.round(p.x + (gc.getWidth() / 4)),
@@ -346,7 +344,7 @@ public class BattleGameState extends Gui {
 			break;
 		case 3:
 			i = 1;
-			for (LivingEntity c : this.listOfCharacter) {
+			for (LivingEntity c : this.battleController.getListOfCharacter()) {
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
 						c.render(Math.round(p.x + (gc.getWidth() / 4)),
@@ -384,7 +382,7 @@ public class BattleGameState extends Gui {
 			break;
 		case 4:
 			i = 1;
-			for (LivingEntity c : this.listOfCharacter) {
+			for (LivingEntity c : this.battleController.getListOfCharacter()) {
 
 				if (i == 1) {
 					if (this.currentEnemyAnimation == i && !c.isFadingOut()) {
@@ -443,10 +441,10 @@ public class BattleGameState extends Gui {
 	public void mouseReleased(int button, int x, int y) {
 		this.hud.updateButton(button, x, y, false);
 		int i = 0;
-		for (LivingEntity e : this.listOfEnemy) {
+		for (LivingEntity e : this.battleController.getListOfCurrentEnemies()) {
 			if (e.isHovering(x, y)) {
-				this.battleController.setCurrentEnemy(this.listOfEnemy.get(i));
-				this.battleController.setCurrentCharacter(this.listOfCharacter.get(0));
+				this.battleController.setCurrentEnemy(this.battleController.getListOfCurrentEnemies().get(i));
+				this.battleController.setCurrentCharacter(this.battleController.getListOfCharacter().get(0));
 				if (!this.battleController.isInitDone()) {
 					this.battleController.init();
 					this.battleController.setInitDone(true);
@@ -467,56 +465,7 @@ public class BattleGameState extends Gui {
 
 	private void initializeVariables() {
 		if (Game.getInstance() != null && !initiliazeVariable) {
-			int i = 1;
-			int chapter = Game.getInstance().getCurrentChapter();
-
-			List<StageByAccount> listSba = Game.getInstance().getPlayerAccount().getStageByAccount();
-			for (StageByAccount sba : listSba) {
-				if (i == Game.getInstance().getCurrentLevel()) {
-					this.currentLevel = sba;
-					break;
-				} else {
-					i++;
-				}
-			}
-
-			List<LivingEntity> tempListOfEnemy = new ArrayList<LivingEntity>();
-
-			for (EnemyPerStage eps : this.currentLevel.getStage().getEnemy_Per_Stage()) {
-				eps.getEnemy().setLevel(eps.getLevel());
-				eps.getEnemy().setAnEnemy(true);
-				eps.getEnemy().setAnimation(enemyAnimation);
-				tempListOfEnemy.add(eps.getEnemy());
-
-			}
-			this.listOfEnemy = tempListOfEnemy;
-
-			List<LivingEntity> tempListOfCharacter = new ArrayList<LivingEntity>();
-			int numberCharacterAccountHas = Game.getInstance().getPlayerAccount().getAccountOwnCharacter().size();
-			if (numberCharacterAccountHas < 4) {
-				for (int j = 0; j <= (numberCharacterAccountHas - 1); j++) {
-					Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
-							.setAnEnemy(false);
-					Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
-					.setAnimation(characterAnimation);
-					tempListOfCharacter.add(
-							Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity());
-					Game.getInstance().getCurrentCharacterInFight().add(Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j));
-					
-				}
-			} else if (numberCharacterAccountHas >= 4) {
-				for (int j = 0; j <= 3; j++) {
-					Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
-							.setAnEnemy(false);
-					Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
-					.setAnimation(characterAnimation);
-					tempListOfCharacter.add(
-							Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity());
-					Game.getInstance().getCurrentCharacterInFight().add(Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j));
-				}
-			}
-			this.listOfCharacter = tempListOfCharacter;
-			this.battleController = new BattleController(listOfCharacter, listOfEnemy, this);
+			this.battleController.getAllEntitiesForThisStage();
 			this.initiliazeVariable = true;
 			calculateTurnOrder();
 		}
@@ -524,11 +473,11 @@ public class BattleGameState extends Gui {
 
 	private void calculateTurnOrder() {
 
-		this.orderedBattleTurn.addAll(listOfEnemy);
-		this.orderedBattleTurn.addAll(listOfCharacter);
+		this.orderedBattleTurn.addAll(this.battleController.getListOfCurrentEnemies());
+		this.orderedBattleTurn.addAll(this.battleController.getListOfCharacter());
 		Collections.sort(this.orderedBattleTurn);
 		Collections.reverse(this.orderedBattleTurn);
-		Collections.reverse(listOfEnemy);
+		Collections.reverse(this.battleController.getListOfCurrentEnemies());
 	}
 
 }

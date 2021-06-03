@@ -1,10 +1,12 @@
 package model.databaseManager;
 
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
+import org.hamcrest.CoreMatchers;
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +22,7 @@ import model.account.Account;
 @Setter
 /**
  * This is the test class that test the database manager
+ * 
  * @author Mathieu Rabot
  *
  */
@@ -43,15 +46,16 @@ public class DatabaseAccountManagerTest {
 		this.jm.DatabaseCreation();
 
 	}
-	
+
 	/**
 	 * This test check if the database connection works
 	 */
 	@Test
 	public void DatabaseConnection() {
-		this.jm.OpenDatabaseConnection();
+		assertTrue(this.jm.OpenDatabaseConnection() instanceof Session);
+
 	}
-	
+
 	/**
 	 * This test check if the user account does not exist
 	 */
@@ -64,13 +68,13 @@ public class DatabaseAccountManagerTest {
 			this.jm.RegisterAccount(account);
 			this.account.setUsername("Albert");
 			assertTrue(!this.jm.LoginAccount(account));
-			
+
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	/**
 	 * This test check if the user account exists
 	 */
@@ -83,13 +87,13 @@ public class DatabaseAccountManagerTest {
 			this.jm.RegisterAccount(account);
 			this.jm.setATest(true);
 			assertTrue(this.jm.LoginAccount(account));
-			
+
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	/**
 	 * This method delete the database content before every tests
 	 */

@@ -1,19 +1,22 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.newdawn.slick.command.Command;
 import org.newdawn.slick.command.InputProviderListener;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import main.Game;
 import model.animation.AnimationListener;
+import model.animation.BezierPath;
+import model.animation.PathAnimation;
+import model.enemyPerStage.EnemyPerStage;
 import model.fight.BattleCommand;
 import model.livingEntity.LivingEntity;
+import model.stageByAccount.StageByAccount;
 import view.guis.BattleGameState;
 
 /**
@@ -28,16 +31,19 @@ import view.guis.BattleGameState;
 @NoArgsConstructor
 public class BattleController extends Controller implements InputProviderListener {
 	private List<LivingEntity> listOfCharacter;
-	private List<LivingEntity> listOfEnemy;
+	private List<LivingEntity> listOfCurrentEnemies;
 	private LivingEntity currentCharacter;
 	private LivingEntity currentEnemy;
 	private int currentSpell;
 	private boolean isEnemiesTurn;
 	private boolean isInitDone = false;
 	private boolean isEndBattle = false;
+	private StageByAccount currentLevel;
 
 	private BattleCommand mode;
 	private BattleGameState game;
+	
+
 
 	/**
 	 * This is the principal constructor for this controller, it takes all the
@@ -47,20 +53,18 @@ public class BattleController extends Controller implements InputProviderListene
 	 * @param listOfEnemy     This is the list of enemy that the player is fighting
 	 * @param game            This is the current view that the player see
 	 */
-	public BattleController(List<LivingEntity> listOfCharacter, List<LivingEntity> listOfEnemy, BattleGameState game) {
-		this.listOfEnemy = listOfEnemy;
-		this.listOfCharacter = listOfCharacter;
+	public BattleController(BattleGameState game) {
 		this.isEnemiesTurn = false;
 		this.game = game;
 
 	}
 
 	/**
-	 * This method initialize all needed variable
+	 * This method initialize all needed variables
 	 */
 	public void init() {
 		initAnimationListeners();
-
+		
 	}
 
 	/**
@@ -117,13 +121,13 @@ public class BattleController extends Controller implements InputProviderListene
 	 */
 	private void endPlayerAttack() {
 		this.game.setCurrentTurn(this.game.getCurrentTurn() + 1);
-		for (LivingEntity e : this.listOfEnemy) {
+		for (LivingEntity e : this.listOfCurrentEnemies) {
 			if (e.getHealth() <= 0) {
 				e.setFadingOut(true);
 			}
 		}
 		boolean end = false;
-		for (LivingEntity e : this.listOfEnemy) {
+		for (LivingEntity e : this.listOfCurrentEnemies) {
 			if (e.isFadingOut()) {
 				end = true;
 			} else {
@@ -133,7 +137,7 @@ public class BattleController extends Controller implements InputProviderListene
 		}
 		this.currentCharacter.setDone(false);
 		if (end) {
-			for (LivingEntity e : this.listOfEnemy) {
+			for (LivingEntity e : this.listOfCurrentEnemies) {
 				for (LivingEntity c : this.listOfCharacter) {
 					c.calculateExperienceEarned(e.getLevel());
 					c.allocateEarnedExperience();
@@ -142,6 +146,8 @@ public class BattleController extends Controller implements InputProviderListene
 			}
 			this.jm.saveCharacterOwnedAfterFight(account, this.listOfCharacter);
 			this.changeView(8);
+			this.game.setInitiliazeVariable(false);
+			
 		}
 
 	}
@@ -166,6 +172,63 @@ public class BattleController extends Controller implements InputProviderListene
 
 	}
 
+	/**
+	 * 
+	 */
+	public void getAllEntitiesForThisStage() {
+		
+		int i = 1;
+		if(this.listOfCurrentEnemies != null) {
+			this.listOfCurrentEnemies = null;
+		}
+		List<StageByAccount> listSba = Game.getInstance().getPlayerAccount().getStageByAccount();
+		for (StageByAccount sba : listSba) {
+			if (i == Game.getInstance().getCurrentLevel()) {
+				this.currentLevel = sba;
+				break;
+			} else {
+				i++;
+			}
+		}
+
+		List<LivingEntity> tempListOfEnemy = new ArrayList<LivingEntity>();
+
+		for (EnemyPerStage eps : this.currentLevel.getStage().getEnemy_Per_Stage()) {
+			eps.getEnemy().setLevel(eps.getLevel());
+			eps.getEnemy().setAnEnemy(true);
+			eps.getEnemy().setAnimation(this.game.getEnemyAnimation());
+			tempListOfEnemy.add(eps.getEnemy());
+
+		}
+		this.listOfCurrentEnemies = tempListOfEnemy;
+
+		List<LivingEntity> tempListOfCharacter = new ArrayList<LivingEntity>();
+		int numberCharacterAccountHas = Game.getInstance().getPlayerAccount().getAccountOwnCharacter().size();
+		if (numberCharacterAccountHas < 4) {
+			for (int j = 0; j <= (numberCharacterAccountHas - 1); j++) {
+				Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
+						.setAnEnemy(false);
+				Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
+				.setAnimation(this.game.getCharacterAnimation());
+				tempListOfCharacter.add(
+						Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity());
+				Game.getInstance().getCurrentCharacterInFight().add(Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j));
+				
+			}
+		} else if (numberCharacterAccountHas >= 4) {
+			for (int j = 0; j <= 3; j++) {
+				Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
+						.setAnEnemy(false);
+				Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity()
+				.setAnimation(this.game.getCharacterAnimation());
+				tempListOfCharacter.add(
+						Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j).getLivingEntity());
+				Game.getInstance().getCurrentCharacterInFight().add(Game.getInstance().getPlayerAccount().getAccountOwnCharacter().get(j));
+			}
+		}
+		this.listOfCharacter = tempListOfCharacter;
+	}
+	
 	/**
 	 * This method is call when a command has been used
 	 */

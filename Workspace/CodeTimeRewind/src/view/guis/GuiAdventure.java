@@ -62,6 +62,7 @@ public class GuiAdventure extends Gui {
 			int i = 1;
 			int chapterId = Game.getInstance().getCurrentChapter();
 			if (!initializeButtons) {
+				this.getListOfCurrentButton().removeIf(n -> (n instanceof LevelButton));
 				for (StageByAccount l : this.listOfLevels) {
 					LevelButton button = new LevelButton(new Image("/res/buttons/Button_13.png"),
 							new Image("/res/buttons/Button_13_Hit.png"), l.getStage().getXPosition(),
@@ -96,6 +97,7 @@ public class GuiAdventure extends Gui {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (Game.getInstance() != null) {
+
 			List<StageByAccount> listSba = Game.getInstance().getPlayerAccount().getStageByAccount();
 			for (StageByAccount sba : listSba) {
 				if (sba.getStage().getChapter().getId() == Game.getInstance().getCurrentChapter()) {
@@ -125,6 +127,7 @@ public class GuiAdventure extends Gui {
 		for (Button b : this.listOfCurrentButton) {
 			if (b.isHovering(x, y) && button == 0) {
 				this.controller.activeButton(b);
+
 			}
 		}
 
